@@ -1,45 +1,87 @@
-# BeyScore
+# Welcome to React Router!
 
-<!--toc:start-->
+A modern, production-ready template for building full-stack React applications using React Router.
 
-- [BeyScore](#beyscore)
-  - [Setup](#setup)
-  - [Development Server](#development-server)
-  - [Production](#production)
-  <!--toc:end-->
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-BeyScore is a Beyblade score keeping application built using [Vue.js](https://vuejs.org/), [Nuxt](https://nuxt.com/) and [Bootstrap](https://getbootstrap.com/)
+## Features
 
-## Setup
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
-Install [NodeJS](https://nodejs.org/en), [pnpm](https://pnpm.io), and [Git-LFS](https://git-lfs.com/)
+## Getting Started
 
-Make sure to install dependencies:
+### Installation
 
-```bash
-pnpm install
-```
-
-VS Code user? Open `beyscore.code-workspace` and install the recommended extensions
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Install the dependencies:
 
 ```bash
-pnpm dev
+npm install
 ```
 
-## Production
+### Development
 
-Build the application for production:
+Start the development server with HMR:
 
 ```bash
-pnpm generate
+npm run dev
 ```
 
-Locally preview production build:
+Your application will be available at `http://localhost:5173`.
+
+## Building for Production
+
+Create a production build:
 
 ```bash
-pnpm preview
+npm run build
 ```
+
+## Deployment
+
+### Docker Deployment
+
+To build and run using Docker:
+
+```bash
+docker build -t my-app .
+
+# Run the container
+docker run -p 3000:3000 my-app
+```
+
+The containerized application can be deployed to any platform that supports Docker, including:
+
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
+
+### DIY Deployment
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
+
+```
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── build/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.
