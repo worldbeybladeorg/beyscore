@@ -7,6 +7,9 @@ import type { EarnPointArgs } from "../types/earnPointArgs";
 // the first argument is a unique id of the store across your application
 export const useScoreboardStore = defineStore("scoreboard", () => {
   // other options...
+  const player1Name = ref("Player 1");
+  const player2Name = ref("Player 2");
+
   const player1Score = ref(0);
   const player2Score = ref(0);
   const scoreReason = ref("");
@@ -34,6 +37,8 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   }
 
   function reset() {
+    player1Name.value = "Player 1";
+    player2Name.value = "Player 2";
     player1Score.value = 0;
     player2Score.value = 0;
     scoreReason.value = "";
@@ -41,6 +46,8 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   }
 
   return {
+    player1Name,
+    player2Name,
     player1Score,
     player2Score,
     scoreReason,

@@ -15,6 +15,7 @@
     "@nuxtjs/color-mode": "3.5.2",
     "@pinia/nuxt": "^0.11.1",
     "@tailwindcss/vite": "^4.1.8",
+    "@tanstack/vue-table": "^8.21.3",
     "@vite-pwa/nuxt": "0.10.6",
     "@vueuse/core": "^13.3.0",
     "@vueuse/sound": "^2.1.3",

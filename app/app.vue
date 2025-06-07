@@ -11,28 +11,32 @@ useSeoMeta({
 
 const scoreToWin = ref(4);
 
-const player1Name = ref("");
-const player2Name = ref("");
 const judgeMode = ref(true);
 
 const store = useScoreboardStore();
 
+// if (store.player1Name === "") {
+//   store.player1Name = "Player 1";
+// }
+//
+// if (store.player2Name === "") {
+//   store.player2Name = "Player 2";
+// }
+
 function _newMatch(matchScore: number) {
   store.reset();
   scoreToWin.value = matchScore;
-  if (player1Name.value === "") {
-    player1Name.value = "Player 1";
+  if (store.player1Name === "") {
+    store.player1Name = "Player 1";
   }
 
-  if (player2Name.value === "") {
-    player2Name.value = "Player 2";
+  if (store.player2Name === "") {
+    store.player2Name = "Player 2";
   }
 }
 
 function reset() {
   scoreToWin.value = 0;
-  player1Name.value = "";
-  player2Name.value = "";
 }
 </script>
 
@@ -46,7 +50,7 @@ function reset() {
     <!--     <label for="player-1-name" class="form-label">Player 1 Name</label> -->
     <!--     <input -->
     <!--       id="player-1-name" -->
-    <!--       v-model="player1Name" -->
+    <!--       v-model="store.player1Name" -->
     <!--       type="text" -->
     <!--       class="form-control" -->
     <!--       placeholder="Player 1" -->
@@ -58,7 +62,7 @@ function reset() {
     <!--   <div> -->
     <!--     <label for="player-2-name" class="form-label">Player 2 Name</label> -->
     <!--     <input -->
-    <!--       v-model="player2Name" -->
+    <!--       v-model="store.player2Name" -->
     <!--       type="text" -->
     <!--       class="form-control" -->
     <!--       placeholder="Player 2" -->
@@ -105,8 +109,6 @@ function reset() {
       v-if="scoreToWin !== 0 && judgeMode"
       hydrate-on-visible
       :points-to-win="scoreToWin"
-      :player1-name="player1Name"
-      :player2-name="player2Name"
       @reset="reset"
     />
 
@@ -114,8 +116,8 @@ function reset() {
     <!--   v-if="scoreToWin !== 0 && !judgeMode" -->
     <!--   hydrate-on-visible -->
     <!--   :points-to-win="scoreToWin" -->
-    <!--   :player1-name="player1Name" -->
-    <!--   :player2-name="player2Name" -->
+    <!--   :player1-name="store.player1Name" -->
+    <!--   :player2-name="store.player2Name" -->
     <!--   @reset="reset" -->
     <!-- /> -->
   </ColorScheme>

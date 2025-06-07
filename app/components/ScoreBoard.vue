@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const props = defineProps<{
   pointsToWin: number;
-  player1Name: string;
-  player2Name: string;
 }>();
 
 defineEmits(["reset"]);
@@ -14,9 +12,9 @@ const player2Index = 1;
 
 function checkWinner() {
   if (store.player1Score >= props.pointsToWin) {
-    return `${props.player1Name} Wins!`;
+    return `${store.player1Name} Wins!`;
   } else if (store.player2Score >= props.pointsToWin) {
-    return `${props.player2Name} Wins!`;
+    return `${store.player2Name} Wins!`;
   }
   return "";
 }
@@ -30,36 +28,32 @@ function startCountdown() {
 
 <template>
   <div class="container mt-4">
-    <div class="row">
+    <div class="flex">
       <div class="col-12">
-        <h2 class="text-center">BeyScore</h2>
+        <h2 class="text-center text-3xl">BeyScore</h2>
         <div class="flex flex-row mt-4">
           <!-- Player 1 Section -->
           <PlayerSection
-            :player-name="player1Name"
+            :player-name="store.player1Name"
             :player-index="player1Index"
             :player-score="store.player1Score"
             :is-disabled="checkWinner() !== ''"
             :win-function="store.earnPoints"
-            class="grow"
           />
           <div class="col text-center">
             <h3>Last Score</h3>
             <h4>{{ store.scoreReason }}</h4>
 
-            <button class="btn btn-primary" @click="startCountdown">
-              Countdown
-            </button>
+            <Button @click="startCountdown"> Countdown </Button>
           </div>
 
           <!-- Player 2 Section -->
           <PlayerSection
-            :player-name="player2Name"
+            :player-name="store.player2Name"
             :player-index="player2Index"
             :player-score="store.player2Score"
             :is-disabled="checkWinner() !== ''"
             :win-function="store.earnPoints"
-            class="grow"
           />
         </div>
 
@@ -69,18 +63,18 @@ function startCountdown() {
         </div>
 
         <div class="mt-4 text-center">
-          <button
-            class="btn btn-warning"
+          <Button
+            variant="secondary"
             :disabled="store.history.length === 0"
             @click="store.undoLastAction()"
           >
             Undo
-          </button>
+          </Button>
         </div>
 
         <div class="mt-4 text-center">
-          <button
-            class="btn btn-warning"
+          <Button
+            variant="destructive"
             @click="
               () => {
                 store.reset();
@@ -89,34 +83,11 @@ function startCountdown() {
             "
           >
             New Match
-          </button>
+          </Button>
         </div>
 
         <!-- History Table -->
-        <div v-if="store.history.length > 0" class="mt-4">
-          <h4 class="text-center">Score History</h4>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>{{ player1Name }} Score</th>
-                <th>{{ player2Name }} Score</th>
-                <th>Reason</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(entry, index) in store.history" :key="index">
-                <td>{{ entry.player1Score }}</td>
-                <td>{{ entry.player2Score }}</td>
-                <td>{{ entry.reason }}</td>
-              </tr>
-              <tr>
-                <td>{{ store.player1Score }}</td>
-                <td>{{ store.player2Score }}</td>
-                <td>{{ store.scoreReason }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <MatchHistory />
       </div>
     </div>
   </div>
