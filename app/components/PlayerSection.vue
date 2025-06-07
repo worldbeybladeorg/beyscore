@@ -11,10 +11,11 @@ defineProps<{
 </script>
 
 <template>
-  <div class="col text-center">
+  <div class="flex flex-row">
     <h3>{{ playerName }}</h3>
-    <h4>{{ playerScore }}</h4>
-    <div class="btn-group">
+    <div
+      :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
+    >
       <WinButton
         win-name="Spin"
         :is-disabled="isDisabled"
@@ -71,5 +72,6 @@ defineProps<{
         "
       />
     </div>
+    <h4 class="text-7xl grow m-24">{{ playerScore }}</h4>
   </div>
 </template>

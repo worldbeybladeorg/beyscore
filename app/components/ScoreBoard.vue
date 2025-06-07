@@ -33,7 +33,7 @@ function startCountdown() {
     <div class="row">
       <div class="col-12">
         <h2 class="text-center">BeyScore</h2>
-        <div class="row mt-4">
+        <div class="flex flex-row mt-4">
           <!-- Player 1 Section -->
           <PlayerSection
             :player-name="player1Name"
@@ -41,6 +41,7 @@ function startCountdown() {
             :player-score="store.player1Score"
             :is-disabled="checkWinner() !== ''"
             :win-function="store.earnPoints"
+            class="grow"
           />
           <div class="col text-center">
             <h3>Last Score</h3>
@@ -58,6 +59,7 @@ function startCountdown() {
             :player-score="store.player2Score"
             :is-disabled="checkWinner() !== ''"
             :win-function="store.earnPoints"
+            class="grow"
           />
         </div>
 

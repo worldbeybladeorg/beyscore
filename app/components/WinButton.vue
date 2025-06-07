@@ -10,11 +10,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <button
-    class="btn btn-success"
-    :disabled="isDisabled"
-    @click="emit('clicked')"
-  >
+  <Button :disabled="isDisabled" @click="emit('clicked')">
     {{ winName }}
-  </button>
+  </Button>
 </template>

@@ -29,7 +29,7 @@ function startCountdown() {
 </script>
 
 <template>
-  <div class="container d-flex flex-column vh-100">
+  <div class="container flex flex-co vh-100">
     <!-- App Header -->
     <div class="row py-2">
       <div class="col-12 text-center">
@@ -38,7 +38,7 @@ function startCountdown() {
     </div>
 
     <!-- Player 1 Section (Top, Rotated) -->
-    <div class="row flex-grow-1">
+    <div class="row flex-grow">
       <MobilePlayer
         :player-name="player1Name"
         :player-index="player1Index"
@@ -53,16 +53,14 @@ function startCountdown() {
     <div class="row my-2">
       <div class="col-12 text-center">
         <div class="mb-2">
-          <button class="btn btn-secondary btn-lg me-2" @click="startCountdown">
-            Countdown
-          </button>
-          <button
+          <Button @click="startCountdown"> Countdown </Button>
+          <Button
             class="btn btn-warning btn-lg"
             :disabled="store.history.length === 0"
             @click="store.undoLastAction"
           >
             Undo
-          </button>
+          </Button>
         </div>
 
         <div class="last-score mt-2">
@@ -73,9 +71,9 @@ function startCountdown() {
         <!-- Winner Display -->
         <div v-if="checkWinner()" class="winner-alert mt-2">
           <h4 class="text-success">{{ checkWinner() }}</h4>
-          <button class="btn btn-primary mt-2" @click="$emit('reset')">
+          <Button class="btn btn-primary mt-2" @click="$emit('reset')">
             New Match
-          </button>
+          </Button>
         </div>
       </div>
     </div>
@@ -95,9 +93,9 @@ function startCountdown() {
     <!-- Bottom Controls -->
     <div class="row py-2">
       <div class="col-12 text-center">
-        <button class="btn btn-danger" @click="$emit('reset')">
+        <Button variant="destructive" @click="$emit('reset')">
           Reset Game
-        </button>
+        </Button>
       </div>
     </div>
   </div>

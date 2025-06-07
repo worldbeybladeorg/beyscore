@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
@@ -11,12 +13,17 @@ export default defineNuxtConfig({
     "@vueuse/sound/nuxt",
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
+    "shadcn-nuxt",
+    "@nuxt/icon",
   ],
-  css: ["bootstrap/dist/css/bootstrap.min.css", "assets/scss/main.scss"],
+  css: ["@/assets/css/tailwind.css"],
   sound: {
     sounds: {
       scan: true,
     },
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
   pwa: {
     registerType: "autoUpdate",
@@ -55,7 +62,18 @@ export default defineNuxtConfig({
     },
   },
   colorMode: {
-    dataValue: "bs-theme",
+    classSuffix: "",
+  },
+  shadcn: {
+    /**
+     * Prefix for all the imported component
+     */
+    prefix: "",
+    /**
+     * Directory that the component lives in.
+     * @default "./components/ui"
+     */
+    componentDir: "./app/components/ui",
   },
 });
 
