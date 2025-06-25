@@ -4,13 +4,16 @@
 			"path": "."
 		}
 	],
-	"settings": {},
+	"settings": {
+		"editor.formatOnSave": true
+	},
 	"extensions": {
 		"recommendations": [
 			"nuxtr.nuxt-vscode-extentions",
 			"esbenp.prettier-vscode",
 			"streetsidesoftware.code-spell-checker",
-			"dbaeumer.vscode-eslint"
+			"dbaeumer.vscode-eslint",
+			"bradlc.vscode-tailwindcss"
 		]
 	}
 }

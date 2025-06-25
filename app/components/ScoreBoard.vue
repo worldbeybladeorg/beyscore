@@ -27,19 +27,18 @@ function startCountdown() {
 </script>
 
 <template>
-  <div class="container mt-4">
-    <div class="flex">
-      <div class="col-12">
-        <h2 class="text-center text-3xl">BeyScore</h2>
-        <div class="flex flex-row mt-4">
-          <!-- Player 1 Section -->
-          <PlayerSection
-            :player-name="store.player1Name"
-            :player-index="player1Index"
-            :player-score="store.player1Score"
-            :is-disabled="checkWinner() !== ''"
-            :win-function="store.earnPoints"
-          />
+  <div class="size-screen">
+    <div class="col-12 h-full flex flex-col justify-center">
+      <h2 class="text-center text-3xl">BeyScore</h2>
+      <div class="flex flex-row justify-center">
+        <!-- Player 1 Section -->
+        <PlayerSection
+          :player-name="store.player1Name"
+          :player-index="player1Index"
+          :player-score="store.player1Score"
+          :is-disabled="checkWinner() !== ''"
+          :win-function="store.earnPoints"
+        />
           <div class="col text-center">
             <h3>Last Score</h3>
             <h4>{{ store.scoreReason }}</h4>
@@ -55,7 +54,7 @@ function startCountdown() {
             :is-disabled="checkWinner() !== ''"
             :win-function="store.earnPoints"
           />
-        </div>
+      </div>
 
         <!-- Display winner -->
         <div v-if="checkWinner()" class="mt-4 text-center">
@@ -90,5 +89,4 @@ function startCountdown() {
         <MatchHistory />
       </div>
     </div>
-  </div>
 </template>
