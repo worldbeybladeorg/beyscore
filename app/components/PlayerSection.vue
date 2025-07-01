@@ -1,13 +1,72 @@
 <script setup lang="ts">
 import type { EarnPointArgs } from "../types/earnPointArgs";
 
-defineProps<{
+const props = defineProps<{
   playerName: string;
   playerIndex: number;
   playerScore: number;
   isDisabled: boolean;
   winFunction: (args: EarnPointArgs) => void;
 }>();
+
+const store = useScoreboardStore();
+
+const errorText = computed(() => {
+  let modifier = "";
+  switch (props.playerIndex) {
+    case 0:
+      if (store.player1Error < 1) {
+        modifier = "Warn";
+      } else {
+        modifier = "+1";
+      }
+      break;
+    case 1:
+      if (store.player2Error < 1) {
+        modifier = "Warn";
+      } else {
+        modifier = "+1";
+      }
+      break;
+    default:
+      break;
+  }
+  return `Error: ${modifier}`;
+});
+
+function scoreLaunchError() {
+  props.winFunction({
+    Points: 1,
+    Player: props.playerIndex,
+    Reason: `${props.playerName} Opponent Launch Error`,
+  });
+}
+
+function trackLaunchError() {
+  switch (props.playerIndex) {
+    case 0:
+      store.player1Error++;
+      if (store.player1Error > 1) {
+        scoreLaunchError();
+        store.player1Error = 0;
+      }
+      break;
+    case 1:
+      store.player2Error++;
+      if (store.player1Error > 1) {
+        scoreLaunchError();
+        store.player2Error = 0;
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+function resetLaunchError() {
+  store.player1Error = 0;
+  store.player2Error = 0;
+}
 </script>
 
 <template>
@@ -24,56 +83,54 @@ defineProps<{
           win-name="Spin"
           :is-disabled="isDisabled"
           @clicked="
+            resetLaunchError();
             winFunction({
               Points: 1,
               Player: playerIndex,
               Reason: `${playerName} Spin Finish`,
-            })
+            });
           "
         />
         <WinButton
           win-name="Burst"
           :is-disabled="isDisabled"
           @clicked="
+            resetLaunchError();
             winFunction({
               Points: 2,
               Player: playerIndex,
               Reason: `${playerName} Burst Finish`,
-            })
+            });
           "
         />
         <WinButton
           win-name="Over"
           :is-disabled="isDisabled"
           @clicked="
+            resetLaunchError();
             winFunction({
               Points: 2,
               Player: playerIndex,
               Reason: `${playerName} Over Finish`,
-            })
+            });
           "
         />
         <WinButton
           win-name="Xtreme"
           :is-disabled="isDisabled"
           @clicked="
+            resetLaunchError();
             winFunction({
               Points: 3,
               Player: playerIndex,
               Reason: `${playerName} Xtreme Finish`,
-            })
+            });
           "
         />
         <WinButton
-          win-name="Launch Error"
+          :win-name="errorText"
           :is-disabled="isDisabled"
-          @clicked="
-            winFunction({
-              Points: 1,
-              Player: playerIndex,
-              Reason: `${playerName} Opponent Launch Error`,
-            })
-          "
+          @clicked="trackLaunchError()"
         />
       </div>
       <h4 v-if="playerIndex === 0" class="text-7xl grow m-24">

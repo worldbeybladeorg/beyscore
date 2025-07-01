@@ -15,6 +15,8 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   const player2Score = ref(0);
   const scoreReason = ref("");
   const history = ref<ScoreHistory[]>([]);
+  const player1Error = ref(0);
+  const player2Error = ref(0);
 
   function undoLastAction() {
     useUndoAction({
@@ -58,5 +60,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     reset,
     pointsToWin,
     judgeMode,
+    player1Error,
+    player2Error,
   };
 });
