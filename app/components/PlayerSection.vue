@@ -32,17 +32,6 @@ defineProps<{
           "
         />
         <WinButton
-          win-name="Over"
-          :is-disabled="isDisabled"
-          @clicked="
-            winFunction({
-              Points: 2,
-              Player: playerIndex,
-              Reason: `${playerName} Over Finish`,
-            })
-          "
-        />
-        <WinButton
           win-name="Burst"
           :is-disabled="isDisabled"
           @clicked="
@@ -50,6 +39,17 @@ defineProps<{
               Points: 2,
               Player: playerIndex,
               Reason: `${playerName} Burst Finish`,
+            })
+          "
+        />
+        <WinButton
+          win-name="Over"
+          :is-disabled="isDisabled"
+          @clicked="
+            winFunction({
+              Points: 2,
+              Player: playerIndex,
+              Reason: `${playerName} Over Finish`,
             })
           "
         />
