@@ -14,7 +14,9 @@ defineProps<{
   <div class="flex flex-col justify-center items-center">
     <h3>{{ playerName }}</h3>
     <div class="flex flex-row">
-      <h4 v-if="playerIndex === 1" class="text-7xl grow m-24">{{ playerScore }}</h4>
+      <h4 v-if="playerIndex === 1" class="text-7xl grow m-24">
+        {{ playerScore }}
+      </h4>
       <div
         :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
       >
@@ -74,7 +76,9 @@ defineProps<{
           "
         />
       </div>
-      <h4 v-if="playerIndex === 0" class="text-7xl grow m-24">{{ playerScore }}</h4>
+      <h4 v-if="playerIndex === 0" class="text-7xl grow m-24">
+        {{ playerScore }}
+      </h4>
     </div>
   </div>
 </template>

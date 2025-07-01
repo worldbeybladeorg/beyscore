@@ -9,7 +9,8 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   // other options...
   const player1Name = ref("Player 1");
   const player2Name = ref("Player 2");
-
+  const judgeMode = ref(true);
+  const pointsToWin = ref(4);
   const player1Score = ref(0);
   const player2Score = ref(0);
   const scoreReason = ref("");
@@ -55,5 +56,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     undoLastAction,
     earnPoints,
     reset,
+    pointsToWin,
+    judgeMode,
   };
 });

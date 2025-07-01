@@ -6,7 +6,7 @@
   - [Setup](#setup)
   - [Development Server](#development-server)
   - [Production](#production)
-  <!--toc:end-->
+    <!--toc:end-->
 
 BeyScore is a Beyblade score keeping application built using [Vue.js](https://vuejs.org/), [Nuxt](https://nuxt.com/) and [Bootstrap](https://getbootstrap.com/)
 

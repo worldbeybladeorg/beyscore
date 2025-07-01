@@ -9,10 +9,6 @@ useSeoMeta({
     "The official score keeping app of the World Beyblade Organization.",
 });
 
-const scoreToWin = ref(4);
-
-const judgeMode = ref(true);
-
 const store = useScoreboardStore();
 
 // if (store.player1Name === "") {
@@ -23,21 +19,7 @@ const store = useScoreboardStore();
 //   store.player2Name = "Player 2";
 // }
 
-function _newMatch(matchScore: number) {
-  store.reset();
-  scoreToWin.value = matchScore;
-  if (store.player1Name === "") {
-    store.player1Name = "Player 1";
-  }
 
-  if (store.player2Name === "") {
-    store.player2Name = "Player 2";
-  }
-}
-
-function reset() {
-  scoreToWin.value = 0;
-}
 </script>
 
 <template>
@@ -105,12 +87,7 @@ function reset() {
     <!--   <PwaBadge /> -->
     <!-- </div> -->
 
-    <ScoreBoard
-      v-if="scoreToWin !== 0 && judgeMode"
-      hydrate-on-visible
-      :points-to-win="scoreToWin"
-      @reset="reset"
-    />
+    <ScoreBoard v-if="store.judgeMode" hydrate-on-visible />
 
     <!-- <MobileScoreBoard -->
     <!--   v-if="scoreToWin !== 0 && !judgeMode" -->

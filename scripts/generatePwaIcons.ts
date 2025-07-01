@@ -208,7 +208,9 @@ async function generatePWAIcons(folders: string[], icons: Icons) {
   } = icons;
 
   if (!transparent.resizeOptions)
-    transparent.resizeOptions = { ...defaultIcons.transparent.resizeOptions };
+    transparent.resizeOptions = {
+      ...defaultIcons.transparent.resizeOptions,
+    };
 
   if (!maskable.resizeOptions)
     maskable.resizeOptions = { ...defaultIcons.maskable.resizeOptions };
