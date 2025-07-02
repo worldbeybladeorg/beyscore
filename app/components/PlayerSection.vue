@@ -12,26 +12,23 @@ const props = defineProps<{
 const store = useScoreboardStore();
 
 const errorText = computed(() => {
-  let modifier = "";
   switch (props.playerIndex) {
     case 0:
       if (store.player1Error < 1) {
-        modifier = "Warn";
+        return "Error";
       } else {
-        modifier = "+1";
+        return "Penalty";
       }
-      break;
     case 1:
       if (store.player2Error < 1) {
-        modifier = "Warn";
+        return "Error";
       } else {
-        modifier = "+1";
+        return "Penalty";
       }
-      break;
     default:
       break;
   }
-  return `Error: ${modifier}`;
+  return `Error`;
 });
 
 function scoreLaunchError() {
@@ -80,31 +77,19 @@ function resetLaunchError() {
         :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
       >
         <WinButton
-          win-name="Spin"
+          win-name="Xtreme +3"
           :is-disabled="isDisabled"
           @clicked="
             resetLaunchError();
             winFunction({
-              Points: 1,
+              Points: 3,
               Player: playerIndex,
-              Reason: `${playerName} Spin Finish`,
+              Reason: `${playerName} Xtreme Finish`,
             });
           "
         />
         <WinButton
-          win-name="Burst"
-          :is-disabled="isDisabled"
-          @clicked="
-            resetLaunchError();
-            winFunction({
-              Points: 2,
-              Player: playerIndex,
-              Reason: `${playerName} Burst Finish`,
-            });
-          "
-        />
-        <WinButton
-          win-name="Over"
+          win-name="Over +2"
           :is-disabled="isDisabled"
           @clicked="
             resetLaunchError();
@@ -116,14 +101,26 @@ function resetLaunchError() {
           "
         />
         <WinButton
-          win-name="Xtreme"
+          win-name="Burst +2"
           :is-disabled="isDisabled"
           @clicked="
             resetLaunchError();
             winFunction({
-              Points: 3,
+              Points: 2,
               Player: playerIndex,
-              Reason: `${playerName} Xtreme Finish`,
+              Reason: `${playerName} Burst Finish`,
+            });
+          "
+        />
+        <WinButton
+          win-name="Spin +1"
+          :is-disabled="isDisabled"
+          @clicked="
+            resetLaunchError();
+            winFunction({
+              Points: 1,
+              Player: playerIndex,
+              Reason: `${playerName} Spin Finish`,
             });
           "
         />
