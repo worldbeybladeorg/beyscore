@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 const store = useScoreboardStore();
 </script>
 
@@ -25,6 +26,7 @@ const store = useScoreboardStore();
             placeholder="Player 2"
           />
         </div>
+        <ThemeSwitcher />
       </div>
       <div class="space-y-4">
         <div class="flex items-center justify-between rounded-lg border p-4">

@@ -34,7 +34,7 @@ const errorText = computed(() => {
 function scoreLaunchError() {
   props.winFunction({
     Points: 1,
-    Player: props.playerIndex,
+    Player: props.playerIndex === 0 ? 1 : 0,
     Reason: `${props.playerName} Opponent Launch Error`,
   });
 }
@@ -50,7 +50,7 @@ function trackLaunchError() {
       break;
     case 1:
       store.player2Error++;
-      if (store.player1Error > 1) {
+      if (store.player2Error > 1) {
         scoreLaunchError();
         store.player2Error = 0;
       }
@@ -68,7 +68,6 @@ function resetLaunchError() {
 
 <template>
   <div class="flex flex-col justify-center items-center">
-    <h3>{{ playerName }}</h3>
     <div class="flex flex-row">
       <h4 v-if="playerIndex === 1" class="text-7xl grow m-24">
         {{ playerScore }}
