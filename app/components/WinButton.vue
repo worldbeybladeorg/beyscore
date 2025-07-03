@@ -12,7 +12,7 @@ const emit = defineEmits<{
 <template>
   <Button
     variant="secondary"
-    size="xl"
+    size="score"
     class="my-1"
     :disabled="isDisabled"
     @click="emit('clicked')"
