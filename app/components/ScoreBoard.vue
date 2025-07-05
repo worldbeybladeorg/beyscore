@@ -92,11 +92,28 @@ function startCountdown() {
           :is-disabled="checkWinner() !== ''"
           :win-function="store.earnPoints"
         />
-        <div class="col text-center">
-          <h3>Last Score</h3>
-          <h4>{{ store.scoreReason }}</h4>
+        <div class="flex flex-col">
+          <div class="grow-1 col text-center">
+            <h3>Last Score</h3>
+            <h4>{{ store.scoreReason }}</h4>
 
-          <Button @click="startCountdown"> Countdown </Button>
+            <Button @click="startCountdown"> Countdown </Button>
+          </div>
+          <div class="grow mt-4 text-center">
+            <Button
+              variant="secondary"
+              :disabled="store.history.length === 0"
+              @click="store.undoLastAction()"
+            >
+              Undo
+            </Button>
+          </div>
+
+          <div class="mt-4 text-center">
+            <Button variant="destructive" @click="store.reset()">
+              New Match
+            </Button>
+          </div>
         </div>
 
         <!-- Player 2 Section -->
@@ -112,22 +129,6 @@ function startCountdown() {
       <!-- Display winner -->
       <div v-if="checkWinner()" class="mt-4 text-center">
         <h2 class="text-success">{{ checkWinner() }}</h2>
-      </div>
-
-      <div class="mt-4 text-center">
-        <Button
-          variant="secondary"
-          :disabled="store.history.length === 0"
-          @click="store.undoLastAction()"
-        >
-          Undo
-        </Button>
-      </div>
-
-      <div class="mt-4 text-center">
-        <Button variant="destructive" @click="store.reset()">
-          New Match
-        </Button>
       </div>
 
       <!-- Match History is now in a sheet -->
