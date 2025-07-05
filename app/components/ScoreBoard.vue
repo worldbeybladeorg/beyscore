@@ -83,25 +83,43 @@ function startCountdown() {
           </Sheet>
         </div>
       </div>
-      <div class="flex flex-row justify-center">
+      <div class="flex flex-row justify-center items-stretch">
         <!-- Player 1 Section -->
-        <PlayerSection
-          :player-name="store.player1Name"
-          :player-index="player1Index"
-          :player-score="store.player1Score"
-          :is-disabled="checkWinner() !== ''"
-          :win-function="store.earnPoints"
-        />
-        <div class="flex flex-col">
-          <div class="grow-1 col text-center">
-            <h3>Last Score</h3>
-            <h4>{{ store.scoreReason }}</h4>
+        <div class="flex-1 max-w-1/4">
+          <PlayerSection
+            :player-name="store.player1Name"
+            :player-index="player1Index"
+            :player-score="store.player1Score"
+            :is-disabled="checkWinner() !== ''"
+            :win-function="store.earnPoints"
+          />
+        </div>
 
-            <Button @click="startCountdown"> Countdown </Button>
+        <div class="flex flex-col items-center px-4 w-1/4 flex-shrink-0">
+          <div
+            class="w-full text-center min-h-[120px] flex flex-col justify-center"
+          >
+            <h3 class="h-6 flex items-center justify-center">Last Score</h3>
+            <h4 class="min-h-[24px] flex items-center justify-center">
+              {{ store.scoreReason || "\u00A0" }}
+            </h4>
+            <div class="mt-2 h-10 flex items-center justify-center">
+              <Button class="w-full" @click="startCountdown">Countdown</Button>
+            </div>
           </div>
-          <div class="grow mt-4 text-center">
+
+          <!-- Display winner -->
+          <div class="w-full min-h-[60px] flex items-center justify-center">
+            <h2 v-if="checkWinner()" class="text-success m-0">
+              {{ checkWinner() }}
+            </h2>
+            <div v-else class="h-6" />
+          </div>
+
+          <div class="w-full mt-4">
             <Button
               variant="secondary"
+              class="w-full"
               :disabled="store.history.length === 0"
               @click="store.undoLastAction()"
             >
@@ -118,17 +136,13 @@ function startCountdown() {
 
         <!-- Player 2 Section -->
         <PlayerSection
+          class="flex-1 max-w-1/4"
           :player-name="store.player2Name"
           :player-index="player2Index"
           :player-score="store.player2Score"
           :is-disabled="checkWinner() !== ''"
           :win-function="store.earnPoints"
         />
-      </div>
-
-      <!-- Display winner -->
-      <div v-if="checkWinner()" class="mt-4 text-center">
-        <h2 class="text-success">{{ checkWinner() }}</h2>
       </div>
 
       <!-- Match History is now in a sheet -->
