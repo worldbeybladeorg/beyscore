@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const store = useScoreboardStore();
 </script>
 
@@ -29,10 +28,12 @@ const store = useScoreboardStore();
         <ThemeSwitcher />
       </div>
       <div class="space-y-4">
-        <div class="flex items-center justify-between rounded-lg border p-4">
-          <Label for="judgeMode" class="text-base">Enable Judge Mode</Label>
-          <Switch id="judgeMode" v-model="store.judgeMode" />
-        </div>
+        <DevOnly>
+          <div class="flex items-center justify-between rounded-lg border p-4">
+            <Label for="judgeMode" class="text-base">Enable Judge Mode</Label>
+            <Switch id="judgeMode" v-model="store.judgeMode" />
+          </div>
+        </DevOnly>
         <div>
           <Label for="points-to-win" class="mb-2 block">Points to Win</Label>
           <Select v-model="store.pointsToWin">
