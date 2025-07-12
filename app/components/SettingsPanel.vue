@@ -1,12 +1,11 @@
 <script setup lang="ts">
-
 const store = useScoreboardStore();
 </script>
 
 <template>
   <div>
     <!-- <NavBar /> -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <div class="space-y-4">
         <div>
           <Label for="player-1-name">Player 1 Name</Label>

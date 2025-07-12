@@ -23,7 +23,7 @@ const delegatedProps = reactiveOmit(props, "class");
     <TableCell
       :class="
         cn(
-          'p-4 whitespace-nowrap align-middle text-sm text-foreground',
+          'p-4 align-middle text-sm whitespace-nowrap text-foreground',
           props.class,
         )
       "

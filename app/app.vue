@@ -18,8 +18,6 @@ const store = useScoreboardStore();
 // if (store.player2Name === "") {
 //   store.player2Name = "Player 2";
 // }
-
-
 </script>
 
 <template>

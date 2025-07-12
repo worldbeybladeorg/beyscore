@@ -16,7 +16,7 @@ const delegatedProps = reactiveOmit(props, "class");
   <DrawerTitle
     data-slot="drawer-title"
     v-bind="delegatedProps"
-    :class="cn('text-foreground font-semibold', props.class)"
+    :class="cn('font-semibold text-foreground', props.class)"
   >
     <slot />
   </DrawerTitle>

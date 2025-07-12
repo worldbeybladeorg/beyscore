@@ -34,7 +34,7 @@ function startCountdown() {
 
 <template>
   <div class="size-screen">
-    <div class="col-12 h-full flex flex-col justify-center">
+    <div class="col-12 flex h-full flex-col justify-center">
       <div class="relative flex items-center justify-center p-4">
         <div>
           <Sheet>
@@ -43,7 +43,7 @@ function startCountdown() {
             </SheetTrigger>
             <SheetContent
               side="left"
-              class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 flex flex-col"
+              class="flex w-full flex-col sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4"
             >
               <SheetHeader>
                 <SheetTitle>Match History</SheetTitle>
@@ -65,13 +65,13 @@ function startCountdown() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 flex flex-col"
+              class="flex w-full flex-col sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4"
             >
               <SheetHeader>
                 <SheetTitle>Settings</SheetTitle>
                 <SheetDescription>Set your match preferences.</SheetDescription>
               </SheetHeader>
-              <div class="p-4 flex-1 overflow-y-auto">
+              <div class="flex-1 overflow-y-auto p-4">
                 <SettingsPanel />
               </div>
               <SheetFooter>

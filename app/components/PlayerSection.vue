@@ -67,13 +67,13 @@ function resetLaunchError() {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center">
+  <div class="flex flex-col items-center justify-center">
     <div class="flex flex-row">
-      <h4 v-if="playerIndex === 1" class="text-7xl grow m-24">
+      <h4 v-if="playerIndex === 1" class="m-24 grow text-7xl">
         {{ playerScore }}
       </h4>
       <div
-        :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
+        :class="`flex max-w-24 flex-col ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
       >
         <WinButton
           win-name="Xtreme +3"
@@ -129,7 +129,7 @@ function resetLaunchError() {
           @clicked="trackLaunchError()"
         />
       </div>
-      <h4 v-if="playerIndex === 0" class="text-7xl grow m-24">
+      <h4 v-if="playerIndex === 0" class="m-24 grow text-7xl">
         {{ playerScore }}
       </h4>
     </div>

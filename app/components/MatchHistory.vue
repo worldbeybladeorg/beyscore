@@ -5,7 +5,7 @@ const store = useScoreboardStore();
 <template>
   <div v-if="store.history.length > 0" class="mt-4">
     <h4 class="text-center">Score History</h4>
-    <Table class="table table-bordered">
+    <Table class="table-bordered table">
       <TableHeader>
         <TableRow>
           <TableHead>{{ store.player1Name }} Score</TableHead>

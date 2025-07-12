@@ -13,7 +13,7 @@ defineProps<{
 
 <template>
   <div
-    class="col-12 text-center score-container"
+    class="score-container col-12 text-center"
     :class="rotated ? 'rotated-content' : ''"
   >
     <h3 class="player-name mb-3">{{ playerName }}</h3>

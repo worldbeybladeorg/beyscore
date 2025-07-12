@@ -29,7 +29,7 @@ function startCountdown() {
 </script>
 
 <template>
-  <div class="container flex flex-co vh-100">
+  <div class="flex-co vh-100 container flex">
     <!-- App Header -->
     <div class="row py-2">
       <div class="col-12 text-center">
