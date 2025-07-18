@@ -78,7 +78,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Xtreme +3"
           :is-disabled="isDisabled"
-          @clicked="
+          @click="
             resetLaunchError();
             winFunction({
               Points: 3,
@@ -90,7 +90,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Over +2"
           :is-disabled="isDisabled"
-          @clicked="
+          @click="
             resetLaunchError();
             winFunction({
               Points: 2,
@@ -102,7 +102,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Burst +2"
           :is-disabled="isDisabled"
-          @clicked="
+          @click="
             resetLaunchError();
             winFunction({
               Points: 2,
@@ -114,7 +114,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Spin +1"
           :is-disabled="isDisabled"
-          @clicked="
+          @click="
             resetLaunchError();
             winFunction({
               Points: 1,
@@ -126,7 +126,7 @@ function resetLaunchError() {
         <WinButton
           :win-name="errorText"
           :is-disabled="isDisabled"
-          @clicked="trackLaunchError()"
+          @click="trackLaunchError()"
         />
       </div>
       <h4 v-if="playerIndex === 0" class="text-7xl grow m-24">
