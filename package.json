@@ -35,12 +35,17 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.5.2",
+    "@nuxt/test-utils": "^3.19.2",
+    "@vue/test-utils": "^2.4.6",
     "eslint": "^9.31.0",
+    "happy-dom": "^18.0.1",
+    "playwright-core": "^1.54.1",
     "prettier": "^3.6.2",
     "sharp": "^0.34.3",
     "sharp-ico": "^0.1.5",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "volta": {
     "node": "22.15.0"
