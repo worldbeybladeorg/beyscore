@@ -78,6 +78,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Xtreme +3"
           :is-disabled="isDisabled"
+          :is-player-2="playerIndex === 1"
           @click="
             resetLaunchError();
             winFunction({
@@ -90,6 +91,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Over +2"
           :is-disabled="isDisabled"
+          :is-player-2="playerIndex === 1"
           @click="
             resetLaunchError();
             winFunction({
@@ -102,6 +104,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Burst +2"
           :is-disabled="isDisabled"
+          :is-player-2="playerIndex === 1"
           @click="
             resetLaunchError();
             winFunction({
@@ -114,6 +117,7 @@ function resetLaunchError() {
         <WinButton
           win-name="Spin +1"
           :is-disabled="isDisabled"
+          :is-player-2="playerIndex === 1"
           @click="
             resetLaunchError();
             winFunction({
@@ -125,6 +129,7 @@ function resetLaunchError() {
         />
         <WinButton
           :win-name="errorText"
+          :is-player-2="playerIndex === 1"
           :is-disabled="isDisabled"
           @click="trackLaunchError()"
         />

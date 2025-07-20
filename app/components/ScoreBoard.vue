@@ -11,6 +11,14 @@ import {
 } from "@/components/ui/sheet";
 import SettingsPanel from "./SettingsPanel.vue";
 
+import {
+  Settings as SettingsIcon,
+  History as HistoryIcon,
+  Undo as UndoIcon,
+  CirclePlus,
+  Timer,
+} from "lucide-vue-next";
+
 const store = useScoreboardStore();
 
 const player1Index = 0;
@@ -39,7 +47,10 @@ function startCountdown() {
         <div>
           <Sheet>
             <SheetTrigger as-child>
-              <Button variant="outline" class="px-4"> History </Button>
+              <Button variant="outline" class="px-4">
+                <HistoryIcon />
+                History
+              </Button>
             </SheetTrigger>
             <SheetContent
               side="left"
@@ -61,7 +72,9 @@ function startCountdown() {
         <div>
           <Sheet>
             <SheetTrigger as-child>
-              <Button variant="outline" class="px-4"> Settings </Button>
+              <Button variant="outline" class="px-4">
+                <SettingsIcon /> Settings
+              </Button>
             </SheetTrigger>
             <SheetContent
               side="right"
@@ -104,7 +117,9 @@ function startCountdown() {
               {{ store.scoreReason || "\u00A0" }}
             </h4>
             <div class="mt-2 h-10 flex items-center justify-center">
-              <Button class="w-full" @click="startCountdown">Countdown</Button>
+              <Button class="w-full" @click="startCountdown"
+                ><Timer />Countdown</Button
+              >
             </div>
           </div>
 
@@ -123,13 +138,14 @@ function startCountdown() {
               :disabled="store.history.length === 0"
               @click="store.undoLastAction()"
             >
+              <UndoIcon />
               Undo
             </Button>
           </div>
 
           <div class="mt-4 text-center">
             <Button variant="destructive" @click="store.reset()">
-              New Match
+              <CirclePlus />New Match
             </Button>
           </div>
         </div>

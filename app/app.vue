@@ -14,16 +14,16 @@ const store = useScoreboardStore();
 
 <template>
   <NuxtPwaManifest />
-  <!-- <ColorScheme placeholder="..." tag="div"> -->
-  <ScoreBoard v-if="store.judgeMode" />
+  <ColorScheme placeholder="..." tag="div">
+    <ScoreBoard v-if="store.judgeMode" />
 
-  <!-- <MobileScoreBoard -->
-  <!--   v-if="scoreToWin !== 0 && !judgeMode" -->
-  <!--   hydrate-on-visible -->
-  <!--   :points-to-win="scoreToWin" -->
-  <!--   :player1-name="store.player1Name" -->
-  <!--   :player2-name="store.player2Name" -->
-  <!--   @reset="reset" -->
-  <!-- /> -->
-  <!-- </ColorScheme> -->
+    <!-- <MobileScoreBoard -->
+    <!--   v-if="scoreToWin !== 0 && !judgeMode" -->
+    <!--   hydrate-on-visible -->
+    <!--   :points-to-win="scoreToWin" -->
+    <!--   :player1-name="store.player1Name" -->
+    <!--   :player2-name="store.player2Name" -->
+    <!--   @reset="reset" -->
+    <!-- /> -->
+  </ColorScheme>
 </template>
