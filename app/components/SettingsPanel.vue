@@ -52,7 +52,9 @@ const store = useScoreboardStore();
                 >
                 <SelectItem value="4">4</SelectItem>
                 <SelectItem value="5">5</SelectItem>
-                <SelectItem value="7">7</SelectItem>
+                <SelectItem v-if="store.generation === Generation.X" value="7"
+                  >7</SelectItem
+                >
                 <SelectItem value="Infinity">No Limit</SelectItem>
               </SelectGroup>
             </SelectContent>
