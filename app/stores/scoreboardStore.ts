@@ -9,16 +9,16 @@ import { Generation } from "../types/generations";
 // the first argument is a unique id of the store across your application
 export const useScoreboardStore = defineStore("scoreboard", () => {
   // other options...
-  const player1Name = ref("Player 1");
-  const player2Name = ref("Player 2");
-  const judgeMode = ref(true);
-  const pointsToWin = ref(4);
-  const player1Score = ref(0);
-  const player2Score = ref(0);
-  const scoreReason = ref("");
+  const player1Name = ref<string>("Player 1");
+  const player2Name = ref<string>("Player 2");
+  const judgeMode = ref<boolean>(true);
+  const pointsToWin = ref<number>(4);
+  const player1Score = ref<number>(0);
+  const player2Score = ref<number>(0);
+  const scoreReason = ref<string>("");
   const history = ref<ScoreHistory[]>([]);
-  const player1Error = ref(0);
-  const player2Error = ref(0);
+  const player1Error = ref<number>(0);
+  const player2Error = ref<number>(0);
   const generation = ref<GenerationType>(Generation.X);
 
   function undoLastAction() {

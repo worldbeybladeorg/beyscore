@@ -37,14 +37,17 @@ const store = useScoreboardStore();
         </DevOnly>
         <div>
           <Label for="points-to-win" class="mb-2 block">Points to Win</Label>
-          <Select v-model="store.pointsToWin">
+          <Select
+            v-model="store.pointsToWin"
+            :default-value="store.pointsToWin"
+          >
             <SelectTrigger id="points-to-win">
-              <SelectValue placeholder="Select points" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Points</SelectLabel>
-                <SelectItem v-if="store.generation != Generation.X" value="3"
+                <SelectItem v-if="store.generation !== Generation.X" value="3"
                   >3</SelectItem
                 >
                 <SelectItem value="4">4</SelectItem>
