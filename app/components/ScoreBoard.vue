@@ -96,9 +96,9 @@ function startCountdown() {
           </Sheet>
         </div>
       </div>
-      <div class="flex flex-row justify-center items-stretch">
+      <div class="flex flex-row items-stretch justify-center">
         <!-- Player 1 Section -->
-        <div class="flex-1 max-w-1/4">
+        <div class="max-w-1/4 flex-1">
           <PlayerSection
             :player-name="store.player1Name"
             :player-index="player1Index"
@@ -108,15 +108,15 @@ function startCountdown() {
           />
         </div>
 
-        <div class="flex flex-col items-center px-4 w-1/4 flex-shrink-0">
+        <div class="flex w-1/4 flex-shrink-0 flex-col items-center px-4">
           <div
-            class="w-full text-center min-h-[120px] flex flex-col justify-center"
+            class="flex min-h-[120px] w-full flex-col justify-center text-center"
           >
-            <h3 class="h-6 flex items-center justify-center">Last Score</h3>
-            <h4 class="min-h-[24px] flex items-center justify-center">
+            <h3 class="flex h-6 items-center justify-center">Last Score</h3>
+            <h4 class="flex min-h-[24px] items-center justify-center">
               {{ store.scoreReason || "\u00A0" }}
             </h4>
-            <div class="mt-2 h-10 flex items-center justify-center">
+            <div class="mt-2 flex h-10 items-center justify-center">
               <Button class="w-full" @click="startCountdown"
                 ><Timer />Countdown</Button
               >
@@ -124,14 +124,14 @@ function startCountdown() {
           </div>
 
           <!-- Display winner -->
-          <div class="w-full min-h-[60px] flex items-center justify-center">
+          <div class="flex min-h-[60px] w-full items-center justify-center">
             <h2 v-if="checkWinner()" class="text-success m-0">
               {{ checkWinner() }}
             </h2>
             <div v-else class="h-6" />
           </div>
 
-          <div class="w-full mt-4">
+          <div class="mt-4 w-full">
             <Button
               variant="secondary"
               class="w-full"
@@ -152,7 +152,7 @@ function startCountdown() {
 
         <!-- Player 2 Section -->
         <PlayerSection
-          class="flex-1 max-w-1/4"
+          class="max-w-1/4 flex-1"
           :player-name="store.player2Name"
           :player-index="player2Index"
           :player-score="store.player2Score"

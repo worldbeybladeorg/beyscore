@@ -74,7 +74,7 @@ function resetLaunchError() {
         {{ playerScore }}
       </h4>
       <div
-        :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'} justify-center`"
+        :class="`flex max-w-24 flex-col ${playerIndex ? 'justify-items-end' : 'justify-items-start'} justify-center`"
       >
         <WinButton
           v-if="store.generation === Generation.X"
