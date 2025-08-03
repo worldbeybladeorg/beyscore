@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Generation } from "~/types/generations";
 const store = useScoreboardStore();
 </script>
 
@@ -43,11 +44,29 @@ const store = useScoreboardStore();
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Points</SelectLabel>
-                <SelectItem value="3">3</SelectItem>
+                <SelectItem v-if="store.generation != Generation.X" value="3"
+                  >3</SelectItem
+                >
                 <SelectItem value="4">4</SelectItem>
                 <SelectItem value="5">5</SelectItem>
                 <SelectItem value="7">7</SelectItem>
                 <SelectItem value="Infinity">No Limit</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label for="generatiojn" class="mb-2 block">Generation</Label>
+          <Select v-model="store.generation" :default-value="store.generation">
+            <SelectTrigger id="generation">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Generation</SelectLabel>
+                <template v-for="generation in Generation" :key="generation">
+                  <SelectItem :value="generation">{{ generation }}</SelectItem>
+                </template>
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EarnPointArgs } from "../types/earnPointArgs";
+import { Generation } from "../types/generations";
 
 const props = defineProps<{
   playerName: string;
@@ -73,9 +74,10 @@ function resetLaunchError() {
         {{ playerScore }}
       </h4>
       <div
-        :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
+        :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'} justify-center`"
       >
         <WinButton
+          v-if="store.generation === Generation.X"
           win-name="Xtreme +3"
           :is-disabled="isDisabled"
           :is-player-2="playerIndex === 1"
@@ -89,6 +91,7 @@ function resetLaunchError() {
           "
         />
         <WinButton
+          v-if="store.generation !== Generation.PLA_MFB"
           win-name="Over +2"
           :is-disabled="isDisabled"
           :is-player-2="playerIndex === 1"
@@ -128,6 +131,7 @@ function resetLaunchError() {
           "
         />
         <WinButton
+          v-if="store.generation === Generation.X"
           :win-name="errorText"
           :is-player-2="playerIndex === 1"
           :is-disabled="isDisabled"

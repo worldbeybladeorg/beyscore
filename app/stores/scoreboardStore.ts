@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import type { EarnPointArgs } from "../types/earnPointArgs";
+import type { GenerationType } from "../types/generations";
+import { Generation } from "../types/generations";
 
 // You can name the return value of `defineStore()` anything you want,
 // but it's best to use the name of the store and surround it with `use`
@@ -17,6 +19,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   const history = ref<ScoreHistory[]>([]);
   const player1Error = ref(0);
   const player2Error = ref(0);
+  const generation = ref<GenerationType>(Generation.X);
 
   function undoLastAction() {
     useUndoAction({
@@ -62,5 +65,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     judgeMode,
     player1Error,
     player2Error,
+    generation,
   };
 });
