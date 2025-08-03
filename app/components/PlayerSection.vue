@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EarnPointArgs } from "../types/earnPointArgs";
+import { Generation } from "../types/generations";
 
 const props = defineProps<{
   playerName: string;
@@ -73,12 +74,14 @@ function resetLaunchError() {
         {{ playerScore }}
       </h4>
       <div
-        :class="`flex max-w-24 flex-col ${playerIndex ? 'justify-items-end' : 'justify-items-start'}`"
+        :class="`flex flex-col max-w-24 ${playerIndex ? 'justify-items-end' : 'justify-items-start'} justify-center`"
       >
         <WinButton
+          v-if="store.generation === Generation.X"
           win-name="Xtreme +3"
           :is-disabled="isDisabled"
-          @clicked="
+          :is-player-2="playerIndex === 1"
+          @click="
             resetLaunchError();
             winFunction({
               Points: 3,
@@ -88,21 +91,24 @@ function resetLaunchError() {
           "
         />
         <WinButton
-          win-name="Over +2"
+          :win-name="`Over + ${store.generation !== Generation.PLA_MFB ? 2 : 1}`"
           :is-disabled="isDisabled"
-          @clicked="
+          :is-player-2="playerIndex === 1"
+          @click="
             resetLaunchError();
             winFunction({
-              Points: 2,
+              Points: store.generation !== Generation.PLA_MFB ? 2 : 1,
               Player: playerIndex,
               Reason: `${playerName} Over Finish`,
             });
           "
         />
         <WinButton
+          v-if="store.generation !== Generation.PLA_MFB"
           win-name="Burst +2"
           :is-disabled="isDisabled"
-          @clicked="
+          :is-player-2="playerIndex === 1"
+          @click="
             resetLaunchError();
             winFunction({
               Points: 2,
@@ -114,7 +120,8 @@ function resetLaunchError() {
         <WinButton
           win-name="Spin +1"
           :is-disabled="isDisabled"
-          @clicked="
+          :is-player-2="playerIndex === 1"
+          @click="
             resetLaunchError();
             winFunction({
               Points: 1,
@@ -124,9 +131,11 @@ function resetLaunchError() {
           "
         />
         <WinButton
+          v-if="store.generation === Generation.X"
           :win-name="errorText"
+          :is-player-2="playerIndex === 1"
           :is-disabled="isDisabled"
-          @clicked="trackLaunchError()"
+          @click="trackLaunchError()"
         />
       </div>
       <h4 v-if="playerIndex === 0" class="m-24 grow text-7xl">

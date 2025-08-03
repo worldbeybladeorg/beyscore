@@ -2,11 +2,9 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4,
-  },
+  ssr: false,
   compatibilityDate: "2024-11-01",
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     "@nuxt/eslint",
     "@vite-pwa/nuxt",
@@ -28,7 +26,7 @@ export default defineNuxtConfig({
   pwa: {
     registerType: "autoUpdate",
     devOptions: {
-      enabled: true,
+      enabled: false,
     },
     workbox: {
       globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
