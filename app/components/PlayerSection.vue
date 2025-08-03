@@ -91,20 +91,20 @@ function resetLaunchError() {
           "
         />
         <WinButton
-          v-if="store.generation !== Generation.PLA_MFB"
-          win-name="Over +2"
+          :win-name="`Over + ${store.generation !== Generation.PLA_MFB ? 2 : 1}`"
           :is-disabled="isDisabled"
           :is-player-2="playerIndex === 1"
           @click="
             resetLaunchError();
             winFunction({
-              Points: 2,
+              Points: store.generation !== Generation.PLA_MFB ? 2 : 1,
               Player: playerIndex,
               Reason: `${playerName} Over Finish`,
             });
           "
         />
         <WinButton
+          v-if="store.generation !== Generation.PLA_MFB"
           win-name="Burst +2"
           :is-disabled="isDisabled"
           :is-player-2="playerIndex === 1"
