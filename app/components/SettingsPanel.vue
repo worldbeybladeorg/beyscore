@@ -27,6 +27,13 @@ const store = useScoreboardStore();
             placeholder="Player 2"
           />
         </div>
+        <div
+          v-if="store.generation === Generation.X"
+          class="flex items-center justify-between rounded-lg border p-4"
+        >
+          <Label for="ownFinish" class="text-base">Enable Own Finish</Label>
+          <Switch id="ownFinish" v-model="store.ownFinishEnabled" />
+        </div>
         <ThemeSwitcher />
       </div>
       <div class="space-y-4">

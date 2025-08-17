@@ -130,13 +130,28 @@ function resetLaunchError() {
             });
           "
         />
-        <WinButton
-          v-if="store.generation === Generation.X"
-          :win-name="errorText"
-          :is-player-2="playerIndex === 1"
-          :is-disabled="isDisabled"
-          @click="trackLaunchError()"
-        />
+        <template v-if="store.generation === Generation.X"
+          ><WinButton
+            v-if="store.ownFinishEnabled"
+            win-name="Own Finish"
+            :is-player-2="playerIndex === 1"
+            :is-disabled="isDisabled"
+            @click="
+              resetLaunchError();
+              winFunction({
+                Points: 1,
+                Player: playerIndex,
+                Reason: `${playerName} Own Finish`,
+              });
+            "
+          />
+          <WinButton
+            :win-name="errorText"
+            :is-player-2="playerIndex === 1"
+            :is-disabled="isDisabled"
+            @click="trackLaunchError()"
+          />
+        </template>
       </div>
       <h4 v-if="playerIndex === 0" class="m-24 grow text-7xl">
         {{ playerScore }}

@@ -20,6 +20,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   const player1Error = ref<number>(0);
   const player2Error = ref<number>(0);
   const generation = ref<GenerationType>(Generation.X);
+  const ownFinishEnabled = ref<boolean>(false);
 
   function undoLastAction() {
     useUndoAction({
@@ -66,5 +67,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     player1Error,
     player2Error,
     generation,
+    ownFinishEnabled,
   };
 });
