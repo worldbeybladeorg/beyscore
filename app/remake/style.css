@@ -1,0 +1,53 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Safe area support for PWA - handles notches, status bars, home indicators */
+/* Critical for iOS PWA "Add to Home Screen" to work properly in standalone mode */
+/* Also works on Android PWAs where safe-area-inset is supported */
+:root {
+  /* Safe area insets - works in PWA standalone mode on iOS and supported Android devices */
+  /* Falls back to 0px for browsers/devices that don't support safe-area-inset */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  
+  /* Status bar height - accounts for status bar in PWA standalone mode */
+  /* iOS: Uses safe-area-inset-top, Android: Uses safe-area-inset-top where supported */
+  /* Minimum 20px fallback for devices without safe-area-inset support */
+  --status-bar-height: max(20px, env(safe-area-inset-top, 20px));
+  
+  /* Home indicator height - accounts for home indicator/navigation bar at bottom */
+  /* iOS (iPhone X and later): ~34px via safe-area-inset-bottom */
+  /* Android: Navigation bar height via safe-area-inset-bottom where supported, 0px otherwise */
+  --home-indicator-height: max(34px, env(safe-area-inset-bottom, 0px));
+}
+
+/* Ensure body and html account for safe areas */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Landscape detection disabled for development - can re-enable later */
+/* @media (orientation: landscape) {
+  #app {
+    display: none !important;
+  }
+  
+  body::before {
+    content: "Please rotate your device to portrait mode";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 1rem;
+    color: #334155;
+    text-align: center;
+    padding: 2rem;
+  }
+} */
