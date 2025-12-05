@@ -1,189 +1,87 @@
+/* stylelint-disable at-rule-no-unknown */
 @import "tailwindcss";
-@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@theme {
+  --font-titillium: "Titillium Web", sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-serif: var(--font-serif);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-
-  --shadow-2xs: var(--shadow-2xs);
-  --shadow-xs: var(--shadow-xs);
-  --shadow-sm: var(--shadow-sm);
-  --shadow: var(--shadow);
-  --shadow-md: var(--shadow-md);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-xl: var(--shadow-xl);
-  --shadow-2xl: var(--shadow-2xl);
-
-  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
-  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
-  --tracking-normal: var(--tracking-normal);
-  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
-  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
-  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+  --breakpoint-mobile-sm: 375px;
+  --breakpoint-mobile-md: 390px;
+  --breakpoint-mobile-lg: 428px;
+  --breakpoint-mobile-landscape: 640px;
 }
 
+/* Animations */
+@keyframes shrinkScore {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+}
+
+@keyframes fadeInScore {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.score-shrink {
+  animation: shrinkScore 600ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.score-fade-in {
+  animation: fadeInScore 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Safe area support for PWA - handles notches, status bars, home indicators */
+/* Critical for iOS PWA "Add to Home Screen" to work properly in standalone mode */
+/* Also works on Android PWAs where safe-area-inset is supported */
+/* 
+ * Uses CSS env() function which is the standard approach for safe areas.
+ * Falls back to 0px for browsers/devices that don't support safe-area-inset.
+ * 
+ * Reference: https://developer.mozilla.org/en-US/docs/Web/CSS/env
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.1548 0.0021 286.1515);
-  --card: oklch(0.9816 0.0017 247.839);
-  --card-foreground: oklch(0.1548 0.0021 286.1515);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.1548 0.0021 286.1515);
-  --primary: oklch(0.6243 0.2056 255.4861);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.9584 0.0013 286.3749);
-  --secondary-foreground: oklch(0.4469 0.0048 286.2024);
-  --muted: oklch(0.9584 0.0013 286.3749);
-  --muted-foreground: oklch(0.4469 0.0048 286.2024);
-  --accent: oklch(0.958 0.0213 245.8511);
-  --accent-foreground: oklch(0.6243 0.2056 255.4861);
-  --destructive: oklch(0.6542 0.2321 28.6592);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.9197 0.004 286.3202);
-  --input: oklch(0.9197 0.004 286.3202);
-  --ring: oklch(0.6243 0.2056 255.4861);
-  --chart-1: oklch(0.6243 0.2056 255.4861);
-  --chart-2: oklch(0.6542 0.2321 28.6592);
-  --chart-3: oklch(0.7303 0.1944 147.4439);
-  --chart-4: oklch(0.7652 0.1752 62.5738);
-  --chart-5: oklch(0.5295 0.191 278.3368);
-  --sidebar: oklch(0.9816 0.0017 247.839);
-  --sidebar-foreground: oklch(0.4469 0.0048 286.2024);
-  --sidebar-primary: oklch(0.6243 0.2056 255.4861);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.958 0.0213 245.8511);
-  --sidebar-accent-foreground: oklch(0.6243 0.2056 255.4861);
-  --sidebar-border: oklch(0.9197 0.004 286.3202);
-  --sidebar-ring: oklch(0.6243 0.2056 255.4861);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-georgia);
-  --font-mono: var(--font-geist-mono);
-  --radius: 1rem;
-  --shadow-2xs: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.05);
-  --shadow-sm:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow-md:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 2px 4px -1px hsl(0 0% 0% / 0.1);
-  --shadow-lg:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 4px 6px -1px hsl(0 0% 0% / 0.1);
-  --shadow-xl:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 8px 10px -1px hsl(0 0% 0% / 0.1);
-  --shadow-2xl: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0rem;
-  --spacing: 0.25rem;
+  /* Direct safe area insets - use these for positioning content away from notches/rounded corners */
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
 }
 
-.dark {
-  --background: oklch(0.1548 0.0021 286.1515);
-  --foreground: oklch(0.9816 0.0017 247.839);
-  --card: oklch(0.2055 0.0039 286.0495);
-  --card-foreground: oklch(0.9816 0.0017 247.839);
-  --popover: oklch(0.2055 0.0039 286.0495);
-  --popover-foreground: oklch(0.9816 0.0017 247.839);
-  --primary: oklch(0.6243 0.2056 255.4861);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.2698 0.0055 286.0255);
-  --secondary-foreground: oklch(0.7073 0.0072 286.2146);
-  --muted: oklch(0.2698 0.0055 286.0255);
-  --muted-foreground: oklch(0.7073 0.0072 286.2146);
-  --accent: oklch(0.2637 0.0297 250.9666);
-  --accent-foreground: oklch(0.9816 0.0017 247.839);
-  --destructive: oklch(0.6633 0.2236 28.2919);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.2698 0.0055 286.0255);
-  --input: oklch(0.2698 0.0055 286.0255);
-  --ring: oklch(0.6243 0.2056 255.4861);
-  --chart-1: oklch(0.6243 0.2056 255.4861);
-  --chart-2: oklch(0.6633 0.2236 28.2919);
-  --chart-3: oklch(0.7303 0.1944 147.4439);
-  --chart-4: oklch(0.7652 0.1752 62.5738);
-  --chart-5: oklch(0.5295 0.191 278.3368);
-  --sidebar: oklch(0.2055 0.0039 286.0495);
-  --sidebar-foreground: oklch(0.7073 0.0072 286.2146);
-  --sidebar-primary: oklch(0.6243 0.2056 255.4861);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.2637 0.0297 250.9666);
-  --sidebar-accent-foreground: oklch(0.9816 0.0017 247.839);
-  --sidebar-border: oklch(0.2698 0.0055 286.0255);
-  --sidebar-ring: oklch(0.6243 0.2056 255.4861);
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-georgia);
-  --font-mono: var(--font-geist-mono);
-  --radius: 1rem;
-  --shadow-2xs: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.05);
-  --shadow-sm:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow-md:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 2px 4px -1px hsl(0 0% 0% / 0.1);
-  --shadow-lg:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 4px 6px -1px hsl(0 0% 0% / 0.1);
-  --shadow-xl:
-    0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.1),
-    0rem 8px 10px -1px hsl(0 0% 0% / 0.1);
-  --shadow-2xl: 0rem 0.0625rem 0rem 0rem hsl(0 0% 0% / 0.25);
+/* Ensure body and html account for safe areas */
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+/* Landscape detection disabled for development - can re-enable later */
+/* @media (orientation: landscape) {
+  #app {
+    display: none !important;
   }
-  body {
-    @apply bg-background text-foreground;
+  
+  body::before {
+    content: "Please rotate your device to portrait mode";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 1rem;
+    color: #334155;
+    text-align: center;
+    padding: 2rem;
   }
-}
+} */
