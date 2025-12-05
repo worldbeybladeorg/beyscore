@@ -1,3 +1,14 @@
+<script setup>
+import { Redo2 } from "lucide-vue-next";
+
+const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
 <template>
   <button
     class="redo-button"
@@ -17,17 +28,6 @@
     />
   </button>
 </template>
-
-<script setup>
-import { Redo2 } from "lucide-vue-next";
-
-const props = defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-});
-</script>
 
 <style scoped>
 .redo-button {

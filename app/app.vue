@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import GameSetup from "./components/GameSetup.vue";
-
 // Documentation: https://nuxt.com/docs/api/composables/use-seo-meta
 useSeoMeta({
   title: "WBO BeyScore",
@@ -10,8 +8,6 @@ useSeoMeta({
   ogDescription:
     "The official score keeping app of the World Beyblade Organization.",
 });
-
-const store = useScoreboardStore();
 </script>
 
 <template>
@@ -19,7 +15,7 @@ const store = useScoreboardStore();
   <!-- <ColorScheme placeholder="..." tag="div"> -->
   <!-- <ScoreBoard v-if="store.judgeMode" /> -->
 
-  <GameSetup />
+  <NuxtPage />
   <!-- <MobileScoreBoard -->
   <!--   v-if="scoreToWin !== 0 && !judgeMode" -->
   <!--   hydrate-on-visible -->

@@ -1,3 +1,15 @@
+<script setup>
+import { AlertTriangle, Trophy } from "lucide-vue-next";
+
+const props = defineProps({
+  variant: {
+    type: String,
+    default: "warning",
+    validator: (value) => ["warning", "p1Winner", "p2Winner"].includes(value),
+  },
+});
+</script>
+
 <template>
   <div
     class="box-border flex items-center justify-start gap-2 rounded-full bg-white px-3 py-[6px] shadow-[0_2px_8px_rgba(3,7,18,0.05)] [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0"
@@ -19,15 +31,3 @@
     </span>
   </div>
 </template>
-
-<script setup>
-import { AlertTriangle, Trophy } from "lucide-vue-next";
-
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "warning",
-    validator: (value) => ["warning", "p1Winner", "p2Winner"].includes(value),
-  },
-});
-</script>

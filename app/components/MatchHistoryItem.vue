@@ -1,72 +1,3 @@
-<template>
-  <div
-    class="mt-0 box-border flex flex-row items-center justify-between border-b border-slate-200 pb-3"
-    :class="{ '!border-b-0 !pb-0': isAfterDivider }"
-  >
-    <div class="flex flex-col items-start">
-      <div class="flex flex-row items-center gap-2">
-        <div class="m-0 p-0 font-titillium text-base font-bold text-slate-600">
-          {{ playerName }}
-        </div>
-        <!-- Star appears for all entries after a set is won, but not for penalty receivers in penalty wins -->
-        <ScoringStar
-          v-if="
-            bestOf !== null &&
-            setWins > 0 &&
-            !(isPenaltyWin && player !== winner)
-          "
-          :player="isPenaltyWin ? winner : player"
-          :count="setWins"
-          :filled-stars="filledStarsArray"
-          class="shrink-0"
-        />
-      </div>
-      <div
-        class="m-0 mt-[2px] p-0 font-titillium text-sm font-medium text-slate-500"
-      >
-        {{ displayScore }}
-      </div>
-      <div
-        v-if="winMessage"
-        class="m-0 mt-0 p-0 font-titillium text-sm font-medium text-slate-500"
-      >
-        {{ winMessage }}
-      </div>
-    </div>
-    <div class="flex items-center">
-      <ScoringChip
-        v-if="isWarning"
-        label="Error"
-        :score="0"
-        variant="warning"
-        :static="true"
-        :hide-score="true"
-      />
-      <ScoringChip
-        v-else-if="isPenalty"
-        :label="chipLabel"
-        :score="1"
-        variant="warning"
-        :static="true"
-      />
-      <ScoringChip
-        v-else-if="isGameWin && isPenaltyWin"
-        :label="chipLabel"
-        :score="1"
-        variant="warning"
-        :static="true"
-      />
-      <ScoringChip
-        v-else
-        :label="chipLabel"
-        :score="chipScore"
-        :variant="player === 'p1' ? 'blue' : 'red'"
-        :static="true"
-      />
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { computed } from "vue";
 import ScoringChip from "./ScoringChip.vue";
@@ -199,3 +130,72 @@ const filledStarsArray = computed(() => {
   return filled;
 });
 </script>
+
+<template>
+  <div
+    class="mt-0 box-border flex flex-row items-center justify-between border-b border-slate-200 pb-3"
+    :class="{ '!border-b-0 !pb-0': isAfterDivider }"
+  >
+    <div class="flex flex-col items-start">
+      <div class="flex flex-row items-center gap-2">
+        <div class="m-0 p-0 font-titillium text-base font-bold text-slate-600">
+          {{ playerName }}
+        </div>
+        <!-- Star appears for all entries after a set is won, but not for penalty receivers in penalty wins -->
+        <ScoringStar
+          v-if="
+            bestOf !== null &&
+            setWins > 0 &&
+            !(isPenaltyWin && player !== winner)
+          "
+          :player="isPenaltyWin ? winner : player"
+          :count="setWins"
+          :filled-stars="filledStarsArray"
+          class="shrink-0"
+        />
+      </div>
+      <div
+        class="m-0 mt-[2px] p-0 font-titillium text-sm font-medium text-slate-500"
+      >
+        {{ displayScore }}
+      </div>
+      <div
+        v-if="winMessage"
+        class="m-0 mt-0 p-0 font-titillium text-sm font-medium text-slate-500"
+      >
+        {{ winMessage }}
+      </div>
+    </div>
+    <div class="flex items-center">
+      <ScoringChip
+        v-if="isWarning"
+        label="Error"
+        :score="0"
+        variant="warning"
+        :static="true"
+        :hide-score="true"
+      />
+      <ScoringChip
+        v-else-if="isPenalty"
+        :label="chipLabel"
+        :score="1"
+        variant="warning"
+        :static="true"
+      />
+      <ScoringChip
+        v-else-if="isGameWin && isPenaltyWin"
+        :label="chipLabel"
+        :score="1"
+        variant="warning"
+        :static="true"
+      />
+      <ScoringChip
+        v-else
+        :label="chipLabel"
+        :score="chipScore"
+        :variant="player === 'p1' ? 'blue' : 'red'"
+        :static="true"
+      />
+    </div>
+  </div>
+</template>

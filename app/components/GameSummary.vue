@@ -1,3 +1,21 @@
+<script setup>
+const props = defineProps({
+  /**
+   * items: Array of { id?: string|number, label: string, value: string }
+   * Example default represents win conditions (Xtreme / Over / Burst / Spin).
+   */
+  items: {
+    type: Array,
+    default: () => [
+      { id: "xtreme", label: "XTR", value: 0 },
+      { id: "burst", label: "BST", value: 0 },
+      { id: "over", label: "OVR", value: 0 },
+      { id: "spin", label: "SPF", value: 0 },
+    ],
+  },
+});
+</script>
+
 <template>
   <div
     class="box-border flex h-12 w-full items-stretch justify-between overflow-visible rounded-none border-none bg-transparent shadow-none"
@@ -18,21 +36,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const props = defineProps({
-  /**
-   * items: Array of { id?: string|number, label: string, value: string }
-   * Example default represents win conditions (Xtreme / Over / Burst / Spin).
-   */
-  items: {
-    type: Array,
-    default: () => [
-      { id: "xtreme", label: "XTR", value: 0 },
-      { id: "burst", label: "BST", value: 0 },
-      { id: "over", label: "OVR", value: 0 },
-      { id: "spin", label: "SPF", value: 0 },
-    ],
-  },
-});
-</script>

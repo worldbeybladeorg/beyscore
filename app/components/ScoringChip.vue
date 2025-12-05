@@ -1,3 +1,55 @@
+<script setup>
+import { computed } from "vue";
+
+const props = defineProps({
+  label: {
+    type: String,
+    default: "XTR",
+  },
+  score: {
+    type: Number,
+    default: 3,
+  },
+  variant: {
+    type: String,
+    default: "blue", // 'blue' for player 1, 'red' for player 2, 'warning' for error state
+    validator: (value) => ["blue", "red", "warning"].includes(value),
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  hideScore: {
+    type: Boolean,
+    default: false,
+  },
+  static: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["chipClick"]);
+
+const colorClasses = computed(() => {
+  if (props.static) {
+    if (props.variant === "warning") return "bg-[#F59E0B] border-transparent";
+    if (props.variant === "red") return "bg-[#FF5555] border-transparent";
+    return "bg-[#1088C9] border-transparent";
+  }
+  if (props.variant === "warning") return "bg-[#F59E0B] border-b-[#D97706]";
+  if (props.variant === "red") return "bg-[#FF5555] border-b-[#E51d1d]";
+  return "bg-[#1088C9] border-b-[#0D6497]";
+});
+
+const handleClick = () => {
+  // Emit if not disabled and not static (warning variant now also emits, but with null score)
+  if (!props.disabled && !props.static) {
+    emit("chipClick", props.variant === "warning" ? null : props.score);
+  }
+};
+</script>
+
 <template>
   <div
     class="box-border flex items-center justify-start rounded-full border-t-0 border-b-2"
@@ -50,55 +102,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { computed } from "vue";
-
-const props = defineProps({
-  label: {
-    type: String,
-    default: "XTR",
-  },
-  score: {
-    type: Number,
-    default: 3,
-  },
-  variant: {
-    type: String,
-    default: "blue", // 'blue' for player 1, 'red' for player 2, 'warning' for error state
-    validator: (value) => ["blue", "red", "warning"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  hideScore: {
-    type: Boolean,
-    default: false,
-  },
-  static: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const emit = defineEmits(["chipClick"]);
-
-const colorClasses = computed(() => {
-  if (props.static) {
-    if (props.variant === "warning") return "bg-[#F59E0B] border-transparent";
-    if (props.variant === "red") return "bg-[#FF5555] border-transparent";
-    return "bg-[#1088C9] border-transparent";
-  }
-  if (props.variant === "warning") return "bg-[#F59E0B] border-b-[#D97706]";
-  if (props.variant === "red") return "bg-[#FF5555] border-b-[#E51d1d]";
-  return "bg-[#1088C9] border-b-[#0D6497]";
-});
-
-const handleClick = () => {
-  // Emit if not disabled and not static (warning variant now also emits, but with null score)
-  if (!props.disabled && !props.static) {
-    emit("chipClick", props.variant === "warning" ? null : props.score);
-  }
-};
-</script>

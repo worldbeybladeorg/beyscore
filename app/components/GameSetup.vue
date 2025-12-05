@@ -1,116 +1,76 @@
 <script setup>
-import { ref, nextTick } from "vue";
-import { useRouter } from "vue-router";
+import { ref, nextTick, watch } from "vue";
+import { storeToRefs } from "pinia";
 import ToggleButton from "../components/ToggleButton.vue";
 import Button from "../components/Button.vue";
-const router = useRouter();
+import { useScoreboardStore } from "~/stores/scoreboardStore";
 
-const selectedGeneration = ref("x"); // Default to 'X'
-const selectedMatchType = ref("4pts"); // Default to '4 Pts.'
-const selectedBestOf = ref(null); // Default to none (both unselected)
-const ownFinishEnabled = ref(false); // Default to 'Off'
+const scoreboardStore = useScoreboardStore();
+const { generation, matchType, bestOf, ownFinishEnabled } =
+  storeToRefs(scoreboardStore);
+
+const selectedGeneration = ref(generation.value);
+watch(generation, (value) => {
+  selectedGeneration.value = value;
+});
+
+const selectedMatchType = ref(matchType.value);
+watch(matchType, (value) => {
+  selectedMatchType.value = value;
+});
+
+const selectedBestOf = ref(bestOf.value ? bestOf.value.toString() : null);
+watch(bestOf, (value) => {
+  selectedBestOf.value = value ? value.toString() : null;
+});
+
+const localOwnFinishEnabled = ref(ownFinishEnabled.value);
+watch(ownFinishEnabled, (value) => {
+  localOwnFinishEnabled.value = value;
+});
 
 const handleBack = () => {
   // Back button removed - no splash screen to go back to
   // Could navigate to home or remove the back button entirely
 };
 
-const handleGenerationToggle = (generation, state) => {
+const handleGenerationToggle = (value, state) => {
   if (state) {
-    // Turn on this generation - this will update keys and turn off others
-    selectedGeneration.value = generation;
-
-    // For Burst, Metal Fight/Zero-G, and Plastic & HMS, default to 3pts
-    if (generation !== "x") {
-      selectedMatchType.value = "3pts"; // Default for non-X formats
-    }
-    // If switching to X format, default to 4pts
-    if (generation === "x") {
-      selectedMatchType.value = "4pts"; // Default for X format
-    }
-  } else {
-    // Prevent deselecting - always keep one selected (mandatory)
-    // Can only change selection by clicking another generation
-    if (selectedGeneration.value === generation) {
-      // Keep the current selection - force re-render by toggling the value
-      // This ensures the key updates and component resets to selected state
-      selectedGeneration.value = null;
-      nextTick(() => {
-        selectedGeneration.value = generation;
-      });
-      return;
-    }
+    scoreboardStore.setGeneration(value);
+  } else if (selectedGeneration.value === value) {
+    selectedGeneration.value = null;
+    nextTick(() => {
+      selectedGeneration.value = generation.value;
+    });
   }
 };
 
-const handleMatchTypeToggle = (matchType, state) => {
+const handleMatchTypeToggle = (value, state) => {
   if (state) {
-    // Turn on this match type - this will update keys and turn off others
-    selectedMatchType.value = matchType;
-    // If "No Limit" is selected, reset best-of selection
-    if (matchType === "nolimit") {
-      selectedBestOf.value = null;
-    }
-  } else {
-    // Prevent deselecting - always keep one selected (mandatory)
-    // Can only change selection by clicking another match type
-    if (selectedMatchType.value === matchType) {
-      // Keep the current selection - force re-render by toggling the value
-      // This ensures the key updates and component resets to selected state
-      selectedMatchType.value = null;
-      nextTick(() => {
-        selectedMatchType.value = matchType;
-      });
-      return;
-    }
+    scoreboardStore.setMatchType(value);
+  } else if (selectedMatchType.value === value) {
+    selectedMatchType.value = null;
+    nextTick(() => {
+      selectedMatchType.value = matchType.value;
+    });
   }
 };
 
-const handleBestOfToggle = (bestOf, state) => {
+const handleBestOfToggle = (value, state) => {
   if (state) {
-    // Turn on this best-of - this will update keys and turn off others
-    selectedBestOf.value = bestOf;
-  } else {
-    // If trying to turn off, allow it (unlike generation/match type, these can be unselected)
-    if (selectedBestOf.value === bestOf) {
-      selectedBestOf.value = null;
-    }
+    scoreboardStore.setBestOf(value ? parseInt(value, 10) : null);
+  } else if (selectedBestOf.value === value) {
+    scoreboardStore.setBestOf(null);
   }
 };
 
 const handleOwnFinishToggle = (state) => {
-  // Not mandatory - can be toggled on/off freely
-  ownFinishEnabled.value = state;
+  scoreboardStore.setOwnFinishEnabled(state);
 };
 
-const handleStartGame = () => {
-  // Map generation values to match ScoreCardPortrait prop values
-  let generationParam = selectedGeneration.value;
-  if (selectedGeneration.value === "metal-fight") {
-    generationParam = "mfb-zero-g";
-  } else if (selectedGeneration.value === "plastic-hms") {
-    generationParam = "plastics-hms";
-  }
-
-  const query = {
-    generation: generationParam,
-    matchType: selectedMatchType.value, // Add match type to query
-  };
-
-  // Add bestOf to query if selected (convert string to number)
-  if (selectedBestOf.value) {
-    query.bestOf = selectedBestOf.value;
-  }
-
-  // Add ownFinish to query if enabled (X format only)
-  if (ownFinishEnabled.value && generationParam === "x") {
-    query.ownFinish = "1";
-  }
-
-  router.push({
-    path: "/app/game",
-    query: query,
-  });
+const handleStartGame = async () => {
+  scoreboardStore.reset();
+  await navigateTo("/game");
 };
 </script>
 
@@ -146,16 +106,16 @@ const handleStartGame = () => {
         <ToggleButton
           :key="`metal-${selectedGeneration}`"
           size="large"
-          :initial-state="selectedGeneration === 'metal-fight'"
-          @toggle="(state) => handleGenerationToggle('metal-fight', state)"
+          :initial-state="selectedGeneration === 'mfb-zero-g'"
+          @toggle="(state) => handleGenerationToggle('mfb-zero-g', state)"
         >
           Metal Fight/Zero-G
         </ToggleButton>
         <ToggleButton
           :key="`plastic-${selectedGeneration}`"
           size="large"
-          :initial-state="selectedGeneration === 'plastic-hms'"
-          @toggle="(state) => handleGenerationToggle('plastic-hms', state)"
+          :initial-state="selectedGeneration === 'plastics-hms'"
+          @toggle="(state) => handleGenerationToggle('plastics-hms', state)"
         >
           Plastic & HMS
         </ToggleButton>
@@ -268,11 +228,11 @@ const handleStartGame = () => {
           :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
         >
           <ToggleButton
-            :key="`ownfinish-${ownFinishEnabled}`"
-            :initial-state="ownFinishEnabled"
+            :key="`ownfinish-${localOwnFinishEnabled}`"
+            :initial-state="localOwnFinishEnabled"
             @toggle="(state) => handleOwnFinishToggle(state)"
           >
-            {{ ownFinishEnabled ? "On" : "Off" }}
+            {{ localOwnFinishEnabled ? "On" : "Off" }}
           </ToggleButton>
         </div>
       </template>

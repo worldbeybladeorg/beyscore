@@ -1,3 +1,108 @@
+<script setup>
+import PlayerName from "./PlayerName.vue";
+import ScoringChip from "./ScoringChip.vue";
+import ResponseChip from "./ResponseChip.vue";
+
+const props = defineProps({
+  player: {
+    type: String,
+    default: "p1",
+    validator: (value) => ["p1", "p2"].includes(value),
+  },
+  playerName: {
+    type: String,
+    default: "Player 1",
+  },
+  generation: {
+    type: String,
+    default: "x",
+    validator: (value) =>
+      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
+  },
+  bestOf: {
+    type: Number,
+    default: null,
+    validator: (value) => value === null || [3, 5].includes(value),
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  filledStars: {
+    type: Array,
+    default: () => [],
+    validator: (value) => {
+      return (
+        Array.isArray(value) && value.every((item) => typeof item === "boolean")
+      );
+    },
+  },
+  showWarning: {
+    type: Boolean,
+    default: false,
+  },
+  ownFinishEnabled: {
+    type: Boolean,
+    default: false,
+  },
+  isFadingIn: {
+    type: Boolean,
+    default: false,
+  },
+  isShrinking: {
+    type: Boolean,
+    default: false,
+  },
+  score: {
+    type: String,
+    default: "0",
+  },
+  xtrScore: {
+    type: Number,
+    default: 3,
+  },
+  ovrScore: {
+    type: Number,
+    default: 2,
+  },
+  bstScore: {
+    type: Number,
+    default: 2,
+  },
+  spfScore: {
+    type: Number,
+    default: 1,
+  },
+});
+
+const emit = defineEmits([
+  "scoreIncrease",
+  "penalty",
+  "warningToggle",
+  "ownFinish",
+]);
+
+const handleChipClick = (points, chipLabel) => {
+  // Emit event with player, points to add, and chip label
+  emit("scoreIncrease", points, chipLabel);
+};
+
+const handleErrClick = () => {
+  if (!props.showWarning) {
+    // First click: Show warning chip (ERR -> PEN) - emit toggle event
+    emit("warningToggle");
+  } else {
+    // Second click (PEN): Issue penalty point to opposing player
+    emit("penalty");
+    // Warning state will be reset by parent after penalty is issued
+  }
+};
+
+const handleOwnFinishClick = () => {
+  emit("ownFinish");
+};
+</script>
+
 <template>
   <div
     class="relative box-border flex aspect-square w-[90vw] max-w-[390px] flex-col rounded-[20px] bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat p-5"
@@ -357,108 +462,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import PlayerName from "./PlayerName.vue";
-import ScoringChip from "./ScoringChip.vue";
-import ResponseChip from "./ResponseChip.vue";
-
-const props = defineProps({
-  player: {
-    type: String,
-    default: "p1",
-    validator: (value) => ["p1", "p2"].includes(value),
-  },
-  playerName: {
-    type: String,
-    default: "Player 1",
-  },
-  generation: {
-    type: String,
-    default: "x",
-    validator: (value) =>
-      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
-  },
-  bestOf: {
-    type: Number,
-    default: null,
-    validator: (value) => value === null || [3, 5].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  filledStars: {
-    type: Array,
-    default: () => [],
-    validator: (value) => {
-      return (
-        Array.isArray(value) && value.every((item) => typeof item === "boolean")
-      );
-    },
-  },
-  showWarning: {
-    type: Boolean,
-    default: false,
-  },
-  ownFinishEnabled: {
-    type: Boolean,
-    default: false,
-  },
-  isFadingIn: {
-    type: Boolean,
-    default: false,
-  },
-  isShrinking: {
-    type: Boolean,
-    default: false,
-  },
-  score: {
-    type: String,
-    default: "0",
-  },
-  xtrScore: {
-    type: Number,
-    default: 3,
-  },
-  ovrScore: {
-    type: Number,
-    default: 2,
-  },
-  bstScore: {
-    type: Number,
-    default: 2,
-  },
-  spfScore: {
-    type: Number,
-    default: 1,
-  },
-});
-
-const emit = defineEmits([
-  "scoreIncrease",
-  "penalty",
-  "warningToggle",
-  "ownFinish",
-]);
-
-const handleChipClick = (points, chipLabel) => {
-  // Emit event with player, points to add, and chip label
-  emit("scoreIncrease", points, chipLabel);
-};
-
-const handleErrClick = () => {
-  if (!props.showWarning) {
-    // First click: Show warning chip (ERR -> PEN) - emit toggle event
-    emit("warningToggle");
-  } else {
-    // Second click (PEN): Issue penalty point to opposing player
-    emit("penalty");
-    // Warning state will be reset by parent after penalty is issued
-  }
-};
-
-const handleOwnFinishClick = () => {
-  emit("ownFinish");
-};
-</script>

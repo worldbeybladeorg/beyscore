@@ -1,55 +1,3 @@
-<template>
-  <div
-    class="relative box-border flex w-full flex-col items-center rounded-[20px] bg-white p-5"
-  >
-    <button
-      class="absolute top-5 right-5 flex h-6 w-6 cursor-pointer items-center justify-center border-none bg-transparent p-0"
-      @click="$emit('close')"
-    >
-      <X :size="24" color="#64748b" :stroke-width="2" />
-    </button>
-
-    <div class="flex w-full flex-col items-center">
-      <div
-        class="text-center font-titillium text-base font-normal text-slate-500"
-      >
-        Winner
-      </div>
-      <div
-        class="mt-[2px] text-center font-titillium text-lg font-bold text-slate-700"
-      >
-        {{ winnerName }}
-      </div>
-    </div>
-
-    <div class="mt-6 w-full">
-      <GameSummary :items="summaryItemsComputed" />
-    </div>
-
-    <div
-      v-if="format === 'x' && showOpponentSummary"
-      class="mt-5 w-full text-center font-titillium text-sm font-normal text-slate-400"
-    >
-      {{ opponentSummaryText }}
-    </div>
-
-    <div class="mt-6 flex w-full flex-row gap-5">
-      <Button
-        variant="blue"
-        class-name="flex-1 w-full font-bold"
-        @click="$emit('newGame')"
-        >New Game</Button
-      >
-      <Button
-        variant="secondary"
-        class-name="flex-1 w-full font-bold"
-        @click="$emit('viewHistory')"
-        >View History</Button
-      >
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { computed } from "vue";
 import GameSummary from "./GameSummary.vue";
@@ -146,3 +94,55 @@ const opponentSummaryText = computed(() => {
 
 defineEmits(["newGame", "viewHistory", "close"]);
 </script>
+
+<template>
+  <div
+    class="relative box-border flex w-full flex-col items-center rounded-[20px] bg-white p-5"
+  >
+    <button
+      class="absolute top-5 right-5 flex h-6 w-6 cursor-pointer items-center justify-center border-none bg-transparent p-0"
+      @click="$emit('close')"
+    >
+      <X :size="24" color="#64748b" :stroke-width="2" />
+    </button>
+
+    <div class="flex w-full flex-col items-center">
+      <div
+        class="text-center font-titillium text-base font-normal text-slate-500"
+      >
+        Winner
+      </div>
+      <div
+        class="mt-[2px] text-center font-titillium text-lg font-bold text-slate-700"
+      >
+        {{ winnerName }}
+      </div>
+    </div>
+
+    <div class="mt-6 w-full">
+      <GameSummary :items="summaryItemsComputed" />
+    </div>
+
+    <div
+      v-if="format === 'x' && showOpponentSummary"
+      class="mt-5 w-full text-center font-titillium text-sm font-normal text-slate-400"
+    >
+      {{ opponentSummaryText }}
+    </div>
+
+    <div class="mt-6 flex w-full flex-row gap-5">
+      <Button
+        variant="blue"
+        class-name="flex-1 w-full font-bold"
+        @click="$emit('newGame')"
+        >New Game</Button
+      >
+      <Button
+        variant="secondary"
+        class-name="flex-1 w-full font-bold"
+        @click="$emit('viewHistory')"
+        >View History</Button
+      >
+    </div>
+  </div>
+</template>

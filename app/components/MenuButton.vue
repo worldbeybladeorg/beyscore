@@ -1,3 +1,19 @@
+<script setup>
+import { History, Settings } from "lucide-vue-next";
+
+const props = defineProps({
+  variant: {
+    type: String,
+    default: "matchHistory",
+    validator: (value) => ["matchHistory", "settings"].includes(value),
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
 <template>
   <button
     class="menu-button"
@@ -21,22 +37,6 @@
     />
   </button>
 </template>
-
-<script setup>
-import { History, Settings } from "lucide-vue-next";
-
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "matchHistory",
-    validator: (value) => ["matchHistory", "settings"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-});
-</script>
 
 <style scoped>
 .menu-button {
