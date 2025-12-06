@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 export type MatchTypeOption = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
@@ -47,41 +47,88 @@ const DEFAULT_BEST_OF: BestOfOption = undefined;
 const DEFAULT_OWN_FINISH = false;
 
 export const useScoreboardStore = defineStore("scoreboard", () => {
+  // Load persisted state from localStorage
+  const loadPersistedState = () => {
+    if (typeof window !== "undefined") {
+      const persisted = localStorage.getItem("beyscore-store");
+      if (persisted) {
+        try {
+          return JSON.parse(persisted);
+        } catch {
+          return {};
+        }
+      }
+    }
+    return {};
+  };
+
+  const persistedState = loadPersistedState();
+
   // Core scoreboard state shared across viewports
-  const player1Score = ref<number>(0);
-  const player2Score = ref<number>(0);
-  const player1NameSetting = ref<string>("Player 1");
-  const player2NameSetting = ref<string>("Player 2");
+  const player1Score = ref<number>(persistedState.player1Score || 0);
+  const player2Score = ref<number>(persistedState.player2Score || 0);
+  const player1NameSetting = ref<string>(
+    persistedState.player1NameSetting || "Player 1",
+  );
+  const player2NameSetting = ref<string>(
+    persistedState.player2NameSetting || "Player 2",
+  );
   const player1Name = player1NameSetting;
   const player2Name = player2NameSetting;
-  const matchHistory = ref<MatchHistoryEntry[]>([]);
-  const p1SetWins = ref<boolean[]>([]);
-  const p2SetWins = ref<boolean[]>([]);
-  const p1ShowWarning = ref<boolean>(false);
-  const p2ShowWarning = ref<boolean>(false);
-  const currentGameNumber = ref<number>(1);
-  const displayedSetNumber = ref<number>(1);
-  const winningChipLabel = ref<string | null>(null);
-  const isScoreFadingIn = ref<boolean>(false);
-  const isScoreShrinking = ref<boolean>(false);
-  const pendingGameReset = ref<boolean>(false);
-  const history = ref<HistorySnapshot[]>([createInitialHistorySnapshot()]);
-  const historyIndex = ref<number>(0);
-  const showGameResultsOverlay = ref<boolean>(false);
-  const gameResultsOverlayHasBeenShown = ref<boolean>(false);
+  const matchHistory = ref<MatchHistoryEntry[]>(
+    persistedState.matchHistory || [],
+  );
+  const p1SetWins = ref<boolean[]>(persistedState.p1SetWins || []);
+  const p2SetWins = ref<boolean[]>(persistedState.p2SetWins || []);
+  const p1ShowWarning = ref<boolean>(persistedState.p1ShowWarning || false);
+  const p2ShowWarning = ref<boolean>(persistedState.p2ShowWarning || false);
+  const currentGameNumber = ref<number>(persistedState.currentGameNumber || 1);
+  const displayedSetNumber = ref<number>(
+    persistedState.displayedSetNumber || 1,
+  );
+  const winningChipLabel = ref<string | null>(
+    persistedState.winningChipLabel || null,
+  );
+  const isScoreFadingIn = ref<boolean>(persistedState.isScoreFadingIn || false);
+  const isScoreShrinking = ref<boolean>(
+    persistedState.isScoreShrinking || false,
+  );
+  const pendingGameReset = ref<boolean>(
+    persistedState.pendingGameReset || false,
+  );
+  const history = ref<HistorySnapshot[]>(
+    persistedState.history || [createInitialHistorySnapshot()],
+  );
+  const historyIndex = ref<number>(persistedState.historyIndex || 0);
+  const showGameResultsOverlay = ref<boolean>(
+    persistedState.showGameResultsOverlay || false,
+  );
+  const gameResultsOverlayHasBeenShown = ref<boolean>(
+    persistedState.gameResultsOverlayHasBeenShown || false,
+  );
 
   // Additional metadata retained from legacy store (used by future features)
-  const judgeMode = ref<boolean>(true);
-  const pointsToWin = ref<number>(4);
-  const scoreReason = ref<string>("");
-  const player1Error = ref<number>(0);
-  const player2Error = ref<number>(0);
+  const judgeMode = ref<boolean>(
+    persistedState.judgeMode !== undefined ? persistedState.judgeMode : true,
+  );
+  const pointsToWin = ref<number>(persistedState.pointsToWin || 4);
+  const scoreReason = ref<string>(persistedState.scoreReason || "");
+  const player1Error = ref<number>(persistedState.player1Error || 0);
+  const player2Error = ref<number>(persistedState.player2Error || 0);
 
   // Global game configuration shared between setup + screens
-  const generation = ref<GenerationOption>(DEFAULT_GENERATION);
-  const matchType = ref<MatchTypeOption>(DEFAULT_MATCH_TYPE);
-  const bestOf = ref<BestOfOption>(DEFAULT_BEST_OF);
-  const ownFinishEnabled = ref<boolean>(DEFAULT_OWN_FINISH);
+  const generation = ref<GenerationOption>(
+    persistedState.generation || DEFAULT_GENERATION,
+  );
+  const matchType = ref<MatchTypeOption>(
+    persistedState.matchType || DEFAULT_MATCH_TYPE,
+  );
+  const bestOf = ref<BestOfOption>(persistedState.bestOf || DEFAULT_BEST_OF);
+  const ownFinishEnabled = ref<boolean>(
+    persistedState.ownFinishEnabled !== undefined
+      ? persistedState.ownFinishEnabled
+      : DEFAULT_OWN_FINISH,
+  );
 
   const setGeneration = (value: GenerationOption) => {
     generation.value = value;
@@ -162,6 +209,79 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
       resetConfigToDefaults();
     }
   };
+
+  // Persist state to localStorage whenever any state changes
+  const persistState = () => {
+    if (typeof window !== "undefined") {
+      const stateToPersist = {
+        player1Score: player1Score.value,
+        player2Score: player2Score.value,
+        player1NameSetting: player1NameSetting.value,
+        player2NameSetting: player2NameSetting.value,
+        matchHistory: matchHistory.value,
+        p1SetWins: p1SetWins.value,
+        p2SetWins: p2SetWins.value,
+        p1ShowWarning: p1ShowWarning.value,
+        p2ShowWarning: p2ShowWarning.value,
+        currentGameNumber: currentGameNumber.value,
+        displayedSetNumber: displayedSetNumber.value,
+        winningChipLabel: winningChipLabel.value,
+        isScoreFadingIn: isScoreFadingIn.value,
+        isScoreShrinking: isScoreShrinking.value,
+        pendingGameReset: pendingGameReset.value,
+        history: history.value,
+        historyIndex: historyIndex.value,
+        showGameResultsOverlay: showGameResultsOverlay.value,
+        gameResultsOverlayHasBeenShown: gameResultsOverlayHasBeenShown.value,
+        judgeMode: judgeMode.value,
+        pointsToWin: pointsToWin.value,
+        scoreReason: scoreReason.value,
+        player1Error: player1Error.value,
+        player2Error: player2Error.value,
+        generation: generation.value,
+        matchType: matchType.value,
+        bestOf: bestOf.value,
+        ownFinishEnabled: ownFinishEnabled.value,
+      };
+      localStorage.setItem("beyscore-store", JSON.stringify(stateToPersist));
+    }
+  };
+
+  // Watch all state changes and persist them
+  const stateRefs = [
+    player1Score,
+    player2Score,
+    player1NameSetting,
+    player2NameSetting,
+    matchHistory,
+    p1SetWins,
+    p2SetWins,
+    p1ShowWarning,
+    p2ShowWarning,
+    currentGameNumber,
+    displayedSetNumber,
+    winningChipLabel,
+    isScoreFadingIn,
+    isScoreShrinking,
+    pendingGameReset,
+    history,
+    historyIndex,
+    showGameResultsOverlay,
+    gameResultsOverlayHasBeenShown,
+    judgeMode,
+    pointsToWin,
+    scoreReason,
+    player1Error,
+    player2Error,
+    generation,
+    matchType,
+    bestOf,
+    ownFinishEnabled,
+  ];
+
+  stateRefs.forEach((stateRef) => {
+    watch(stateRef, persistState, { deep: true });
+  });
 
   return {
     player1Name,
