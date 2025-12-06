@@ -1,5 +1,1 @@
-- If you dismiss the winner screen without starting a new game, the only way to start a new game is to refresh
-- I can't change the points to win or sets in the settings after the initial pop-up screen
-- New game button doesn't work.
 - When you refresh the page, it forgets your settings
-- Error warning doesn't go away after successful battle

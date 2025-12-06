@@ -960,6 +960,10 @@ const handlePlayer1ScoreIncrease = (points, chipLabel) => {
   // Save state after change if score actually changed
   // If this action ends the game, save BEFORE set win is recorded (so undo can revert this action)
   if (scoreChanged) {
+    // Reset all warnings when any point is scored
+    p1ShowWarning.value = false;
+    p2ShowWarning.value = false;
+
     // Track the chip that ended the game
     if (chipLabel && gameWillEnd) {
       winningChipLabel.value = chipLabel;
@@ -1008,6 +1012,10 @@ const handlePlayer2ScoreIncrease = (points, chipLabel) => {
   // Save state after change if score actually changed
   // If this action ends the game, save BEFORE set win is recorded (so undo can revert this action)
   if (scoreChanged) {
+    // Reset all warnings when any point is scored
+    p1ShowWarning.value = false;
+    p2ShowWarning.value = false;
+
     // Track the chip that ended the game
     if (chipLabel && gameWillEnd) {
       winningChipLabel.value = chipLabel;
