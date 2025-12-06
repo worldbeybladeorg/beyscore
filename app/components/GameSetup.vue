@@ -29,11 +29,6 @@ watch(ownFinishEnabled, (value) => {
   localOwnFinishEnabled.value = value;
 });
 
-const handleBack = () => {
-  // Back button removed - no splash screen to go back to
-  // Could navigate to home or remove the back button entirely
-};
-
 const handleGenerationToggle = (value, state) => {
   if (state) {
     scoreboardStore.setGeneration(value);

@@ -160,12 +160,6 @@ const player2DisplayName = computed(() =>
   formatDisplayName(player2NameSetting.value),
 );
 
-const getPlayerDisplayName = (playerKey) => {
-  if (playerKey === "p1") return player1DisplayName.value;
-  if (playerKey === "p2") return player2DisplayName.value;
-  return "Player";
-};
-
 // Get untruncated player name for match history and winner messages
 const getPlayerDisplayNameFull = (playerKey) => {
   if (playerKey === "p1") return player1NameSetting.value || "Player 1";
@@ -178,16 +172,6 @@ const hasChanges = computed(() => {
   return (
     player1NameSetting.value !== originalPlayer1Name.value ||
     player2NameSetting.value !== originalPlayer2Name.value ||
-    generation.value !== originalGeneration.value ||
-    matchTypeParam.value !== originalMatchType.value ||
-    bestOf.value !== originalBestOf.value ||
-    isOwnFinishEnabled.value !== originalOwnFinish.value
-  );
-});
-
-// Check if game settings have changed (excluding name changes)
-const gameSettingsChanged = computed(() => {
-  return (
     generation.value !== originalGeneration.value ||
     matchTypeParam.value !== originalMatchType.value ||
     bestOf.value !== originalBestOf.value ||
@@ -553,11 +537,6 @@ const restoreState = (state) => {
   // Restore current game number
   currentGameNumber.value = state.currentGameNumber || 1;
 };
-
-// Check if main scores are at 0 (initial state)
-const isAtInitialState = computed(() => {
-  return player1Score.value === 0 && player2Score.value === 0;
-});
 
 // Check if game has ended (either player reached/exceeded maxPoints)
 const gameEnded = computed(() => {
