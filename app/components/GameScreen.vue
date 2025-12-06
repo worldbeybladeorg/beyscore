@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
-import { useGameState } from "../composables/useGameState.js";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "lucide-vue-next";
 import ScoreCardPortrait from "../components/ScoreCardPortrait.vue";
@@ -133,7 +132,7 @@ const {
   historyIndex,
   showGameResultsOverlay,
   gameResultsOverlayHasBeenShown,
-} = useGameState();
+} = storeToRefs(scoreboardStore);
 
 // Store original values when settings modal opens (for comparison and revert)
 const originalPlayer1Name = ref("Player 1");
@@ -309,6 +308,16 @@ const handleGenerationSelect = (value) => {
   openDropdown.value = null;
 };
 
+const handlePointsToWinSelect = (value) => {
+  setMatchType(value);
+  openDropdown.value = null;
+};
+
+const handleSetsSelect = (value) => {
+  setBestOf(value ? parseInt(value) : null);
+  openDropdown.value = null;
+};
+
 // Track the chip that caused the game to end (for match history)
 // winningChipLabel is now from useGameState()
 
@@ -451,7 +460,7 @@ const handleSaveChanges = () => {
 
   // If game settings changed and game has started, reset the game
   if (gameSettingsChanged && gameHasStarted) {
-    resetGameState();
+    scoreboardStore.reset();
   }
 
   // Handle empty player names - default to Player 1/Player 2
@@ -482,8 +491,8 @@ const handleResetGame = () => {
   originalPlayer1Name.value = "Player 1";
   originalPlayer2Name.value = "Player 2";
 
-  // Reset game state
-  resetGameState();
+  // Reset game state using store
+  scoreboardStore.reset();
 
   closeSettingsModal();
 };
@@ -1206,7 +1215,7 @@ const handleGameResultsClose = () => {
 };
 
 const handleGameResultsNewGame = () => {
-  resetGameState();
+  scoreboardStore.reset();
   showGameResultsOverlay.value = false;
   gameResultsOverlayHasBeenShown.value = false;
 };

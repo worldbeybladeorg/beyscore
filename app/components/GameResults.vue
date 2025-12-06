@@ -4,6 +4,8 @@ import GameSummary from "./GameSummary.vue";
 import Button from "./Button.vue";
 import { X } from "lucide-vue-next";
 
+// Reset game using store
+
 const props = defineProps({
   winnerName: {
     type: String,

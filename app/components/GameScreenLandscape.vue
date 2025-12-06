@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
-import { useGameState } from "../composables/useGameState.js";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "lucide-vue-next";
 import ScoreCardLandscape from "../components/ScoreCardLandscape.vue";
@@ -132,7 +131,7 @@ const {
   historyIndex,
   showGameResultsOverlay,
   gameResultsOverlayHasBeenShown,
-} = useGameState();
+} = storeToRefs(scoreboardStore);
 
 // Store original values when settings modal opens (for comparison and revert)
 const originalPlayer1Name = ref("Player 1");
@@ -428,55 +427,6 @@ const handleOwnFinishToggle = (state) => {
   setOwnFinishEnabled(state);
 };
 
-// Helper function to reset game state (without closing modal)
-const resetGameState = () => {
-  // Reset scores to 0-0
-  player1Score.value = 0;
-  player2Score.value = 0;
-
-  // Clear match history
-  matchHistory.value = [];
-
-  // Reset set wins
-  p1SetWins.value = [];
-  p2SetWins.value = [];
-
-  // Reset warning states
-  p1ShowWarning.value = false;
-  p2ShowWarning.value = false;
-
-  // Reset game tracking
-  currentGameNumber.value = 1;
-  displayedSetNumber.value = 1;
-  winningChipLabel.value = null;
-
-  // Reset animation states
-  isScoreFadingIn.value = false;
-  isScoreShrinking.value = false;
-
-  // Clear any pending game reset
-  pendingGameReset.value = false;
-  if (gameResetTimeout) {
-    clearTimeout(gameResetTimeout);
-    gameResetTimeout = null;
-  }
-
-  // Reset history system to initial state
-  history.value = [
-    {
-      player1: 0,
-      player2: 0,
-      p1SetWins: [],
-      p2SetWins: [],
-      p1ShowWarning: false,
-      p2ShowWarning: false,
-      matchHistory: [],
-      currentGameNumber: 1,
-    },
-  ];
-  historyIndex.value = 0;
-};
-
 const handleSaveChanges = () => {
   // Check if game settings have changed
   const gameSettingsChanged =
@@ -490,7 +440,7 @@ const handleSaveChanges = () => {
 
   // If game settings changed and game has started, reset the game
   if (gameSettingsChanged && gameHasStarted) {
-    resetGameState();
+    scoreboardStore.reset();
   }
 
   // Handle empty player names - default to Player 1/Player 2
@@ -521,8 +471,8 @@ const handleResetGame = () => {
   originalPlayer1Name.value = "Player 1";
   originalPlayer2Name.value = "Player 2";
 
-  // Reset game state
-  resetGameState();
+  // Reset game state using store
+  scoreboardStore.reset();
 
   closeSettingsModal();
 };
@@ -1237,7 +1187,7 @@ const handleGameResultsClose = () => {
 };
 
 const handleGameResultsNewGame = () => {
-  resetGameState();
+  scoreboardStore.reset();
   showGameResultsOverlay.value = false;
 };
 
