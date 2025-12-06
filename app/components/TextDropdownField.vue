@@ -1,37 +1,35 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import { ChevronDown, ChevronUp } from "lucide-vue-next";
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: "Title",
-  },
-  modelValue: {
-    type: String,
-    default: "Text",
-  },
-  variant: {
-    type: String,
-    default: "input",
-    validator: (value) => ["input", "dropdown"].includes(value),
-  },
-  showChevron: {
-    type: Boolean,
-    default: true,
-  },
-  maxLength: {
-    type: Number,
-    default: null,
-  },
+type TextDropdownVariant = "input" | "dropdown";
+
+interface Props {
+  title?: string;
+  modelValue?: string;
+  variant?: TextDropdownVariant;
+  showChevron?: boolean;
+  maxLength?: number | undefined;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: "Title",
+  modelValue: "Text",
+  variant: "input",
+  showChevron: true,
+  maxLength: undefined,
 });
 
-const emit = defineEmits(["toggle", "update:modelValue"]);
+const emit = defineEmits<{
+  toggle: [];
+  "update:modelValue": [value: string];
+}>();
 
-const handleInput = (event) => {
-  let value = event.target.value;
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  let value = target.value;
   // Enforce maxLength if provided
-  if (props.maxLength !== null && value.length > props.maxLength) {
+  if (props.maxLength && value.length > props.maxLength) {
     value = value.slice(0, props.maxLength);
   }
   emit("update:modelValue", value);

@@ -1,40 +1,31 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  player: {
-    type: String,
-    default: "p1",
-    validator: (value) => ["p1", "p2"].includes(value),
-  },
-  count: {
-    type: Number,
-    default: 3,
-    validator: (value) => [3, 5].includes(value),
-  },
-  filledStars: {
-    type: Array,
-    default: () => [],
-    // Array of booleans indicating which stars are filled (left to right)
-    // Example: [true, false, true] means first and third stars are filled
-    validator: (value) => {
-      return (
-        Array.isArray(value) && value.every((item) => typeof item === "boolean")
-      );
-    },
-  },
+type PlayerType = "p1" | "p2";
+type StarCount = 3 | 5;
+
+interface Props {
+  player?: PlayerType;
+  count?: StarCount;
+  filledStars?: boolean[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  player: "p1",
+  count: 3,
+  filledStars: () => [],
 });
 
 const starStates = computed(() => {
   // Create array of booleans for each star position
-  const states = [];
+  const states: boolean[] = [];
   for (let i = 0; i < props.count; i++) {
     states.push(props.filledStars[i] === true);
   }
   return states;
 });
 
-const getStarImageSrc = (isFilled) => {
+const getStarImageSrc = (isFilled: boolean) => {
   const variant = isFilled ? "fill" : "stroke";
   return `/${props.player}-star-${variant}.svg`;
 };

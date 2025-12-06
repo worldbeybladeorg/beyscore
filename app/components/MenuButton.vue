@@ -1,16 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { History, Settings } from "lucide-vue-next";
 
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "matchHistory",
-    validator: (value) => ["matchHistory", "settings"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+type MenuButtonVariant = "matchHistory" | "settings";
+
+interface Props {
+  variant?: MenuButtonVariant;
+  disabled?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  variant: "matchHistory",
+  disabled: false,
 });
 </script>
 

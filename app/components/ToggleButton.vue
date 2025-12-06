@@ -1,26 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch } from "vue";
 
-const props = defineProps({
-  initialState: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String,
-    default: "default", // 'default' (40px) or 'large' (48px - matches Button height)
-    validator: (value) => ["default", "large"].includes(value),
-  },
+type ToggleButtonSize = "default" | "large";
+
+interface Props {
+  initialState?: boolean;
+  size?: ToggleButtonSize;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  initialState: false,
+  size: "default",
 });
 
 const isOn = ref(props.initialState);
-const emit = defineEmits(["update:state", "toggle"]);
+const emit = defineEmits<{
+  "update:state": [state: boolean];
+  toggle: [state: boolean];
+}>();
 
 // Sync internal state with initialState prop (important for controlled components)
 // This ensures the button respects the parent's state even after internal toggles
 watch(
   () => props.initialState,
-  (newValue) => {
+  (newValue: boolean) => {
     isOn.value = newValue;
   },
   { immediate: true },

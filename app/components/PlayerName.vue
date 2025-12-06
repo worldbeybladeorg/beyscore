@@ -1,35 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import ScoringStar from "./ScoringStar.vue";
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: "Player",
-  },
-  player: {
-    type: String,
-    default: null,
-    validator: (value) => value === null || ["p1", "p2"].includes(value),
-  },
-  bestOf: {
-    type: Number,
-    default: null,
-    validator: (value) => value === null || [3, 5].includes(value),
-  },
-  filledStars: {
-    type: Array,
-    default: () => [],
-    validator: (value) => {
-      return (
-        Array.isArray(value) && value.every((item) => typeof item === "boolean")
-      );
-    },
-  },
+type PlayerType = "p1" | "p2" | undefined;
+type BestOfType = 3 | 5 | undefined;
+
+interface Props {
+  name?: string;
+  player?: PlayerType;
+  bestOf?: BestOfType;
+  filledStars?: boolean[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  name: "Player",
+  player: undefined,
+  bestOf: undefined,
+  filledStars: () => [],
 });
 
 const showDivider = computed(() => {
-  return props.player !== null && props.bestOf !== null;
+  return props.player && props.bestOf !== undefined;
 });
 </script>
 

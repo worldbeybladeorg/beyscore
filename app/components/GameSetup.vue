@@ -19,9 +19,9 @@ watch(matchType, (value) => {
   selectedMatchType.value = value;
 });
 
-const selectedBestOf = ref(bestOf.value ? bestOf.value.toString() : null);
+const selectedBestOf = ref(bestOf.value ? bestOf.value.toString() : undefined);
 watch(bestOf, (value) => {
-  selectedBestOf.value = value ? value.toString() : null;
+  selectedBestOf.value = value ? value.toString() : undefined;
 });
 
 const localOwnFinishEnabled = ref(ownFinishEnabled.value);
@@ -77,160 +77,162 @@ const handleStartGame = async () => {
       <!-- BeyScore Logo -->
       <img src="/beyscore.svg" alt="BeyScore" class="logo" />
 
-      <!-- Heading -->
-      <h1 class="heading-text">Select Beyblade Generation</h1>
+      <div class="content-stack">
+        <!-- Heading -->
+        <h1 class="heading-text">Select Beyblade Generation</h1>
 
-      <!-- Generation toggle buttons -->
-      <div class="toggle-buttons-container">
-        <ToggleButton
-          :key="`x-${selectedGeneration}`"
-          size="large"
-          :initial-state="selectedGeneration === 'x'"
-          @toggle="(state) => handleGenerationToggle('x', state)"
-        >
-          X
-        </ToggleButton>
-        <ToggleButton
-          :key="`burst-${selectedGeneration}`"
-          size="large"
-          :initial-state="selectedGeneration === 'burst'"
-          @toggle="(state) => handleGenerationToggle('burst', state)"
-        >
-          Burst
-        </ToggleButton>
-        <ToggleButton
-          :key="`metal-${selectedGeneration}`"
-          size="large"
-          :initial-state="selectedGeneration === 'mfb-zero-g'"
-          @toggle="(state) => handleGenerationToggle('mfb-zero-g', state)"
-        >
-          Metal Fight/Zero-G
-        </ToggleButton>
-        <ToggleButton
-          :key="`plastic-${selectedGeneration}`"
-          size="large"
-          :initial-state="selectedGeneration === 'plastics-hms'"
-          @toggle="(state) => handleGenerationToggle('plastics-hms', state)"
-        >
-          Plastic & HMS
-        </ToggleButton>
-      </div>
-
-      <!-- Match Type heading -->
-      <h1 class="match-type-heading">Match Type</h1>
-
-      <!-- Match Type toggle buttons -->
-      <div class="match-type-buttons-container">
-        <!-- For X format: 4, 5, 7, No Limit -->
-        <template v-if="selectedGeneration === 'x'">
+        <!-- Generation toggle buttons -->
+        <div class="toggle-buttons-container">
           <ToggleButton
-            :key="`4pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '4pts'"
-            @toggle="(state) => handleMatchTypeToggle('4pts', state)"
+            :key="`x-${selectedGeneration}`"
+            size="large"
+            :initial-state="selectedGeneration === 'x'"
+            @toggle="(state) => handleGenerationToggle('x', state)"
           >
-            4 Pts.
+            X
           </ToggleButton>
           <ToggleButton
-            :key="`5pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '5pts'"
-            @toggle="(state) => handleMatchTypeToggle('5pts', state)"
+            :key="`burst-${selectedGeneration}`"
+            size="large"
+            :initial-state="selectedGeneration === 'burst'"
+            @toggle="(state) => handleGenerationToggle('burst', state)"
           >
-            5 Pts.
+            Burst
           </ToggleButton>
           <ToggleButton
-            :key="`7pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '7pts'"
-            @toggle="(state) => handleMatchTypeToggle('7pts', state)"
+            :key="`metal-${selectedGeneration}`"
+            size="large"
+            :initial-state="selectedGeneration === 'mfb-zero-g'"
+            @toggle="(state) => handleGenerationToggle('mfb-zero-g', state)"
           >
-            7 Pts.
+            Metal Fight/Zero-G
           </ToggleButton>
           <ToggleButton
-            :key="`nolimit-${selectedMatchType}`"
-            :initial-state="selectedMatchType === 'nolimit'"
-            @toggle="(state) => handleMatchTypeToggle('nolimit', state)"
+            :key="`plastic-${selectedGeneration}`"
+            size="large"
+            :initial-state="selectedGeneration === 'plastics-hms'"
+            @toggle="(state) => handleGenerationToggle('plastics-hms', state)"
           >
-            No Limit
-          </ToggleButton>
-        </template>
-
-        <!-- For Burst, Metal Fight/Zero-G, Plastic & HMS: 3, 4, 5, No Limit -->
-        <template v-else>
-          <ToggleButton
-            :key="`3pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '3pts'"
-            @toggle="(state) => handleMatchTypeToggle('3pts', state)"
-          >
-            3 Pts.
-          </ToggleButton>
-          <ToggleButton
-            :key="`4pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '4pts'"
-            @toggle="(state) => handleMatchTypeToggle('4pts', state)"
-          >
-            4 Pts.
-          </ToggleButton>
-          <ToggleButton
-            :key="`5pts-${selectedMatchType}`"
-            :initial-state="selectedMatchType === '5pts'"
-            @toggle="(state) => handleMatchTypeToggle('5pts', state)"
-          >
-            5 Pts.
-          </ToggleButton>
-          <ToggleButton
-            :key="`nolimit-${selectedMatchType}`"
-            :initial-state="selectedMatchType === 'nolimit'"
-            @toggle="(state) => handleMatchTypeToggle('nolimit', state)"
-          >
-            No Limit
-          </ToggleButton>
-        </template>
-      </div>
-
-      <!-- Best-of Sets toggle buttons (hidden when No Limit is selected) -->
-      <div
-        v-if="selectedMatchType !== 'nolimit'"
-        class="best-of-buttons-container"
-      >
-        <ToggleButton
-          :key="`bestof3-${selectedBestOf}`"
-          :initial-state="selectedBestOf === '3'"
-          @toggle="(state) => handleBestOfToggle('3', state)"
-        >
-          Best-of-3 Sets
-        </ToggleButton>
-        <ToggleButton
-          :key="`bestof5-${selectedBestOf}`"
-          :initial-state="selectedBestOf === '5'"
-          @toggle="(state) => handleBestOfToggle('5', state)"
-        >
-          Best-of-5 Sets
-        </ToggleButton>
-      </div>
-
-      <!-- Own Finish section (only shown for X generation) -->
-      <template v-if="selectedGeneration === 'x'">
-        <!-- Own Finish heading -->
-        <h1
-          class="own-finish-heading"
-          :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
-        >
-          Own Finish
-        </h1>
-
-        <!-- Own Finish toggle button -->
-        <div
-          class="own-finish-button-container"
-          :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
-        >
-          <ToggleButton
-            :key="`ownfinish-${localOwnFinishEnabled}`"
-            :initial-state="localOwnFinishEnabled"
-            @toggle="(state) => handleOwnFinishToggle(state)"
-          >
-            {{ localOwnFinishEnabled ? "On" : "Off" }}
+            Plastic & HMS
           </ToggleButton>
         </div>
-      </template>
+
+        <!-- Match Type heading -->
+        <h1 class="match-type-heading">Match Type</h1>
+
+        <!-- Match Type toggle buttons -->
+        <div class="match-type-buttons-container">
+          <!-- For X format: 4, 5, 7, No Limit -->
+          <template v-if="selectedGeneration === 'x'">
+            <ToggleButton
+              :key="`4pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '4pts'"
+              @toggle="(state) => handleMatchTypeToggle('4pts', state)"
+            >
+              4 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`5pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '5pts'"
+              @toggle="(state) => handleMatchTypeToggle('5pts', state)"
+            >
+              5 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`7pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '7pts'"
+              @toggle="(state) => handleMatchTypeToggle('7pts', state)"
+            >
+              7 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`nolimit-${selectedMatchType}`"
+              :initial-state="selectedMatchType === 'nolimit'"
+              @toggle="(state) => handleMatchTypeToggle('nolimit', state)"
+            >
+              No Limit
+            </ToggleButton>
+          </template>
+
+          <!-- For Burst, Metal Fight/Zero-G, Plastic & HMS: 3, 4, 5, No Limit -->
+          <template v-else>
+            <ToggleButton
+              :key="`3pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '3pts'"
+              @toggle="(state) => handleMatchTypeToggle('3pts', state)"
+            >
+              3 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`4pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '4pts'"
+              @toggle="(state) => handleMatchTypeToggle('4pts', state)"
+            >
+              4 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`5pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '5pts'"
+              @toggle="(state) => handleMatchTypeToggle('5pts', state)"
+            >
+              5 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`nolimit-${selectedMatchType}`"
+              :initial-state="selectedMatchType === 'nolimit'"
+              @toggle="(state) => handleMatchTypeToggle('nolimit', state)"
+            >
+              No Limit
+            </ToggleButton>
+          </template>
+        </div>
+
+        <!-- Best-of Sets toggle buttons (hidden when No Limit is selected) -->
+        <div
+          v-if="selectedMatchType !== 'nolimit'"
+          class="best-of-buttons-container"
+        >
+          <ToggleButton
+            :key="`bestof3-${selectedBestOf}`"
+            :initial-state="selectedBestOf === '3'"
+            @toggle="(state) => handleBestOfToggle('3', state)"
+          >
+            Best-of-3 Sets
+          </ToggleButton>
+          <ToggleButton
+            :key="`bestof5-${selectedBestOf}`"
+            :initial-state="selectedBestOf === '5'"
+            @toggle="(state) => handleBestOfToggle('5', state)"
+          >
+            Best-of-5 Sets
+          </ToggleButton>
+        </div>
+
+        <!-- Own Finish section (only shown for X generation) -->
+        <template v-if="selectedGeneration === 'x'">
+          <!-- Own Finish heading -->
+          <h1
+            class="own-finish-heading"
+            :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
+          >
+            Own Finish
+          </h1>
+
+          <!-- Own Finish toggle button -->
+          <div
+            class="own-finish-button-container"
+            :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
+          >
+            <ToggleButton
+              :key="`ownfinish-${localOwnFinishEnabled}`"
+              :initial-state="localOwnFinishEnabled"
+              @toggle="(state) => handleOwnFinishToggle(state)"
+            >
+              {{ localOwnFinishEnabled ? "On" : "Off" }}
+            </ToggleButton>
+          </div>
+        </template>
+      </div>
 
       <!-- Start Game button -->
       <div class="button-container">
@@ -257,37 +259,31 @@ const handleStartGame = async () => {
 }
 
 .game-setup-screen {
-  /* PWA viewport in portrait - matches actual device dimensions when installed */
-  /* Width: 360px (Android baseline) to 428px (iPhone Pro Max, large Android) */
-  /* Default: 390px (iPhone 12/13/14, iPhone 15, common Android like Pixel) */
   width: 390px;
-  min-width: 360px; /* Android baseline (Galaxy S, Pixel), smallest supported devices */
-  max-width: 428px; /* iPhone Pro Max, large Android phones */
-
-  /* Height: 640px (Android baseline) to 926px (iPhone Pro Max, large Android) */
-  /* Default: 844px (iPhone 12/13/14, iPhone 15, common Android) */
+  min-width: 360px;
+  max-width: 428px;
   height: 844px;
-  min-height: 640px; /* Android baseline - smallest supported height */
-  max-height: 926px; /* iPhone Pro Max, large Android devices */
-
+  min-height: 640px;
+  max-height: 926px;
   background-color: white;
-  border: none; /* No border on mobile */
+  border: none;
   box-sizing: border-box;
   position: relative;
-
-  /* Account for safe areas - these represent the actual usable content area */
-  /* Top: Status bar area (minimum 20px for status bar, plus any safe area inset) */
-  padding-top: max(20px, env(safe-area-inset-top, 0px));
-
-  /* Bottom: Home indicator area (minimum 34px for home indicator, plus any safe area inset) */
-  padding-bottom: max(34px, env(safe-area-inset-bottom, 0px));
-
-  /* Left/Right: 20px padding + Safe areas for notches (if any) */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: calc(max(20px, env(safe-area-inset-top, 0px)) + 72px);
+  padding-bottom: calc(max(34px, env(safe-area-inset-bottom, 0px)) + 12px);
   padding-left: calc(20px + env(safe-area-inset-left, 0px));
   padding-right: calc(20px + env(safe-area-inset-right, 0px));
+  overflow-y: auto;
+}
 
-  /* Ensure content area respects safe zones */
-  overflow: hidden;
+.content-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
 }
 
 .logo {
@@ -300,36 +296,19 @@ const handleStartGame = async () => {
 }
 
 .heading-text {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px
-  ); /* Status bar + top padding + logo height + 32px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   font-family: "Titillium Web", sans-serif;
-  font-size: 1rem; /* text-base */
+  font-size: 1rem;
   font-weight: bold;
-  color: #475569; /* Tailwind slate-600 */
+  color: #475569;
   margin: 0;
   padding: 0;
   line-height: 1.5;
 }
 
 .toggle-buttons-container {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px
-  ); /* Status bar + top padding + logo height + 32px gap + heading height (1rem * 1.5) + 20px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: calc(
-    100% - 40px - env(safe-area-inset-left, 0px) -
-      env(safe-area-inset-right, 0px)
-  );
 }
 
 .toggle-buttons-container :deep(button) {
@@ -337,36 +316,20 @@ const handleStartGame = async () => {
 }
 
 .match-type-heading {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px
-  ); /* Generation buttons container top + 4 buttons (48px each) + 3 gaps (16px each) + 24px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   font-family: "Titillium Web", sans-serif;
-  font-size: 1rem; /* text-base */
+  font-size: 1rem;
   font-weight: bold;
-  color: #475569; /* Tailwind slate-600 */
+  color: #475569;
   margin: 0;
   padding: 0;
   line-height: 1.5;
 }
 
 .match-type-buttons-container {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px
-  ); /* Match type heading top + heading height + 20px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
   flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .match-type-buttons-container :deep(button) {
@@ -375,19 +338,10 @@ const handleStartGame = async () => {
 }
 
 .best-of-buttons-container {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px + 40px + 16px
-  ); /* Match type buttons container top + button height (40px) + 16px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: flex-start;
   flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
 }
 
 .best-of-buttons-container :deep(button) {
@@ -396,51 +350,26 @@ const handleStartGame = async () => {
 }
 
 .own-finish-heading {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px + 40px + 16px + 40px + 32px
-  ); /* Best-of buttons container top + button height (40px) + 32px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   font-family: "Titillium Web", sans-serif;
-  font-size: 1rem; /* text-base */
+  font-size: 1rem;
   font-weight: bold;
-  color: #475569; /* Tailwind slate-600 */
-  margin: 0;
+  color: #475569;
+  margin: 8px 0 0;
   padding: 0;
   line-height: 1.5;
 }
 
 .own-finish-heading.no-best-of {
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px + 40px + 32px
-  ); /* Match type buttons container top + button height (40px) + 32px gap */
+  margin-top: 0;
 }
 
 .own-finish-button-container {
-  position: absolute;
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px + 40px + 16px + 40px + 32px + 1.5rem + 20px
-  ); /* Own finish heading top + heading height + 20px gap */
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  right: calc(20px + env(safe-area-inset-right, 0px));
   display: flex;
-  flex-direction: row;
   align-items: flex-start;
 }
 
 .own-finish-button-container.no-best-of {
-  top: calc(
-    max(20px, env(safe-area-inset-top, 0px)) + 20px + 20px + 32px + 1.5rem +
-      20px + 48px + 16px + 48px + 16px + 48px + 16px + 48px + 24px + 1.5rem +
-      20px + 40px + 32px + 1.5rem + 20px
-  ); /* Match type buttons container top + button height (40px) + 32px gap + heading height + 20px gap */
+  margin-top: 4px;
 }
 
 .own-finish-button-container :deep(button) {
@@ -449,15 +378,8 @@ const handleStartGame = async () => {
 }
 
 .button-container {
-  position: absolute;
-  bottom: calc(
-    max(34px, env(safe-area-inset-bottom, 0px)) + 1.25em + 20px
-  ); /* Copyright height + 20px gap */
-  left: 0;
-  right: 0;
-  padding-left: calc(20px + env(safe-area-inset-left, 0px));
-  padding-right: calc(20px + env(safe-area-inset-right, 0px));
-  box-sizing: border-box;
+  margin-top: auto;
+  width: 100%;
 }
 
 .button-container :deep(button) {
@@ -465,18 +387,12 @@ const handleStartGame = async () => {
 }
 
 .copyright-text {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding-bottom: max(34px, env(safe-area-inset-bottom, 0px));
-  padding-left: calc(20px + env(safe-area-inset-left, 0px));
-  padding-right: calc(20px + env(safe-area-inset-right, 0px));
   text-align: center;
+  padding-bottom: max(34px, env(safe-area-inset-bottom, 0px));
   font-family: "Titillium Web", sans-serif;
-  font-size: 0.75rem; /* text-xs */
-  font-weight: 400; /* regular */
-  color: #94a3b8; /* Tailwind slate-400 */
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #94a3b8;
   line-height: 1.5;
 }
 </style>

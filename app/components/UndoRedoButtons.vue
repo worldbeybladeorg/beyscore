@@ -1,19 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import UndoButton from "./UndoButton.vue";
 import RedoButton from "./RedoButton.vue";
 
-const props = defineProps({
-  undoDisabled: {
-    type: Boolean,
-    default: false,
-  },
-  redoDisabled: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  undoDisabled?: boolean;
+  redoDisabled?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  undoDisabled: false,
+  redoDisabled: false,
 });
 
-defineEmits(["undo", "redo"]);
+defineEmits<{
+  undo: [];
+  redo: [];
+}>();
 </script>
 
 <template>

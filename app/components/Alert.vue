@@ -1,16 +1,15 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  title: {
-    type: String,
-    default: "Your game has already started",
-  },
-  message: {
-    type: String,
-    default:
-      "Adjusting game conditions will force reset this game if Save Changes is pressed.",
-  },
+interface Props {
+  title?: string;
+  message?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  title: "Your game has already started",
+  message:
+    "Adjusting game conditions will force reset this game if Save Changes is pressed.",
 });
 
 const formattedMessage = computed(() => {

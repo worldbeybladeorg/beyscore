@@ -1,12 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { AlertTriangle, Trophy } from "lucide-vue-next";
 
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "warning",
-    validator: (value) => ["warning", "p1Winner", "p2Winner"].includes(value),
-  },
+type ResponseChipVariant = "warning" | "p1Winner" | "p2Winner";
+
+interface Props {
+  variant?: ResponseChipVariant;
+}
+
+withDefaults(defineProps<Props>(), {
+  variant: "warning",
 });
 </script>
 

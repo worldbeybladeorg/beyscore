@@ -1,23 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import MenuButton from "./MenuButton.vue";
 import UndoRedoButtons from "./UndoRedoButtons.vue";
 
-defineProps({
-  undoDisabled: {
-    type: Boolean,
-    default: false,
-  },
-  redoDisabled: {
-    type: Boolean,
-    default: false,
-  },
-  historyDisabled: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  undoDisabled?: boolean;
+  redoDisabled?: boolean;
+  historyDisabled?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  undoDisabled: false,
+  redoDisabled: false,
+  historyDisabled: false,
 });
 
-defineEmits(["history", "undo", "redo", "settings"]);
+defineEmits<{
+  history: [];
+  undo: [];
+  redo: [];
+  settings: [];
+}>();
 </script>
 
 <template>

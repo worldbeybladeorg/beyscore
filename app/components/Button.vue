@@ -1,20 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  className: {
-    type: String,
-    default: "",
-  },
-  variant: {
-    type: String,
-    default: "blue", // 'blue', 'orange', or 'secondary'
-    validator: (value) => ["blue", "orange", "secondary"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+type ButtonVariant = "blue" | "orange" | "secondary";
+
+interface Props {
+  className?: string;
+  variant?: ButtonVariant;
+  disabled?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  className: "",
+  variant: "blue",
+  disabled: false,
 });
 
 const variantClass = computed(() => {
@@ -30,7 +28,9 @@ const variantClass = computed(() => {
   }
 });
 
-defineEmits(["click"]);
+defineEmits<{
+  click: [event: MouseEvent];
+}>();
 </script>
 
 <template>

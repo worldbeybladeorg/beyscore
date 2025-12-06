@@ -144,7 +144,7 @@ const filledStarsArray = computed(() => {
         <!-- Star appears for all entries after a set is won, but not for penalty receivers in penalty wins -->
         <ScoringStar
           v-if="
-            bestOf !== null &&
+            bestOf !== undefined &&
             setWins > 0 &&
             !(isPenaltyWin && player !== winner)
           "

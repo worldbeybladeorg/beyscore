@@ -1,11 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import { Redo2 } from "lucide-vue-next";
 
-const props = defineProps({
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  disabled?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  disabled: false,
 });
 </script>
 

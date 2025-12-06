@@ -1,88 +1,30 @@
-<script setup>
+<script setup lang="ts">
 import PlayerName from "./PlayerName.vue";
 import ScoringChip from "./ScoringChip.vue";
 import ResponseChip from "./ResponseChip.vue";
+import type { ScoreCardProps, ScoreCardEmits } from "~/types/scoreCard";
 
-const props = defineProps({
-  player: {
-    type: String,
-    default: "p1",
-    validator: (value) => ["p1", "p2"].includes(value),
-  },
-  playerName: {
-    type: String,
-    default: "Player 1",
-  },
-  generation: {
-    type: String,
-    default: "x",
-    validator: (value) =>
-      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
-  },
-  bestOf: {
-    type: Number,
-    default: null,
-    validator: (value) => value === null || [3, 5].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  filledStars: {
-    type: Array,
-    default: () => [],
-    validator: (value) => {
-      return (
-        Array.isArray(value) && value.every((item) => typeof item === "boolean")
-      );
-    },
-  },
-  showWarning: {
-    type: Boolean,
-    default: false,
-  },
-  ownFinishEnabled: {
-    type: Boolean,
-    default: false,
-  },
-  isFadingIn: {
-    type: Boolean,
-    default: false,
-  },
-  isShrinking: {
-    type: Boolean,
-    default: false,
-  },
-  score: {
-    type: String,
-    default: "0",
-  },
-  xtrScore: {
-    type: Number,
-    default: 3,
-  },
-  ovrScore: {
-    type: Number,
-    default: 2,
-  },
-  bstScore: {
-    type: Number,
-    default: 2,
-  },
-  spfScore: {
-    type: Number,
-    default: 1,
-  },
+const props = withDefaults(defineProps<ScoreCardProps>(), {
+  player: "p1",
+  playerName: "Player 1",
+  generation: "x",
+  bestOf: undefined,
+  disabled: false,
+  filledStars: () => [],
+  showWarning: false,
+  ownFinishEnabled: false,
+  isFadingIn: false,
+  isShrinking: false,
+  score: "0",
+  xtrScore: 3,
+  ovrScore: 2,
+  bstScore: 2,
+  spfScore: 1,
 });
 
-const emit = defineEmits([
-  "scoreIncrease",
-  "penalty",
-  "warningToggle",
-  "ownFinish",
-]);
+const emit = defineEmits<ScoreCardEmits>();
 
-const handleChipClick = (points, chipLabel) => {
+const handleChipClick = (points: number | undefined, chipLabel: string) => {
   // Emit event with player, points to add, and chip label
   emit("scoreIncrease", points, chipLabel);
 };

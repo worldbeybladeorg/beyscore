@@ -1,18 +1,21 @@
-<script setup>
-const props = defineProps({
-  /**
-   * items: Array of { id?: string|number, label: string, value: string }
-   * Example default represents win conditions (Xtreme / Over / Burst / Spin).
-   */
-  items: {
-    type: Array,
-    default: () => [
-      { id: "xtreme", label: "XTR", value: 0 },
-      { id: "burst", label: "BST", value: 0 },
-      { id: "over", label: "OVR", value: 0 },
-      { id: "spin", label: "SPF", value: 0 },
-    ],
-  },
+<script setup lang="ts">
+interface GameSummaryItem {
+  id?: string | number;
+  label: string;
+  value: number;
+}
+
+interface Props {
+  items?: GameSummaryItem[];
+}
+
+withDefaults(defineProps<Props>(), {
+  items: () => [
+    { id: "xtreme", label: "XTR", value: 0 },
+    { id: "burst", label: "BST", value: 0 },
+    { id: "over", label: "OVR", value: 0 },
+    { id: "spin", label: "SPF", value: 0 },
+  ],
 });
 </script>
 

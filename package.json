@@ -8,7 +8,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "generate-pwa-icons": "tsx scripts/generatePwaIcons.ts"
+    "generate-pwa-icons": "tsx scripts/generatePwaIcons.ts",
+    "format": "prettier --write .",
+    "lint": "eslint --ext .ts,.js,.vue ."
   },
   "dependencies": {
     "@nuxt/icon": "^1.15.0",

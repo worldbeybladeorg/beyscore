@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
-type MatchTypeOption = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
-type BestOfOption = 3 | 5 | null;
+export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
+export type MatchTypeOption = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
+export type BestOfOption = 3 | 5 | undefined;
 
 type MatchHistoryEntry = Record<string, unknown>;
 
@@ -43,7 +43,7 @@ const defaultMatchTypeForGeneration = (
 const DEFAULT_GENERATION: GenerationOption = "x";
 const DEFAULT_MATCH_TYPE: MatchTypeOption =
   defaultMatchTypeForGeneration(DEFAULT_GENERATION);
-const DEFAULT_BEST_OF: BestOfOption = null;
+const DEFAULT_BEST_OF: BestOfOption = undefined;
 const DEFAULT_OWN_FINISH = false;
 
 export const useScoreboardStore = defineStore("scoreboard", () => {
@@ -94,15 +94,15 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   const setMatchType = (value: MatchTypeOption) => {
     matchType.value = value;
     if (value === "nolimit") {
-      bestOf.value = null;
+      bestOf.value = undefined;
     }
   };
 
-  const setBestOf = (value: number | null) => {
+  const setBestOf = (value: BestOfOption) => {
     if (value === 3 || value === 5) {
       bestOf.value = value;
     } else {
-      bestOf.value = null;
+      bestOf.value = undefined;
     }
   };
 

@@ -1,31 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { Check } from "lucide-vue-next";
 
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true,
-    validator: (value) => {
-      return (
-        Array.isArray(value) &&
-        value.every(
-          (item) =>
-            typeof item === "object" &&
-            item.hasOwnProperty("label") &&
-            item.hasOwnProperty("value"),
-        )
-      );
-    },
-  },
-  selectedValue: {
-    type: [String, Number, null],
-    default: null,
-  },
+interface DropdownItem {
+  label: string;
+  value: string | number;
+}
+
+interface Props {
+  items: DropdownItem[];
+  selectedValue?: string | number | null;
+}
+
+withDefaults(defineProps<Props>(), {
+  selectedValue: null,
 });
 
-const emit = defineEmits(["select"]);
+const emit = defineEmits<{
+  select: [value: string | number];
+}>();
 
-const handleItemClick = (item) => {
+const handleItemClick = (item: DropdownItem) => {
   emit("select", item.value);
 };
 </script>

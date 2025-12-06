@@ -1,35 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  label: {
-    type: String,
-    default: "XTR",
-  },
-  score: {
-    type: Number,
-    default: 3,
-  },
-  variant: {
-    type: String,
-    default: "blue", // 'blue' for player 1, 'red' for player 2, 'warning' for error state
-    validator: (value) => ["blue", "red", "warning"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  hideScore: {
-    type: Boolean,
-    default: false,
-  },
-  static: {
-    type: Boolean,
-    default: false,
-  },
+type ScoringChipVariant = "blue" | "red" | "warning";
+
+interface Props {
+  label?: string;
+  score?: number;
+  variant?: ScoringChipVariant;
+  disabled?: boolean;
+  hideScore?: boolean;
+  static?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  label: "XTR",
+  score: 3,
+  variant: "blue",
+  disabled: false,
+  hideScore: false,
+  static: false,
 });
 
-const emit = defineEmits(["chipClick"]);
+const emit = defineEmits<{
+  chipClick: [score: number | undefined];
+}>();
 
 const colorClasses = computed(() => {
   if (props.static) {
@@ -45,7 +39,7 @@ const colorClasses = computed(() => {
 const handleClick = () => {
   // Emit if not disabled and not static (warning variant now also emits, but with null score)
   if (!props.disabled && !props.static) {
-    emit("chipClick", props.variant === "warning" ? null : props.score);
+    emit("chipClick", props.variant === "warning" ? undefined : props.score);
   }
 };
 </script>
