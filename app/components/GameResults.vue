@@ -3,6 +3,20 @@ import { computed } from "vue";
 import GameSummary from "./GameSummary.vue";
 import Button from "./Button.vue";
 import { X } from "lucide-vue-next";
+import { useScoreboardStore } from "~/stores/scoreboardStore";
+import { storeToRefs } from "pinia";
+
+const store = useScoreboardStore();
+const {
+  player1Score,
+  player2Score,
+  player1Name,
+  player2Name,
+  pointsToWin,
+  bestOf,
+  p1SetWins,
+  p2SetWins,
+} = storeToRefs(store);
 
 // Reset game using store
 
@@ -94,6 +108,43 @@ const opponentSummaryText = computed(() => {
   return "";
 });
 
+const finalScores = computed(() => {
+  const isBestOfMatch = bestOf.value !== undefined;
+
+  if (isBestOfMatch) {
+    // Show sets won for best of matches
+    const p1SetsWon = p1SetWins.value.filter(Boolean).length;
+    const p2SetsWon = p2SetWins.value.filter(Boolean).length;
+
+    return {
+      player1: p1SetsWon,
+      player2: p2SetsWon,
+      isSets: true,
+    };
+  } else {
+    // Show points for regular matches
+    const p1Score = player1Score.value;
+    const p2Score = player2Score.value;
+    const maxScore = pointsToWin.value;
+
+    const isPlayer1Winner = props.winnerName === player1Name.value;
+    const isPlayer2Winner = props.winnerName === player2Name.value;
+
+    const p1FinalScore = isPlayer1Winner
+      ? Math.min(p1Score, maxScore)
+      : p1Score;
+    const p2FinalScore = isPlayer2Winner
+      ? Math.min(p2Score, maxScore)
+      : p2Score;
+
+    return {
+      player1: p1FinalScore,
+      player2: p2FinalScore,
+      isSets: false,
+    };
+  }
+});
+
 defineEmits(["newGame", "viewHistory", "close"]);
 </script>
 
@@ -122,6 +173,30 @@ defineEmits(["newGame", "viewHistory", "close"]);
     </div>
 
     <div class="mt-6 w-full">
+      <div class="mb-4 flex justify-center gap-8">
+        <div class="text-center">
+          <div class="mb-1 font-titillium text-sm text-slate-500">
+            {{ player1Name }}
+          </div>
+          <div
+            class="font-titillium text-2xl font-bold"
+            :style="{ color: '#1088C9' }"
+          >
+            {{ finalScores.player1 }}{{ finalScores.isSets ? " sets" : " pts" }}
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="mb-1 font-titillium text-sm text-slate-500">
+            {{ player2Name }}
+          </div>
+          <div
+            class="font-titillium text-2xl font-bold"
+            :style="{ color: '#FF5555' }"
+          >
+            {{ finalScores.player2 }}{{ finalScores.isSets ? " sets" : " pts" }}
+          </div>
+        </div>
+      </div>
       <GameSummary :items="summaryItemsComputed" />
     </div>
 
