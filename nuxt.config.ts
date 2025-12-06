@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
     "@nuxt/icon",
+    "@nuxt/fonts",
   ],
   css: ["@/assets/css/tailwind.css"],
   sound: {
