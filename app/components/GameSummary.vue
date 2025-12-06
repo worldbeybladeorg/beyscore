@@ -1,9 +1,5 @@
 <script setup lang="ts">
-interface GameSummaryItem {
-  id?: string | number;
-  label: string;
-  value: number;
-}
+import type { GameSummaryItem } from "~/types/scoreCard";
 
 interface Props {
   items?: GameSummaryItem[];

@@ -1,30 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import GameSummary from "./GameSummary.vue";
 import Button from "./Button.vue";
 import { X } from "lucide-vue-next";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { storeToRefs } from "pinia";
+import type { GameSummaryItem } from "~/types/scoreCard";
 
-const store = useScoreboardStore();
-const {
-  player1Score,
-  player2Score,
-  player1Name,
-  player2Name,
-  pointsToWin,
-  bestOf,
-  p1SetWins,
-  p2SetWins,
-} = storeToRefs(store);
+type GameFormat = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
+type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
 
-// Reset game using store
-
-const props = defineProps({
-  winnerName: {
-    type: String,
-    default: "PlayerName",
-  },
+interface Props {
+  winnerName?: string;
   /**
    * Format controls which win conditions are shown in the summary
    * 'x' (default): XTR, BST, OVR, SPF
@@ -32,38 +19,42 @@ const props = defineProps({
    * 'mfb-zero-g':  OVR, SPF
    * 'plastics-hms': OVR, SPF
    */
-  format: {
-    type: String,
-    default: "x",
-    validator: (value) =>
-      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
-  },
+  format?: GameFormat;
   /**
    * Optional edge-case line shown only for X format:
    * "Opponent: X OWF, Y PEN"
    */
-  showOpponentSummary: {
-    type: Boolean,
-    default: false,
-  },
-  opponentOwnFinishCount: {
-    type: Number,
-    default: 0,
-  },
-  opponentPenaltyCount: {
-    type: Number,
-    default: 0,
-  },
+  showOpponentSummary?: boolean;
+  opponentOwnFinishCount?: number;
+  opponentPenaltyCount?: number;
   /**
    * Optional explicit summary items. If provided, overrides the format-based defaults.
    */
-  summaryItems: {
-    type: Array,
-    default: null,
-  },
+  summaryItems?: GameSummaryItem[] | null;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  winnerName: "PlayerName",
+  format: "x",
+  showOpponentSummary: false,
+  opponentOwnFinishCount: 0,
+  opponentPenaltyCount: 0,
+  summaryItems: null,
 });
 
-const summaryItemsComputed = computed(() => {
+const store = useScoreboardStore();
+const {
+  player1Score,
+  player2Score,
+  player1Name,
+  player2Name,
+  matchType,
+  bestOf,
+  p1SetWins,
+  p2SetWins,
+} = storeToRefs(store);
+
+const summaryItemsComputed = computed((): GameSummaryItem[] => {
   if (Array.isArray(props.summaryItems) && props.summaryItems.length > 0) {
     return props.summaryItems;
   }
@@ -108,7 +99,15 @@ const opponentSummaryText = computed(() => {
   return "";
 });
 
-const finalScores = computed(() => {
+interface FinalScores {
+  player1: number;
+  player2: number;
+  player1Color: string;
+  player2Color: string;
+  isSets: boolean;
+}
+
+const finalScores = computed((): FinalScores => {
   const isBestOfMatch = bestOf.value !== undefined;
 
   if (isBestOfMatch) {
@@ -116,36 +115,68 @@ const finalScores = computed(() => {
     const p1SetsWon = p1SetWins.value.filter(Boolean).length;
     const p2SetsWon = p2SetWins.value.filter(Boolean).length;
 
+    const isPlayer1Winner = props.winnerName === player1Name.value;
+    const isPlayer2Winner = props.winnerName === player2Name.value;
+
     return {
       player1: p1SetsWon,
       player2: p2SetsWon,
+      player1Color: isPlayer1Winner ? "#10b981" : "#ef4444",
+      player2Color: isPlayer2Winner ? "#10b981" : "#ef4444",
       isSets: true,
     };
   } else {
     // Show points for regular matches
     const p1Score = player1Score.value;
     const p2Score = player2Score.value;
-    const maxScore = pointsToWin.value;
+
+    // Derive max score from matchType
+    const getPointsToWin = (matchType: MatchType): number => {
+      switch (matchType) {
+        case "3pts":
+          return 3;
+        case "4pts":
+          return 4;
+        case "5pts":
+          return 5;
+        case "7pts":
+          return 7;
+        case "nolimit":
+          return Infinity;
+        default:
+          return 4;
+      }
+    };
+
+    const maxScore = getPointsToWin(matchType.value as MatchType);
 
     const isPlayer1Winner = props.winnerName === player1Name.value;
     const isPlayer2Winner = props.winnerName === player2Name.value;
 
-    const p1FinalScore = isPlayer1Winner
-      ? Math.min(p1Score, maxScore)
-      : p1Score;
-    const p2FinalScore = isPlayer2Winner
-      ? Math.min(p2Score, maxScore)
-      : p2Score;
+    const p1FinalScore =
+      isPlayer1Winner && maxScore !== Infinity
+        ? Math.min(p1Score, maxScore)
+        : p1Score;
+    const p2FinalScore =
+      isPlayer2Winner && maxScore !== Infinity
+        ? Math.min(p2Score, maxScore)
+        : p2Score;
 
     return {
       player1: p1FinalScore,
       player2: p2FinalScore,
+      player1Color: isPlayer1Winner ? "#10b981" : "#ef4444",
+      player2Color: isPlayer2Winner ? "#10b981" : "#ef4444",
       isSets: false,
     };
   }
 });
 
-defineEmits(["newGame", "viewHistory", "close"]);
+defineEmits<{
+  newGame: [];
+  viewHistory: [];
+  close: [];
+}>();
 </script>
 
 <template>

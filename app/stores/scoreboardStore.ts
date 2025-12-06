@@ -108,10 +108,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
   );
 
   // Additional metadata retained from legacy store (used by future features)
-  const judgeMode = ref<boolean>(
-    persistedState.judgeMode !== undefined ? persistedState.judgeMode : true,
-  );
-  const pointsToWin = ref<number>(persistedState.pointsToWin || 4);
+
   const scoreReason = ref<string>(persistedState.scoreReason || "");
   const player1Error = ref<number>(persistedState.player1Error || 0);
   const player2Error = ref<number>(persistedState.player2Error || 0);
@@ -199,8 +196,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     historyIndex.value = 0;
     showGameResultsOverlay.value = false;
     gameResultsOverlayHasBeenShown.value = false;
-    judgeMode.value = true;
-    pointsToWin.value = 4;
     scoreReason.value = "";
     player1Error.value = 0;
     player2Error.value = 0;
@@ -233,8 +228,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
         historyIndex: historyIndex.value,
         showGameResultsOverlay: showGameResultsOverlay.value,
         gameResultsOverlayHasBeenShown: gameResultsOverlayHasBeenShown.value,
-        judgeMode: judgeMode.value,
-        pointsToWin: pointsToWin.value,
         scoreReason: scoreReason.value,
         player1Error: player1Error.value,
         player2Error: player2Error.value,
@@ -268,8 +261,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     historyIndex,
     showGameResultsOverlay,
     gameResultsOverlayHasBeenShown,
-    judgeMode,
-    pointsToWin,
     scoreReason,
     player1Error,
     player2Error,
@@ -305,8 +296,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     historyIndex,
     showGameResultsOverlay,
     gameResultsOverlayHasBeenShown,
-    judgeMode,
-    pointsToWin,
     scoreReason,
     player1Error,
     player2Error,
