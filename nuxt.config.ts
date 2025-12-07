@@ -62,4 +62,10 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
   },
+  fonts: {
+    defaults: {
+      weights: [400, 500, 600, 700],
+      styles: ["normal", "italic"],
+    },
+  },
 });
