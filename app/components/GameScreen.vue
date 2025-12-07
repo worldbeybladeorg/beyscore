@@ -690,7 +690,7 @@ watch(gameEnded, async (ended) => {
               <div class="own-finish-label">Own Finish</div>
               <div class="own-finish-toggle">
                 <ToggleButton
-                  size="small"
+                  size="default"
                   :initial-state="isOwnFinishEnabled"
                   @toggle="handleOwnFinishToggle"
                 >
