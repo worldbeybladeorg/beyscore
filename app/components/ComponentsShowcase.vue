@@ -77,7 +77,7 @@ const gameSummaryItems = [
           >Off Example</ToggleButton
         >
         <ToggleButton
-          :initialState="true"
+          :initial-state="true"
           @toggle="
             (state) => alert(`Toggle button is now ${state ? 'ON' : 'OFF'}`)
           "
@@ -93,7 +93,7 @@ const gameSummaryItems = [
         >
         <ToggleButton
           size="large"
-          :initialState="true"
+          :initial-state="true"
           @toggle="
             (state) =>
               alert(`Large toggle button is now ${state ? 'ON' : 'OFF'}`)
@@ -142,18 +142,18 @@ const gameSummaryItems = [
           @redo="() => alert('Redo clicked')"
         />
         <UndoRedoButtons
-          :undoDisabled="true"
+          :undo-disabled="true"
           @undo="() => alert('Undo clicked')"
           @redo="() => alert('Redo clicked')"
         />
         <UndoRedoButtons
-          :redoDisabled="true"
+          :redo-disabled="true"
           @undo="() => alert('Undo clicked')"
           @redo="() => alert('Redo clicked')"
         />
         <UndoRedoButtons
-          :undoDisabled="true"
-          :redoDisabled="true"
+          :undo-disabled="true"
+          :redo-disabled="true"
           @undo="() => alert('Undo clicked')"
           @redo="() => alert('Redo clicked')"
         />
@@ -177,14 +177,14 @@ const gameSummaryItems = [
           @settings="() => alert('Settings clicked')"
         />
         <LandscapeNavigation
-          :undoDisabled="true"
+          :undo-disabled="true"
           @history="() => alert('History clicked')"
           @undo="() => alert('Undo clicked')"
           @redo="() => alert('Redo clicked')"
           @settings="() => alert('Settings clicked')"
         />
         <LandscapeNavigation
-          :redoDisabled="true"
+          :redo-disabled="true"
           @history="() => alert('History clicked')"
           @undo="() => alert('Undo clicked')"
           @redo="() => alert('Redo clicked')"
@@ -195,13 +195,13 @@ const gameSummaryItems = [
       <!-- TextDropdownField preview -->
       <div class="flex w-[320px] flex-col gap-4">
         <TextDropdownField
-          title="Title"
           v-model="textDropdownValue"
+          title="Title"
           @toggle="() => alert('Input field toggled')"
         />
         <TextDropdownField
-          title="Dropdown"
           v-model="textDropdownValue"
+          title="Dropdown"
           variant="dropdown"
           @toggle="() => alert('Dropdown field toggled')"
         />
@@ -211,15 +211,15 @@ const gameSummaryItems = [
       <div class="relative flex w-[320px] flex-col">
         <TextDropdownField
           title="Dropdown with Menu"
-          :modelValue="selectedDropdownLabel"
+          :model-value="selectedDropdownLabel"
           variant="dropdown"
-          :showChevron="true"
+          :show-chevron="true"
           @toggle="handleDropdownToggle"
         />
         <div v-if="isDropdownOpen" class="mt-2">
           <DropdownMenu
             :items="dropdownItems"
-            :selectedValue="selectedDropdownValue"
+            :selected-value="selectedDropdownValue"
             @select="handleMenuSelect"
           />
         </div>
@@ -233,10 +233,10 @@ const gameSummaryItems = [
       <!-- PlayerName variants - same row -->
       <div class="flex flex-row items-center justify-center gap-4">
         <PlayerName />
-        <PlayerName name="Player 1" player="p1" :bestOf="3" />
-        <PlayerName name="Player 1" player="p1" :bestOf="5" />
-        <PlayerName name="Player 2" player="p2" :bestOf="3" />
-        <PlayerName name="Player 2" player="p2" :bestOf="5" />
+        <PlayerName name="Player 1" player="p1" :best-of="3" />
+        <PlayerName name="Player 1" player="p1" :best-of="5" />
+        <PlayerName name="Player 2" player="p2" :best-of="3" />
+        <PlayerName name="Player 2" player="p2" :best-of="5" />
       </div>
 
       <!-- ScoringStar variants - same row (all 4 variants) -->
@@ -258,7 +258,7 @@ const gameSummaryItems = [
             <ScoreCardPortrait player="p1" generation="x" />
             <ScoreCardPortrait
               player="p2"
-              playerName="Player 2"
+              player-name="Player 2"
               generation="x"
             />
           </div>
@@ -273,7 +273,7 @@ const gameSummaryItems = [
             <ScoreCardPortrait player="p1" generation="burst" />
             <ScoreCardPortrait
               player="p2"
-              playerName="Player 2"
+              player-name="Player 2"
               generation="burst"
             />
           </div>
@@ -288,7 +288,7 @@ const gameSummaryItems = [
             <ScoreCardPortrait player="p1" generation="mfb-zero-g" />
             <ScoreCardPortrait
               player="p2"
-              playerName="Player 2"
+              player-name="Player 2"
               generation="mfb-zero-g"
             />
           </div>
@@ -303,7 +303,7 @@ const gameSummaryItems = [
             <ScoreCardPortrait player="p1" generation="plastics-hms" />
             <ScoreCardPortrait
               player="p2"
-              playerName="Player 2"
+              player-name="Player 2"
               generation="plastics-hms"
             />
           </div>
@@ -323,7 +323,7 @@ const gameSummaryItems = [
         <h2 class="font-titillium text-base font-semibold text-slate-500">
           Game Results – X Format
         </h2>
-        <GameResults winnerName="Player 1" format="x" />
+        <GameResults winner-name="Player 1" format="x" />
       </div>
 
       <!-- GameResults preview - X Format with opponent summary edge case -->
@@ -332,9 +332,9 @@ const gameSummaryItems = [
           Game Results – X Format (Opponent Summary)
         </h2>
         <GameResults
-          winnerName="Player 1"
+          winner-name="Player 1"
           format="x"
-          :showOpponentSummary="true"
+          :show-opponent-summary="true"
         />
       </div>
 
@@ -343,7 +343,7 @@ const gameSummaryItems = [
         <h2 class="font-titillium text-base font-semibold text-slate-500">
           Game Results – Burst
         </h2>
-        <GameResults winnerName="Player 1" format="burst" />
+        <GameResults winner-name="Player 1" format="burst" />
       </div>
 
       <!-- GameResults preview - MFB / Plastics / HMS -->
@@ -351,7 +351,7 @@ const gameSummaryItems = [
         <h2 class="font-titillium text-base font-semibold text-slate-500">
           Game Results – MFB / Plastics / HMS
         </h2>
-        <GameResults winnerName="Player 1" format="mfb-zero-g" />
+        <GameResults winner-name="Player 1" format="mfb-zero-g" />
       </div>
     </div>
   </div>

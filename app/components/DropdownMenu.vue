@@ -26,12 +26,12 @@ const handleItemClick = (item: DropdownItem) => {
 
 <template>
   <div
-    class="box-border flex w-full flex-col rounded-[10px] border border-slate-200 bg-white p-[6px] shadow-[0_0_8px_rgba(15,23,42,0.10)]"
+    class="box-border flex w-full flex-col rounded-[10px] border border-slate-200 bg-white p-1.5 shadow-[0_0_8px_rgba(15,23,42,0.10)]"
   >
     <div
       v-for="(item, index) in items"
       :key="index"
-      class="box-border flex w-full cursor-pointer flex-row items-center justify-between rounded-[4px] px-3 py-[6px]"
+      class="box-border flex w-full cursor-pointer flex-row items-center justify-between rounded-sm px-3 py-1.5"
       :class="{ 'bg-slate-50': item.value === selectedValue }"
       @click="handleItemClick(item)"
     >
