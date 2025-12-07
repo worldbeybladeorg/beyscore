@@ -47,7 +47,7 @@ const handleOwnFinishClick = () => {
 
 <template>
   <div
-    class="relative box-border flex aspect-square w-[90vw] max-w-[390px] flex-col rounded-[20px] bg-[length:auto_100%] bg-[position:right_center] bg-no-repeat p-5"
+    class="relative box-border flex aspect-square w-[90vw] max-w-[390px] flex-col rounded-[20px] bg-size-[auto_100%] bg-position-[right_center] bg-no-repeat p-5"
     :class="{
       'generation-burst': generation === 'burst',
       'generation-mfb-plastics':

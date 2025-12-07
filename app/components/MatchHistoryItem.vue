@@ -134,7 +134,7 @@ const filledStarsArray = computed(() => {
 <template>
   <div
     class="mt-0 box-border flex flex-row items-center justify-between border-b border-slate-200 pb-3"
-    :class="{ '!border-b-0 !pb-0': isAfterDivider }"
+    :class="{ 'border-b-0! pb-0!': isAfterDivider }"
   >
     <div class="flex flex-col items-start">
       <div class="flex flex-row items-center gap-2">
@@ -155,7 +155,7 @@ const filledStarsArray = computed(() => {
         />
       </div>
       <div
-        class="m-0 mt-[2px] p-0 font-titillium text-sm font-medium text-slate-500"
+        class="m-0 mt-0.5 p-0 font-titillium text-sm font-medium text-slate-500"
       >
         {{ displayScore }}
       </div>

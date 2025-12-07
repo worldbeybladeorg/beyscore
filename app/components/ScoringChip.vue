@@ -49,7 +49,7 @@ const handleClick = () => {
     class="box-border flex items-center justify-start rounded-full border-t-0 border-b-2"
     :class="[
       static
-        ? 'h-8 cursor-default gap-2 !border-b-0 pr-[6px] pl-[10px]'
+        ? 'h-8 cursor-default gap-2 border-b-0! pr-1.5 pl-2.5'
         : 'h-[38px] gap-2 pr-2 pl-3',
       !disabled && !static ? 'cursor-pointer hover:opacity-90' : '',
       disabled ? 'cursor-not-allowed opacity-60' : '',
@@ -61,7 +61,7 @@ const handleClick = () => {
       variant === "warning" ? label || "ERR" : label
     }}</span>
     <div
-      class="ml-auto box-border flex h-5 min-h-[20px] w-6 shrink-0 items-center justify-center rounded-full bg-white p-1"
+      class="ml-auto box-border flex h-5 min-h-5 w-6 shrink-0 items-center justify-center rounded-full bg-white p-1"
       :class="static ? 'cursor-default' : 'cursor-pointer'"
     >
       <img

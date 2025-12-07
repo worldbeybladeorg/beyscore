@@ -47,7 +47,7 @@ const handleOwnFinishClick = () => {
 
 <template>
   <div
-    class="score-card relative box-border flex w-full max-w-full flex-col rounded-[20px] bg-[length:auto_100%] bg-[position:left_center] bg-no-repeat p-5"
+    class="score-card relative box-border flex w-full max-w-full flex-col rounded-[20px] bg-size-[auto_100%] bg-position-[left_center] bg-no-repeat p-5"
     :class="{
       'generation-burst': generation === 'burst',
       'generation-mfb-plastics':

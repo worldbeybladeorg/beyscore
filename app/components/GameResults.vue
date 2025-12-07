@@ -197,7 +197,7 @@ defineEmits<{
         Winner
       </div>
       <div
-        class="mt-[2px] text-center font-titillium text-lg font-bold text-slate-700"
+        class="mt-0.5 text-center font-titillium text-lg font-bold text-slate-700"
       >
         {{ winnerName }}
       </div>

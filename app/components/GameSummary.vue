@@ -28,7 +28,7 @@ withDefaults(defineProps<Props>(), {
         {{ item.value }}
       </div>
       <div
-        class="mt-[2px] font-titillium text-lg leading-6 font-bold text-slate-700"
+        class="mt-0.5 font-titillium text-lg leading-6 font-bold text-slate-700"
       >
         {{ item.label }}
       </div>
