@@ -8,7 +8,7 @@ useSeoMeta({
   ogDescription:
     "The official score keeping app of the World Beyblade Organization.",
   ogImage: "[og:image]",
-  ogUrl: "[og:url]",
+  ogUrl: "https://beyscore.worldbeyblade.org",
   twitterTitle: "WBO BeyScore",
   twitterDescription:
     "The official score keeping app of the World Beyblade Organization.",
@@ -23,8 +23,8 @@ useHead({
   link: [
     {
       rel: "icon",
-      type: "image/png",
-      href: "/favicon.png",
+      type: "image/x-icon",
+      href: "/favicon.ico",
     },
   ],
 });
