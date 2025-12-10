@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  experimental: {
+    typescriptPlugin: true,
+  },
   modules: [
     "@nuxt/eslint",
     "@vite-pwa/nuxt",

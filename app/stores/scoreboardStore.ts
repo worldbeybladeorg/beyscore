@@ -154,21 +154,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     ownFinishEnabled.value = generation.value === "x" ? value : false;
   };
 
-  const setGameConfig = (config: Partial<GameConfig>) => {
-    if (config.generation) {
-      setGeneration(config.generation);
-    }
-    if (config.matchType) {
-      setMatchType(config.matchType);
-    }
-    if (typeof config.bestOf !== "undefined") {
-      setBestOf(config.bestOf);
-    }
-    if (typeof config.ownFinishEnabled !== "undefined") {
-      setOwnFinishEnabled(config.ownFinishEnabled);
-    }
-  };
-
   const resetConfigToDefaults = () => {
     generation.value = DEFAULT_GENERATION;
     matchType.value = DEFAULT_MATCH_TYPE;
@@ -307,7 +292,6 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     setMatchType,
     setBestOf,
     setOwnFinishEnabled,
-    setGameConfig,
     resetConfigToDefaults,
     reset,
   };
