@@ -463,10 +463,12 @@ watch(gameEnded, async (ended) => {
           :undo-disabled="undoDisabled"
           :redo-disabled="redoDisabled"
           :history-disabled="undoDisabled"
+          :game-over="matchOver || (gameEnded && bestOf === undefined)"
           @history="openMatchHistoryModal"
           @undo="handleUndo"
           @redo="handleRedo"
           @settings="openSettingsModal"
+          @new-game="handleGameResultsNewGame"
         />
       </div>
 

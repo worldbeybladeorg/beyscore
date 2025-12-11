@@ -1,27 +1,36 @@
 <script setup lang="ts">
 import UndoButton from "./UndoButton.vue";
 import RedoButton from "./RedoButton.vue";
+import NewGameButton from "./NewGameButton.vue";
 
 interface Props {
   undoDisabled?: boolean;
   redoDisabled?: boolean;
+  gameOver?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   undoDisabled: false,
   redoDisabled: false,
+  gameOver: false,
 });
 
 defineEmits<{
   undo: [];
   redo: [];
+  newGame: [];
 }>();
 </script>
 
 <template>
   <div class="undo-redo-container">
     <UndoButton :disabled="undoDisabled" @click="$emit('undo')" />
-    <RedoButton :disabled="redoDisabled" @click="$emit('redo')" />
+    <RedoButton
+      v-if="!gameOver"
+      :disabled="redoDisabled"
+      @click="$emit('redo')"
+    />
+    <NewGameButton v-else @click="$emit('newGame')" />
   </div>
 </template>
 

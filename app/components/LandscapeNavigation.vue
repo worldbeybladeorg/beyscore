@@ -6,12 +6,14 @@ interface Props {
   undoDisabled?: boolean;
   redoDisabled?: boolean;
   historyDisabled?: boolean;
+  gameOver?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   undoDisabled: false,
   redoDisabled: false,
   historyDisabled: false,
+  gameOver: false,
 });
 
 defineEmits<{
@@ -19,6 +21,7 @@ defineEmits<{
   undo: [];
   redo: [];
   settings: [];
+  newGame: [];
 }>();
 </script>
 
@@ -34,8 +37,10 @@ defineEmits<{
     <UndoRedoButtons
       :undo-disabled="undoDisabled"
       :redo-disabled="redoDisabled"
+      :game-over="gameOver"
       @undo="$emit('undo')"
       @redo="$emit('redo')"
+      @new-game="$emit('newGame')"
     />
     <MenuButton variant="settings" @click="$emit('settings')" />
   </div>

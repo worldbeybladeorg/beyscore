@@ -483,8 +483,10 @@ watch(gameEnded, async (ended) => {
         <UndoRedoButtons
           :undo-disabled="undoDisabled"
           :redo-disabled="redoDisabled"
+          :game-over="matchOver || (gameEnded && bestOf === undefined)"
           @undo="handleUndo"
           @redo="handleRedo"
+          @new-game="handleGameResultsNewGame"
         />
         <MenuButton variant="settings" @click="openSettingsModal" />
       </div>
