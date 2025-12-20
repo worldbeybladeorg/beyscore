@@ -122,7 +122,7 @@ const handleStartGame = async () => {
 
         <!-- Match Type toggle buttons -->
         <div class="match-type-buttons-container">
-          <!-- For X format: 4, 5, 7, No Limit -->
+          <!-- For X format: 4, 5, 7, 10, No Limit -->
           <template v-if="selectedGeneration === 'x'">
             <ToggleButton
               :key="`4pts-${selectedMatchType}`"
@@ -144,6 +144,13 @@ const handleStartGame = async () => {
               @toggle="(state) => handleMatchTypeToggle('7pts', state)"
             >
               7 Pts.
+            </ToggleButton>
+            <ToggleButton
+              :key="`10pts-${selectedMatchType}`"
+              :initial-state="selectedMatchType === '10pts'"
+              @toggle="(state) => handleMatchTypeToggle('10pts', state)"
+            >
+              10 Pts.
             </ToggleButton>
             <ToggleButton
               :key="`nolimit-${selectedMatchType}`"

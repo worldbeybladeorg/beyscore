@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import type { GameSummaryItem } from "~/types/scoreCard";
 
 type GameFormat = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
-type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
+type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "10pts" | "nolimit";
 
 interface Props {
   winnerName?: string;
@@ -141,6 +141,8 @@ const finalScores = computed((): FinalScores => {
           return 5;
         case "7pts":
           return 7;
+        case "10pts":
+          return 10;
         case "nolimit":
           return Infinity;
         default:

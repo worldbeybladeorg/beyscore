@@ -77,6 +77,8 @@ export function getMaxPoints(matchType: string): number | null {
     return 5;
   } else if (matchType === "7pts") {
     return 7;
+  } else if (matchType === "10pts") {
+    return 10;
   }
   // Default to no limit if not provided or invalid
   return null;
@@ -98,6 +100,7 @@ export function getPointsToWinLabel(matchType: string): string {
     "4pts": "4 Pts.",
     "5pts": "5 Pts.",
     "7pts": "7 Pts.",
+    "10pts": "10 Pts.",
     nolimit: "No Limit",
   };
   return mapping[matchType as keyof typeof mapping] || "No Limit";
@@ -122,6 +125,7 @@ export const POINTS_TO_WIN_ITEMS_X = [
   { label: "4 Pts.", value: "4pts" },
   { label: "5 Pts.", value: "5pts" },
   { label: "7 Pts.", value: "7pts" },
+  { label: "10 Pts.", value: "10pts" },
   { label: "No Limit", value: "nolimit" },
 ];
 

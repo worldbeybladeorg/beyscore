@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
-export type MatchTypeOption = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
+export type MatchTypeOption = "3pts" | "4pts" | "5pts" | "7pts" | "10pts" | "nolimit";
 export type BestOfOption = 3 | 5 | undefined;
 
 type MatchHistoryEntry = Record<string, unknown>;
