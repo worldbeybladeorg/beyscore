@@ -28,6 +28,7 @@ const scoreboardStore = useScoreboardStore();
 const {
   generation,
   matchType,
+  customPoints,
   bestOf,
   ownFinishEnabled,
   player1Score,
@@ -73,6 +74,7 @@ const {
 } = useGameState({
   generation,
   matchType,
+  customPoints,
   bestOf,
   player1Score,
   player2Score,
@@ -106,6 +108,7 @@ const {
 } = useMatchSettings(
   generation,
   matchType,
+  customPoints,
   bestOf,
   isOwnFinishEnabled,
   scoreboardStore.setGeneration,

@@ -8,7 +8,7 @@ import { storeToRefs } from "pinia";
 import type { GameSummaryItem } from "~/types/scoreCard";
 
 type GameFormat = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
-type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit";
+type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit" | "custom";
 
 interface Props {
   winnerName?: string;
@@ -49,6 +49,7 @@ const {
   player1Name,
   player2Name,
   matchType,
+  customPoints,
   bestOf,
   p1SetWins,
   p2SetWins,
@@ -131,8 +132,11 @@ const finalScores = computed((): FinalScores => {
     const p2Score = player2Score.value;
 
     // Derive max score from matchType
-    const getPointsToWin = (matchType: MatchType): number => {
-      switch (matchType) {
+    const getPointsToWin = (
+      matchTypeValue: MatchType,
+      customPointsValue: number,
+    ): number => {
+      switch (matchTypeValue) {
         case "3pts":
           return 3;
         case "4pts":
@@ -141,6 +145,8 @@ const finalScores = computed((): FinalScores => {
           return 5;
         case "7pts":
           return 7;
+        case "custom":
+          return customPointsValue;
         case "nolimit":
           return Infinity;
         default:
@@ -148,7 +154,10 @@ const finalScores = computed((): FinalScores => {
       }
     };
 
-    const maxScore = getPointsToWin(matchType.value as MatchType);
+    const maxScore = getPointsToWin(
+      matchType.value as MatchType,
+      customPoints.value,
+    );
 
     const isPlayer1Winner = props.winnerName === player1Name.value;
     const isPlayer2Winner = props.winnerName === player2Name.value;

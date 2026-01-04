@@ -66,9 +66,14 @@ export function computeNameTruncationLimit(bestOf: number | undefined): number {
 }
 
 // Match configuration utilities
-export function getMaxPoints(matchType: string): number | null {
+export function getMaxPoints(
+  matchType: string,
+  customPoints?: number,
+): number | null {
   if (matchType === "nolimit") {
     return null; // No limit
+  } else if (matchType === "custom") {
+    return customPoints ?? 10;
   } else if (matchType === "3pts") {
     return 3;
   } else if (matchType === "4pts") {
@@ -92,7 +97,13 @@ export function getGenerationLabel(generation: string): string {
   return mapping[generation as keyof typeof mapping] || "X";
 }
 
-export function getPointsToWinLabel(matchType: string): string {
+export function getPointsToWinLabel(
+  matchType: string,
+  customPoints?: number,
+): string {
+  if (matchType === "custom") {
+    return `${customPoints ?? 10} Pts.`;
+  }
   const mapping = {
     "3pts": "3 Pts.",
     "4pts": "4 Pts.",

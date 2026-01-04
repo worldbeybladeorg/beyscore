@@ -16,6 +16,7 @@ import type {
 export function useMatchSettings(
   generation: Ref<GenerationOption>,
   matchType: Ref<MatchTypeOption>,
+  customPoints: Ref<number>,
   bestOf: Ref<BestOfOption>,
   isOwnFinishEnabled: Ref<boolean>,
   setGeneration: (value: GenerationOption) => void,
@@ -30,7 +31,9 @@ export function useMatchSettings(
   const beybladeGenerationLabel = computed(() =>
     getGenerationLabel(generation.value),
   );
-  const pointsToWinLabel = computed(() => getPointsToWinLabel(matchType.value));
+  const pointsToWinLabel = computed(() =>
+    getPointsToWinLabel(matchType.value, customPoints.value),
+  );
   const setsLabel = computed(() => getSetsLabel(bestOf.value));
   const ownFinishOptionLabel = computed(() =>
     isOwnFinishEnabled.value ? "On" : "Off",

@@ -13,6 +13,7 @@ import type {
 interface UseGameStateOptions {
   generation: Ref<GenerationOption>;
   matchType: Ref<MatchTypeOption>;
+  customPoints: Ref<number>;
   bestOf: Ref<BestOfOption>;
   player1Score: Ref<number>;
   player2Score: Ref<number>;
@@ -30,6 +31,7 @@ export function useGameState(options: UseGameStateOptions) {
   const {
     generation,
     matchType,
+    customPoints,
     bestOf,
     player1Score,
     player2Score,
@@ -43,7 +45,9 @@ export function useGameState(options: UseGameStateOptions) {
     gameResultsOverlayHasBeenShown,
   } = options;
 
-  const maxPoints = computed(() => getMaxPoints(matchType.value));
+  const maxPoints = computed(() =>
+    getMaxPoints(matchType.value, customPoints.value),
+  );
 
   const nameTruncationLimit = computed(() =>
     computeNameTruncationLimit(bestOf.value),
