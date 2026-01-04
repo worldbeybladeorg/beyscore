@@ -8,11 +8,11 @@
   - [Production](#production)
     <!--toc:end-->
 
-BeyScore is a Beyblade score keeping application built using [Vue.js](https://vuejs.org/), [Nuxt](https://nuxt.com/) and [Bootstrap](https://getbootstrap.com/)
+BeyScore is a Beyblade score keeping application built using [Vue.js](https://vuejs.org/), [Nuxt](https://nuxt.com/) and [TailwindCSS](https://tailwindcss.com/)
 
 ## Setup
 
-Install [Volta](https://docs.volta.sh/guide/getting-started), and [Git-LFS](https://git-lfs.com/)
+Install [Node](https://nodejs.org/en/download), and [Git-LFS](https://git-lfs.com/)
 
 Make sure to install dependencies:
 
