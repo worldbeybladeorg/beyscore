@@ -5,10 +5,10 @@ import Button from "./Button.vue";
 import { X } from "lucide-vue-next";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { storeToRefs } from "pinia";
+import { getMaxPoints } from "~/lib/gameUtils";
 import type { GameSummaryItem } from "~/types/scoreCard";
 
 type GameFormat = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
-type MatchType = "3pts" | "4pts" | "5pts" | "7pts" | "nolimit" | "custom";
 
 interface Props {
   winnerName?: string;
@@ -131,43 +131,17 @@ const finalScores = computed((): FinalScores => {
     const p1Score = player1Score.value;
     const p2Score = player2Score.value;
 
-    // Derive max score from matchType
-    const getPointsToWin = (
-      matchTypeValue: MatchType,
-      customPointsValue: number,
-    ): number => {
-      switch (matchTypeValue) {
-        case "3pts":
-          return 3;
-        case "4pts":
-          return 4;
-        case "5pts":
-          return 5;
-        case "7pts":
-          return 7;
-        case "custom":
-          return customPointsValue;
-        case "nolimit":
-          return Infinity;
-        default:
-          return 4;
-      }
-    };
-
-    const maxScore = getPointsToWin(
-      matchType.value as MatchType,
-      customPoints.value,
-    );
+    const maxScore = getMaxPoints(matchType.value, customPoints.value);
 
     const isPlayer1Winner = props.winnerName === player1Name.value;
     const isPlayer2Winner = props.winnerName === player2Name.value;
 
     const p1FinalScore =
-      isPlayer1Winner && maxScore !== Infinity
+      isPlayer1Winner && maxScore !== null
         ? Math.min(p1Score, maxScore)
         : p1Score;
     const p2FinalScore =
-      isPlayer2Winner && maxScore !== Infinity
+      isPlayer2Winner && maxScore !== null
         ? Math.min(p2Score, maxScore)
         : p2Score;
 
