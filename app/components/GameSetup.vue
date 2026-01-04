@@ -1,37 +1,43 @@
-<script setup>
+<script setup lang="ts">
 import { ref, nextTick, watch } from "vue";
 import { storeToRefs } from "pinia";
 import ToggleButton from "../components/ToggleButton.vue";
 import Button from "../components/Button.vue";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
+import type {
+  GenerationOption,
+  MatchTypeOption,
+} from "~/stores/scoreboardStore";
 
 const scoreboardStore = useScoreboardStore();
 const { generation, matchType, customPoints, bestOf, ownFinishEnabled } =
   storeToRefs(scoreboardStore);
 
-const customPointsInputRef = (ref < HTMLInputElement) | (null > null);
+const customPointsInputRef = ref<HTMLInputElement | null>(null);
 
-const selectedGeneration = ref(generation.value);
-watch(generation, (value) => {
+const selectedGeneration = ref<GenerationOption | null>(generation.value);
+watch(generation, (value: GenerationOption) => {
   selectedGeneration.value = value;
 });
 
-const selectedMatchType = ref(matchType.value);
-watch(matchType, (value) => {
+const selectedMatchType = ref<MatchTypeOption | null>(matchType.value);
+watch(matchType, (value: MatchTypeOption) => {
   selectedMatchType.value = value;
 });
 
-const selectedBestOf = ref(bestOf.value ? bestOf.value.toString() : undefined);
-watch(bestOf, (value) => {
+const selectedBestOf = ref<string | undefined>(
+  bestOf.value ? bestOf.value.toString() : undefined,
+);
+watch(bestOf, (value: number | undefined) => {
   selectedBestOf.value = value ? value.toString() : undefined;
 });
 
 const localOwnFinishEnabled = ref(ownFinishEnabled.value);
-watch(ownFinishEnabled, (value) => {
+watch(ownFinishEnabled, (value: boolean) => {
   localOwnFinishEnabled.value = value;
 });
 
-const handleGenerationToggle = (value, state) => {
+const handleGenerationToggle = (value: GenerationOption, state: boolean) => {
   if (state) {
     scoreboardStore.setGeneration(value);
   } else if (selectedGeneration.value === value) {
@@ -42,7 +48,7 @@ const handleGenerationToggle = (value, state) => {
   }
 };
 
-const handleMatchTypeToggle = (value, state) => {
+const handleMatchTypeToggle = (value: MatchTypeOption, state: boolean) => {
   if (state) {
     scoreboardStore.setMatchType(value);
     if (value === "custom") {
@@ -59,29 +65,32 @@ const handleMatchTypeToggle = (value, state) => {
   }
 };
 
-const handleCustomPointsInput = (event) => {
-  const value = parseInt(event.target.value, 10);
+const handleCustomPointsInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const value = parseInt(target.value, 10);
   if (!isNaN(value) && value >= 1) {
     scoreboardStore.setCustomPoints(value);
   }
 };
 
-const handleCustomPointsBlur = (event) => {
-  const value = parseInt(event.target.value, 10);
+const handleCustomPointsBlur = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const value = parseInt(target.value, 10);
   if (isNaN(value) || value < 1) {
-    scoreboardStore.setCustomPoints(10);
+    // Preserve the current store value instead of hardcoding 10
+    target.value = String(customPoints.value);
   }
 };
 
-const handleBestOfToggle = (value, state) => {
+const handleBestOfToggle = (value: string, state: boolean) => {
   if (state) {
-    scoreboardStore.setBestOf(value ? parseInt(value, 10) : null);
+    scoreboardStore.setBestOf(value ? parseInt(value, 10) : undefined);
   } else if (selectedBestOf.value === value) {
-    scoreboardStore.setBestOf(null);
+    scoreboardStore.setBestOf(undefined);
   }
 };
 
-const handleOwnFinishToggle = (state) => {
+const handleOwnFinishToggle = (state: boolean) => {
   scoreboardStore.setOwnFinishEnabled(state);
 };
 
