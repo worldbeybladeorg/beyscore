@@ -4,11 +4,10 @@ import GameSummary from "./GameSummary.vue";
 import Button from "./Button.vue";
 import { X } from "lucide-vue-next";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
+import type { GenerationOption } from "~/stores/scoreboardStore";
 import { storeToRefs } from "pinia";
 import { getMaxPoints } from "~/lib/gameUtils";
 import type { GameSummaryItem } from "~/types/scoreCard";
-
-type GameFormat = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 
 interface Props {
   winnerName?: string;
@@ -19,7 +18,7 @@ interface Props {
    * 'mfb-zero-g':  OVR, SPF
    * 'plastics-hms': OVR, SPF
    */
-  format?: GameFormat;
+  format?: GenerationOption;
   /**
    * Optional edge-case line shown only for X format:
    * "Opponent: X OWF, Y PEN"
