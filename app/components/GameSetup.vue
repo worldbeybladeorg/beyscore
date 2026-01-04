@@ -228,9 +228,12 @@ const handleStartGame = async () => {
           v-if="selectedMatchType === 'custom'"
           class="custom-points-container"
         >
-          <span class="custom-points-label">Points to Win:</span>
+          <label for="custom-points-input" class="custom-points-label"
+            >Points to Win:</label
+          >
           <div class="custom-points-input-wrapper">
             <input
+              id="custom-points-input"
               ref="customPointsInputRef"
               type="number"
               min="1"
