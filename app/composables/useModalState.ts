@@ -4,6 +4,7 @@ import type {
   MatchTypeOption,
   BestOfOption,
 } from "~/stores/scoreboardStore";
+import { DEFAULT_CUSTOM_POINTS } from "~/lib/gameUtils";
 
 export function useMatchHistoryModal() {
   const isMatchHistoryModalOpen = ref(false);
@@ -38,11 +39,13 @@ export function useSettingsModal(
   player2NameSetting: Ref<string>,
   generation: Ref<GenerationOption>,
   matchType: Ref<MatchTypeOption>,
+  customPoints: Ref<number>,
   bestOf: Ref<BestOfOption>,
   isOwnFinishEnabled: Ref<boolean>,
   storeActions: {
     setGeneration: (value: GenerationOption) => void;
     setMatchType: (value: MatchTypeOption) => void;
+    setCustomPoints: (value: number) => void;
     setBestOf: (value: BestOfOption) => void;
     setOwnFinishEnabled: (value: boolean) => void;
     reset: () => void;
@@ -60,6 +63,7 @@ export function useSettingsModal(
   const originalPlayer2Name = ref("Player 2");
   const originalGeneration = ref<GenerationOption>("x");
   const originalMatchType = ref<MatchTypeOption>("4pts");
+  const originalCustomPoints = ref<number>(DEFAULT_CUSTOM_POINTS);
   const originalBestOf = ref<BestOfOption>(undefined);
   const originalOwnFinish = ref(false);
 
@@ -70,6 +74,7 @@ export function useSettingsModal(
       player2NameSetting.value !== originalPlayer2Name.value ||
       generation.value !== originalGeneration.value ||
       matchType.value !== originalMatchType.value ||
+      customPoints.value !== originalCustomPoints.value ||
       bestOf.value !== originalBestOf.value ||
       isOwnFinishEnabled.value !== originalOwnFinish.value
     );
@@ -93,6 +98,7 @@ export function useSettingsModal(
     originalPlayer2Name.value = player2NameSetting.value;
     originalGeneration.value = generation.value;
     originalMatchType.value = matchType.value;
+    originalCustomPoints.value = customPoints.value;
     originalBestOf.value = bestOf.value;
     originalOwnFinish.value = isOwnFinishEnabled.value;
     isSettingsModalClosing.value = false;
@@ -121,6 +127,9 @@ export function useSettingsModal(
     if (matchType.value !== originalMatchType.value) {
       storeActions.setMatchType(originalMatchType.value);
     }
+    if (customPoints.value !== originalCustomPoints.value) {
+      storeActions.setCustomPoints(originalCustomPoints.value);
+    }
     if (bestOf.value !== originalBestOf.value) {
       storeActions.setBestOf(originalBestOf.value);
     }
@@ -144,6 +153,7 @@ export function useSettingsModal(
     const gameSettingsChanged =
       generation.value !== originalGeneration.value ||
       matchType.value !== originalMatchType.value ||
+      customPoints.value !== originalCustomPoints.value ||
       bestOf.value !== originalBestOf.value ||
       isOwnFinishEnabled.value !== originalOwnFinish.value;
 
@@ -166,6 +176,7 @@ export function useSettingsModal(
     originalPlayer2Name.value = player2NameSetting.value;
     originalGeneration.value = generation.value;
     originalMatchType.value = matchType.value;
+    originalCustomPoints.value = customPoints.value;
     originalBestOf.value = bestOf.value;
     originalOwnFinish.value = isOwnFinishEnabled.value;
 

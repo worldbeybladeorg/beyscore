@@ -140,11 +140,13 @@ const {
   player2NameSetting,
   generation,
   matchType,
+  customPoints,
   bestOf,
   isOwnFinishEnabled,
   {
     setGeneration: scoreboardStore.setGeneration,
     setMatchType: scoreboardStore.setMatchType,
+    setCustomPoints: scoreboardStore.setCustomPoints,
     setBestOf: scoreboardStore.setBestOf,
     setOwnFinishEnabled: scoreboardStore.setOwnFinishEnabled,
     reset: scoreboardStore.reset,
@@ -661,9 +663,9 @@ watch(gameEnded, async (ended) => {
               </div>
             </div>
             <div v-if="matchTypeParam === 'custom'" class="settings-field">
-              <div class="custom-points-row">
-                <span class="custom-points-label">Points to Win:</span>
-                <div class="custom-points-input-wrapper">
+              <div class="custom-points-field">
+                <div class="custom-points-title">Custom Points</div>
+                <div class="custom-points-input-container">
                   <input
                     type="number"
                     min="1"
@@ -1197,45 +1199,39 @@ watch(gameEnded, async (ended) => {
   align-items: center;
 }
 
-.custom-points-row {
+.custom-points-field {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  width: 100%;
 }
 
-.custom-points-label {
+.custom-points-title {
   font-family: "Titillium Web", sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
   color: #64748b;
-  line-height: 1.5;
 }
 
-.custom-points-input-wrapper {
+.custom-points-input-container {
+  margin-top: 8px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 38px;
-  min-width: 70px;
-  padding: 8px 12px;
-  background-color: white;
-  border: 1px solid #cbd5e1;
-  border-bottom: none;
+  justify-content: space-between;
   border-radius: 10px;
-  box-shadow: 0 2px 0 0 #cbd5e1;
+  border: 1px solid #cbd5e1;
+  background-color: white;
+  padding: 8px 12px;
+  box-shadow: 0 0 4px rgba(15, 23, 42, 0.05);
 }
 
 .custom-points-input {
-  width: 50px;
-  height: 100%;
-  padding: 0;
+  width: 100%;
   border: none;
   background: transparent;
   font-family: "Titillium Web", sans-serif;
   font-size: 1rem;
-  font-weight: 700;
-  color: #94a3b8;
-  text-align: center;
+  font-weight: 400;
+  color: #475569;
   outline: none;
 }
 
