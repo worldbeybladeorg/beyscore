@@ -1,5 +1,8 @@
 // Game utility functions shared between GameScreen components
 
+// Default configuration constants
+export const DEFAULT_CUSTOM_POINTS = 10;
+
 // Chip and win condition utilities
 export function getChipTypeForHistory(
   chipLabel: string,
@@ -73,7 +76,7 @@ export function getMaxPoints(
   if (matchType === "nolimit") {
     return null; // No limit
   } else if (matchType === "custom") {
-    return customPoints ?? 10;
+    return customPoints ?? DEFAULT_CUSTOM_POINTS;
   } else if (matchType === "3pts") {
     return 3;
   } else if (matchType === "4pts") {
@@ -102,7 +105,7 @@ export function getPointsToWinLabel(
   customPoints?: number,
 ): string {
   if (matchType === "custom") {
-    return `${customPoints ?? 10} Pts.`;
+    return `${customPoints ?? DEFAULT_CUSTOM_POINTS} Pts.`;
   }
   const mapping = {
     "3pts": "3 Pts.",
@@ -134,6 +137,7 @@ export const POINTS_TO_WIN_ITEMS_X = [
   { label: "5 Pts.", value: "5pts" },
   { label: "7 Pts.", value: "7pts" },
   { label: "No Limit", value: "nolimit" },
+  { label: "Custom", value: "custom" },
 ];
 
 export const POINTS_TO_WIN_ITEMS_OTHER = [
@@ -141,6 +145,7 @@ export const POINTS_TO_WIN_ITEMS_OTHER = [
   { label: "4 Pts.", value: "4pts" },
   { label: "5 Pts.", value: "5pts" },
   { label: "No Limit", value: "nolimit" },
+  { label: "Custom", value: "custom" },
 ];
 
 export const SETS_ITEMS = [

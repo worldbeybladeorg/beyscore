@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
+import { DEFAULT_CUSTOM_POINTS } from "~/lib/gameUtils";
+
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 export type MatchTypeOption =
   | "3pts"
@@ -50,7 +52,6 @@ const defaultMatchTypeForGeneration = (
 const DEFAULT_GENERATION: GenerationOption = "x";
 const DEFAULT_MATCH_TYPE: MatchTypeOption =
   defaultMatchTypeForGeneration(DEFAULT_GENERATION);
-const DEFAULT_CUSTOM_POINTS = 10;
 const DEFAULT_BEST_OF: BestOfOption = undefined;
 const DEFAULT_OWN_FINISH = false;
 

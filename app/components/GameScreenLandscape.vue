@@ -102,6 +102,7 @@ const {
   handlePointsToWinSelect,
   handleSetsSelect,
   handleOwnFinishToggle,
+  handleCustomPointsChange,
   closeDropdowns,
   GENERATION_ITEMS: generationItems,
   SETS_ITEMS: setsItems,
@@ -113,6 +114,7 @@ const {
   isOwnFinishEnabled,
   scoreboardStore.setGeneration,
   scoreboardStore.setMatchType,
+  scoreboardStore.setCustomPoints,
   scoreboardStore.setBestOf,
   scoreboardStore.setOwnFinishEnabled,
 );
@@ -632,6 +634,29 @@ watch(gameEnded, async (ended) => {
                 </div>
               </div>
             </div>
+            <div v-if="matchTypeParam === 'custom'" class="settings-field">
+              <div class="custom-points-row">
+                <span class="custom-points-label">Points to Win:</span>
+                <div class="custom-points-input-wrapper">
+                  <input
+                    type="number"
+                    min="1"
+                    :value="customPoints"
+                    class="custom-points-input"
+                    @input="
+                      (e) => {
+                        const val = parseInt(
+                          (e.target as HTMLInputElement).value,
+                          10,
+                        );
+                        if (!isNaN(val) && val >= 1)
+                          handleCustomPointsChange(val);
+                      }
+                    "
+                  />
+                </div>
+              </div>
+            </div>
             <div
               v-if="matchTypeParam !== 'nolimit'"
               class="settings-field sets-gap"
@@ -1143,6 +1168,58 @@ watch(gameEnded, async (ended) => {
   margin-top: 8px;
   display: flex;
   align-items: center;
+}
+
+.custom-points-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.custom-points-label {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.custom-points-input-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  min-width: 70px;
+  padding: 8px 12px;
+  background-color: white;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 0 0 #cbd5e1;
+}
+
+.custom-points-input {
+  width: 50px;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-align: center;
+  outline: none;
+}
+
+.custom-points-input::-webkit-outer-spin-button,
+.custom-points-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.custom-points-input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 .settings-buttons-container {
