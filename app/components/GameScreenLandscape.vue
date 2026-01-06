@@ -638,9 +638,10 @@ watch(gameEnded, async (ended) => {
             </div>
             <div v-if="matchTypeParam === 'custom'" class="settings-field">
               <div class="custom-points-field">
-                <div class="custom-points-title">Custom Points</div>
+                <label for="custom-points-input" class="custom-points-title">Custom Points</label>
                 <div class="custom-points-input-container">
                   <input
+                    id="custom-points-input"
                     type="number"
                     min="1"
                     :value="customPoints"
