@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Undo2 } from "lucide-vue-next";
+import { Undo2 } from "@lucide/vue";
 
 interface Props {
   disabled?: boolean;

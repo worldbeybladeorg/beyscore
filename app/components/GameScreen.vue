@@ -2,7 +2,7 @@
 import { computed, watch, nextTick, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import ScoreCardPortrait from "../components/ScoreCardPortrait.vue";
 import MenuButton from "../components/MenuButton.vue";
 import UndoRedoButtons from "../components/UndoRedoButtons.vue";
@@ -664,7 +664,9 @@ watch(gameEnded, async (ended) => {
             </div>
             <div v-if="matchTypeParam === 'custom'" class="settings-field">
               <div class="custom-points-field">
-                <label for="custom-points-input" class="custom-points-title">Custom Points</label>
+                <label for="custom-points-input" class="custom-points-title"
+                  >Custom Points</label
+                >
                 <div class="custom-points-input-container">
                   <input
                     id="custom-points-input"

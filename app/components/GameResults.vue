@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import GameSummary from "./GameSummary.vue";
 import Button from "./Button.vue";
-import { X } from "lucide-vue-next";
+import { X } from "@lucide/vue";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import type { GenerationOption } from "~/stores/scoreboardStore";
 import { storeToRefs } from "pinia";
