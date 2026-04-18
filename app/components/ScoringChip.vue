@@ -50,7 +50,7 @@ const handleClick = () => {
     :class="[
       static
         ? 'h-8 cursor-default gap-2 border-b-0! pr-1.5 pl-2.5'
-        : 'h-[38px] gap-2 pr-2 pl-3',
+        : 'h-9.5 gap-2 pr-2 pl-3',
       !disabled && !static ? 'cursor-pointer hover:opacity-90' : '',
       disabled ? 'cursor-not-allowed opacity-60' : '',
       colorClasses,
