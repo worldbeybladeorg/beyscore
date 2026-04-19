@@ -175,6 +175,13 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     if (value !== "x") {
       ownFinishEnabled.value = false;
     }
+    xtrPoints.value = DEFAULT_XTR_POINTS;
+    ovrPoints.value =
+      value === "mfb-zero-g" || value === "plastics-hms"
+        ? 1
+        : DEFAULT_OVR_POINTS;
+    bstPoints.value = DEFAULT_BST_POINTS;
+    spfPoints.value = DEFAULT_SPF_POINTS;
   };
 
   const setMatchType = (value: MatchTypeOption) => {
