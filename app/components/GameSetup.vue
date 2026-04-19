@@ -110,59 +110,79 @@ const handleStartGame = async () => {
 </script>
 
 <template>
-  <div class="viewport-container">
-    <div class="game-setup-screen">
-      <!-- Empty canvas - ready for game setup design -->
+  <div class="flex min-h-screen w-full items-center justify-center p-5">
+    <div
+      class="relative flex h-211 max-h-231.5 min-h-160 w-97.5 max-w-107 min-w-90 flex-col gap-4 overflow-y-auto bg-white px-[calc(20px+env(safe-area-inset-left,0px))] pt-[calc(max(20px,env(safe-area-inset-top,0px))+72px)] pr-[calc(20px+env(safe-area-inset-right,0px))] pb-[calc(max(34px,env(safe-area-inset-bottom,0px))+12px)]"
+    >
+      <img
+        src="/beyscore.svg"
+        alt="BeyScore"
+        class="absolute top-[calc(max(20px,env(safe-area-inset-top,0px))+20px)] left-[calc(20px+env(safe-area-inset-left,0px))] z-10 h-5 w-auto"
+      />
 
-      <!-- BeyScore Logo -->
-      <img src="/beyscore.svg" alt="BeyScore" class="logo" />
+      <div class="flex flex-1 flex-col gap-4">
+        <h1
+          class="m-0 p-0 font-titillium text-base leading-6 font-bold text-slate-700"
+        >
+          Select Beyblade Generation
+        </h1>
 
-      <div class="content-stack">
-        <!-- Heading -->
-        <h1 class="heading-text">Select Beyblade Generation</h1>
-
-        <!-- Generation toggle buttons -->
-        <div class="toggle-buttons-container">
-          <ToggleButton
-            :key="`x-${selectedGeneration}`"
-            size="large"
-            :initial-state="selectedGeneration === 'x'"
-            @toggle="(state) => handleGenerationToggle('x', state)"
-          >
-            X
-          </ToggleButton>
-          <ToggleButton
-            :key="`burst-${selectedGeneration}`"
-            size="large"
-            :initial-state="selectedGeneration === 'burst'"
-            @toggle="(state) => handleGenerationToggle('burst', state)"
-          >
-            Burst
-          </ToggleButton>
-          <ToggleButton
-            :key="`metal-${selectedGeneration}`"
-            size="large"
-            :initial-state="selectedGeneration === 'mfb-zero-g'"
-            @toggle="(state) => handleGenerationToggle('mfb-zero-g', state)"
-          >
-            Metal Fight/Zero-G
-          </ToggleButton>
-          <ToggleButton
-            :key="`plastic-${selectedGeneration}`"
-            size="large"
-            :initial-state="selectedGeneration === 'plastics-hms'"
-            @toggle="(state) => handleGenerationToggle('plastics-hms', state)"
-          >
-            Plastic & HMS
-          </ToggleButton>
+        <div class="flex flex-col gap-4">
+          <div>
+            <ToggleButton
+              :key="`x-${selectedGeneration}`"
+              class="w-full"
+              size="large"
+              :initial-state="selectedGeneration === 'x'"
+              @toggle="(state) => handleGenerationToggle('x', state)"
+            >
+              X
+            </ToggleButton>
+          </div>
+          <div>
+            <ToggleButton
+              :key="`burst-${selectedGeneration}`"
+              class="w-full"
+              size="large"
+              :initial-state="selectedGeneration === 'burst'"
+              @toggle="(state) => handleGenerationToggle('burst', state)"
+            >
+              Burst
+            </ToggleButton>
+          </div>
+          <div>
+            <ToggleButton
+              :key="`metal-${selectedGeneration}`"
+              class="w-full"
+              size="large"
+              :initial-state="selectedGeneration === 'mfb-zero-g'"
+              @toggle="(state) => handleGenerationToggle('mfb-zero-g', state)"
+            >
+              Metal Fight/Zero-G
+            </ToggleButton>
+          </div>
+          <div>
+            <ToggleButton
+              :key="`plastic-${selectedGeneration}`"
+              class="w-full"
+              size="large"
+              :initial-state="selectedGeneration === 'plastics-hms'"
+              @toggle="(state) => handleGenerationToggle('plastics-hms', state)"
+            >
+              Plastic & HMS
+            </ToggleButton>
+          </div>
         </div>
 
-        <!-- Match Type heading -->
-        <h1 class="match-type-heading">Match Type</h1>
+        <h1
+          class="m-0 p-0 font-titillium text-base leading-6 font-bold text-slate-700"
+        >
+          Match Type
+        </h1>
 
-        <!-- Match Type toggle buttons -->
-        <div class="match-type-buttons-container">
-          <!-- For X format: 4, 5, 7, No Limit, Custom -->
+        <div
+          class="flex flex-wrap items-start gap-3 [&>:deep(button)]:w-auto [&>:deep(button)]:shrink-0"
+        >
           <template v-if="selectedGeneration === 'x'">
             <ToggleButton
               :key="`4pts-${selectedMatchType}`"
@@ -201,7 +221,6 @@ const handleStartGame = async () => {
             </ToggleButton>
           </template>
 
-          <!-- For Burst, Metal Fight/Zero-G, Plastic & HMS: 3, 4, 5, No Limit, Custom -->
           <template v-else>
             <ToggleButton
               :key="`3pts-${selectedMatchType}`"
@@ -241,32 +260,34 @@ const handleStartGame = async () => {
           </template>
         </div>
 
-        <!-- Custom Points Input (shown when Custom is selected) -->
         <div
           v-if="selectedMatchType === 'custom'"
-          class="custom-points-container"
+          class="flex items-center gap-3"
         >
-          <label for="custom-points-input" class="custom-points-label"
+          <label
+            for="custom-points-input"
+            class="font-titillium text-base leading-6 font-bold text-slate-400"
             >Points to Win:</label
           >
-          <div class="custom-points-input-wrapper">
+          <div
+            class="relative flex h-9.5 min-w-17.5 items-center justify-center rounded-[10px] border border-b-0 border-[#cbd5e1] bg-white px-3 py-2 shadow-[0_2px_0_0_#cbd5e1]"
+          >
             <input
               id="custom-points-input"
               ref="customPointsInputRef"
               type="number"
               min="1"
               :value="customPoints"
-              class="custom-points-input"
+              class="h-full w-12.5 border-none bg-transparent p-0 text-center font-titillium text-base font-bold text-slate-400 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               @input="handleCustomPointsInput"
               @blur="handleCustomPointsBlur"
             />
           </div>
         </div>
 
-        <!-- Best-of Sets toggle buttons (hidden when No Limit is selected) -->
         <div
           v-if="selectedMatchType !== 'nolimit'"
-          class="best-of-buttons-container"
+          class="flex flex-wrap items-start gap-3 [&>:deep(button)]:w-auto [&>:deep(button)]:shrink-0"
         >
           <ToggleButton
             :key="`bestof3-${selectedBestOf}`"
@@ -284,20 +305,17 @@ const handleStartGame = async () => {
           </ToggleButton>
         </div>
 
-        <!-- Own Finish section (only shown for X generation) -->
         <template v-if="selectedGeneration === 'x'">
-          <!-- Own Finish heading -->
           <h1
-            class="own-finish-heading"
-            :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
+            class="mt-2 p-0 font-titillium text-base leading-6 font-bold text-slate-700"
+            :class="{ 'mt-0': selectedMatchType === 'nolimit' }"
           >
             Own Finish
           </h1>
 
-          <!-- Own Finish toggle button -->
           <div
-            class="own-finish-button-container"
-            :class="{ 'no-best-of': selectedMatchType === 'nolimit' }"
+            class="flex items-start [&>:deep(button)]:w-auto [&>:deep(button)]:shrink-0"
+            :class="{ 'mt-1': selectedMatchType === 'nolimit' }"
           >
             <ToggleButton
               :key="`ownfinish-${localOwnFinishEnabled}`"
@@ -309,7 +327,6 @@ const handleStartGame = async () => {
           </div>
         </template>
 
-        <!-- Advanced Settings dropdown -->
         <AdvancedSettingsSection
           :generation="selectedGeneration || generation"
           :xtr-points="xtrPoints"
@@ -324,219 +341,17 @@ const handleStartGame = async () => {
         />
       </div>
 
-      <!-- Start Game button -->
-      <div class="button-container">
-        <Button variant="blue" @click="handleStartGame">Start Game</Button>
+      <div class="mt-auto w-full">
+        <Button class="w-full" variant="blue" @click="handleStartGame"
+          >Start Game</Button
+        >
       </div>
 
-      <!-- Copyright text at bottom -->
-      <div class="copyright-text">
-        © worldbeyblade.org, Fighting Spirits Inc. 2025
+      <div
+        class="pb-[max(34px,env(safe-area-inset-bottom,0px))] text-center font-titillium text-xs leading-6 font-normal text-slate-400"
+      >
+        © worldbeyblade.org, Fighting Spirits Inc. 2026
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.viewport-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.game-setup-screen {
-  width: 390px;
-  min-width: 360px;
-  max-width: 428px;
-  height: 844px;
-  min-height: 640px;
-  max-height: 926px;
-  background-color: white;
-  border: none;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: calc(max(20px, env(safe-area-inset-top, 0px)) + 72px);
-  padding-bottom: calc(max(34px, env(safe-area-inset-bottom, 0px)) + 12px);
-  padding-left: calc(20px + env(safe-area-inset-left, 0px));
-  padding-right: calc(20px + env(safe-area-inset-right, 0px));
-  overflow-y: auto;
-}
-
-.content-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 1;
-}
-
-.logo {
-  position: absolute;
-  top: calc(max(20px, env(safe-area-inset-top, 0px)) + 20px);
-  left: calc(20px + env(safe-area-inset-left, 0px));
-  height: 20px;
-  width: auto;
-  z-index: 10;
-}
-
-.heading-text {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #475569;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.toggle-buttons-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.toggle-buttons-container :deep(button) {
-  width: 100%;
-}
-
-.match-type-heading {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #475569;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.match-type-buttons-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.match-type-buttons-container :deep(button) {
-  width: auto;
-  flex-shrink: 0;
-}
-
-.best-of-buttons-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.best-of-buttons-container :deep(button) {
-  width: auto;
-  flex-shrink: 0;
-}
-
-.custom-points-container {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.custom-points-label {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #94a3b8;
-  line-height: 1.5;
-}
-
-.custom-points-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 38px;
-  min-width: 70px;
-  padding: 8px 12px;
-  background-color: white;
-  border: 1px solid #cbd5e1;
-  border-bottom: none;
-  border-radius: 10px;
-  box-shadow: 0 2px 0 0 #cbd5e1;
-}
-
-.custom-points-input {
-  width: 50px;
-  height: 100%;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #94a3b8;
-  text-align: center;
-  outline: none;
-}
-
-.custom-points-input::-webkit-outer-spin-button,
-.custom-points-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.custom-points-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.own-finish-heading {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #475569;
-  margin: 8px 0 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.own-finish-heading.no-best-of {
-  margin-top: 0;
-}
-
-.own-finish-button-container {
-  display: flex;
-  align-items: flex-start;
-}
-
-.own-finish-button-container.no-best-of {
-  margin-top: 4px;
-}
-
-.own-finish-button-container :deep(button) {
-  width: auto;
-  flex-shrink: 0;
-}
-
-.button-container {
-  margin-top: auto;
-  width: 100%;
-}
-
-.button-container :deep(button) {
-  width: 100%;
-}
-
-.copyright-text {
-  text-align: center;
-  padding-bottom: max(34px, env(safe-area-inset-bottom, 0px));
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #94a3b8;
-  line-height: 1.5;
-}
-</style>
