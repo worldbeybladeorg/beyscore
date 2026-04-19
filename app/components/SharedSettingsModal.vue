@@ -320,7 +320,7 @@ const handleClose = () => {
         <ToggleButton
           size="default"
           :initial-state="localOwnFinishEnabled"
-          @toggle="localOwnFinishEnabled = !localOwnFinishEnabled"
+          @toggle="localOwnFinishEnabled = $event"
         >
           {{ ownFinishOptionLabel }}
         </ToggleButton>

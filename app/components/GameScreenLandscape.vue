@@ -48,7 +48,10 @@ const {
   historyIndex,
   showGameResultsOverlay,
   gameResultsOverlayHasBeenShown,
+  ownFinishEnabled,
 } = storeToRefs(scoreboardStore);
+
+const isOwnFinishEnabled = computed(() => ownFinishEnabled.value);
 
 const gameResetTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
@@ -175,22 +178,6 @@ const handleGameResultsNewGame = () => {
 const handleGameResultsViewHistory = () => {
   triggerGameResultsViewHistory(openMatchHistoryModal);
 };
-
-displayedSetNumber.value = 1;
-
-history.value = [
-  {
-    player1: 0,
-    player2: 0,
-    p1SetWins: [],
-    p2SetWins: [],
-    p1ShowWarning: false,
-    p2ShowWarning: false,
-    matchHistory: [],
-    currentGameNumber: 1,
-  },
-];
-historyIndex.value = 0;
 
 watch(gameEnded, async (ended) => {
   if (ended && !pendingGameReset.value) {
