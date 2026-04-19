@@ -3,6 +3,7 @@ import { ref, nextTick, watch } from "vue";
 import { storeToRefs } from "pinia";
 import ToggleButton from "../components/ToggleButton.vue";
 import Button from "../components/Button.vue";
+import AdvancedSettingsSection from "../components/AdvancedSettingsSection.vue";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import type {
   GenerationOption,
@@ -10,8 +11,17 @@ import type {
 } from "~/stores/scoreboardStore";
 
 const scoreboardStore = useScoreboardStore();
-const { generation, matchType, customPoints, bestOf, ownFinishEnabled } =
-  storeToRefs(scoreboardStore);
+const {
+  generation,
+  matchType,
+  customPoints,
+  bestOf,
+  ownFinishEnabled,
+  xtrPoints,
+  ovrPoints,
+  bstPoints,
+  spfPoints,
+} = storeToRefs(scoreboardStore);
 
 const customPointsInputRef = ref<HTMLInputElement | null>(null);
 
@@ -77,7 +87,6 @@ const handleCustomPointsBlur = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const value = parseInt(target.value, 10);
   if (isNaN(value) || value < 1) {
-    // Preserve the current store value instead of hardcoding 10
     target.value = String(customPoints.value);
   }
 };
@@ -299,6 +308,20 @@ const handleStartGame = async () => {
             </ToggleButton>
           </div>
         </template>
+
+        <!-- Advanced Settings dropdown -->
+        <AdvancedSettingsSection
+          :generation="selectedGeneration || generation"
+          :xtr-points="xtrPoints"
+          :ovr-points="ovrPoints"
+          :bst-points="bstPoints"
+          :spf-points="spfPoints"
+          @update:xtr-points="scoreboardStore.setXtrPoints"
+          @update:ovr-points="scoreboardStore.setOvrPoints"
+          @update:bst-points="scoreboardStore.setBstPoints"
+          @update:spf-points="scoreboardStore.setSpfPoints"
+          @reset="scoreboardStore.resetChipPointsToDefaults"
+        />
       </div>
 
       <!-- Start Game button -->
@@ -467,6 +490,7 @@ const handleStartGame = async () => {
 
 .custom-points-input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .own-finish-heading {

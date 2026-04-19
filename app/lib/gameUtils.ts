@@ -2,6 +2,10 @@
 
 // Default configuration constants
 export const DEFAULT_CUSTOM_POINTS = 10;
+export const DEFAULT_XTR_POINTS = 3;
+export const DEFAULT_OVR_POINTS = 2;
+export const DEFAULT_BST_POINTS = 2;
+export const DEFAULT_SPF_POINTS = 1;
 
 // Chip and win condition utilities
 export function getChipTypeForHistory(

@@ -14,6 +14,7 @@ import ToggleButton from "../components/ToggleButton.vue";
 import DropdownMenu from "../components/DropdownMenu.vue";
 import Alert from "../components/Alert.vue";
 import GameResults from "../components/GameResults.vue";
+import AdvancedSettingsSection from "../components/AdvancedSettingsSection.vue";
 import { useGameState } from "~/composables/useGameState";
 import { useMatchSettings } from "~/composables/useMatchSettings";
 import {
@@ -32,6 +33,10 @@ const {
   customPoints,
   bestOf,
   ownFinishEnabled,
+  xtrPoints,
+  ovrPoints,
+  bstPoints,
+  spfPoints,
   player1Score,
   player2Score,
   player1NameSetting,
@@ -411,6 +416,10 @@ watch(gameEnded, async (ended) => {
           :show-warning="p1ShowWarning"
           :is-fading-in="isScoreFadingIn"
           :is-shrinking="isScoreShrinking"
+          :xtr-score="xtrPoints"
+          :ovr-score="ovrPoints"
+          :bst-score="bstPoints"
+          :spf-score="spfPoints"
           @score-increase="
             (points, chipLabel) => handlePlayer1ScoreIncrease(points, chipLabel)
           "
@@ -432,11 +441,10 @@ watch(gameEnded, async (ended) => {
           :show-warning="p2ShowWarning"
           :is-fading-in="isScoreFadingIn"
           :is-shrinking="isScoreShrinking"
-          :class="{
-            'winner-state':
-              (matchOver || (gameEnded && bestOf === undefined)) &&
-              winnerDisplayText,
-          }"
+          :xtr-score="xtrPoints"
+          :ovr-score="ovrPoints"
+          :bst-score="bstPoints"
+          :spf-score="spfPoints"
           @score-increase="
             (points, chipLabel) => handlePlayer2ScoreIncrease(points, chipLabel)
           "
@@ -732,6 +740,22 @@ watch(gameEnded, async (ended) => {
                   {{ ownFinishOptionLabel }}
                 </ToggleButton>
               </div>
+            </div>
+
+            <!-- Advanced Settings dropdown -->
+            <div class="settings-field advanced-settings-gap">
+              <AdvancedSettingsSection
+                :generation="generation"
+                :xtr-points="xtrPoints"
+                :ovr-points="ovrPoints"
+                :bst-points="bstPoints"
+                :spf-points="spfPoints"
+                @update:xtr-points="scoreboardStore.setXtrPoints"
+                @update:ovr-points="scoreboardStore.setOvrPoints"
+                @update:bst-points="scoreboardStore.setBstPoints"
+                @update:spf-points="scoreboardStore.setSpfPoints"
+                @reset="scoreboardStore.resetChipPointsToDefaults"
+              />
             </div>
           </div>
 
@@ -1174,6 +1198,10 @@ watch(gameEnded, async (ended) => {
 }
 
 .settings-field.own-finish-gap {
+  margin-top: 16px;
+}
+
+.settings-field.advanced-settings-gap {
   margin-top: 16px;
 }
 
