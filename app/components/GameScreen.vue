@@ -13,6 +13,7 @@ import SharedSettingsModal from "../components/SharedSettingsModal.vue";
 import { useGameState } from "~/composables/useGameState";
 import {
   useMatchHistoryModal,
+  useSettingsModal,
 } from "~/composables/useModalState";
 import { useHistoryUndoRedo } from "~/composables/useHistoryUndoRedo";
 import { useScoring } from "~/composables/useScoring";
@@ -91,26 +92,12 @@ const {
   closeMatchHistoryModal,
 } = useMatchHistoryModal();
 
-const { isSettingsModalOpen, isSettingsModalClosing, openSettingsModal, closeSettingsModal } = (() => {
-  const isSettingsModalOpen = ref(false);
-  const isSettingsModalClosing = ref(false);
-
-  function openSettingsModal() {
-    isSettingsModalClosing.value = false;
-    isSettingsModalOpen.value = true;
-  }
-
-  function closeSettingsModal() {
-    if (isSettingsModalClosing.value) return;
-    isSettingsModalClosing.value = true;
-    setTimeout(() => {
-      isSettingsModalOpen.value = false;
-      isSettingsModalClosing.value = false;
-    }, 300);
-  }
-
-  return { isSettingsModalOpen, isSettingsModalClosing, openSettingsModal, closeSettingsModal };
-})();
+const {
+  isSettingsModalOpen,
+  isSettingsModalClosing,
+  openSettingsModal,
+  closeSettingsModal,
+} = useSettingsModal();
 
 const handleSaveChanges = () => {
   closeSettingsModal();
