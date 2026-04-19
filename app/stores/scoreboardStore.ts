@@ -32,14 +32,6 @@ interface HistorySnapshot {
   currentGameNumber: number;
 }
 
-interface GameConfig {
-  generation: GenerationOption;
-  matchType: MatchTypeOption;
-  customPoints: number;
-  bestOf: BestOfOption;
-  ownFinishEnabled: boolean;
-}
-
 const createInitialHistorySnapshot = (): HistorySnapshot => ({
   player1: 0,
   player2: 0,
@@ -54,6 +46,14 @@ const createInitialHistorySnapshot = (): HistorySnapshot => ({
 const defaultMatchTypeForGeneration = (
   value: GenerationOption,
 ): MatchTypeOption => (value === "x" ? "4pts" : "3pts");
+
+const defaultOvrPointsForGeneration = (value: GenerationOption): number => {
+  if (value === "mfb-zero-g" || value === "plastics-hms") {
+    return 1;
+  } else {
+    return DEFAULT_OVR_POINTS;
+  }
+};
 
 const DEFAULT_GENERATION: GenerationOption = "x";
 const DEFAULT_MATCH_TYPE: MatchTypeOption =
@@ -176,10 +176,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
       ownFinishEnabled.value = false;
     }
     xtrPoints.value = DEFAULT_XTR_POINTS;
-    ovrPoints.value =
-      value === "mfb-zero-g" || value === "plastics-hms"
-        ? 1
-        : DEFAULT_OVR_POINTS;
+    ovrPoints.value = defaultOvrPointsForGeneration(value);
     bstPoints.value = DEFAULT_BST_POINTS;
     spfPoints.value = DEFAULT_SPF_POINTS;
   };
@@ -225,7 +222,7 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
 
   const resetChipPointsToDefaults = () => {
     xtrPoints.value = DEFAULT_XTR_POINTS;
-    ovrPoints.value = DEFAULT_OVR_POINTS;
+    ovrPoints.value = defaultOvrPointsForGeneration(generation.value);
     bstPoints.value = DEFAULT_BST_POINTS;
     spfPoints.value = DEFAULT_SPF_POINTS;
   };

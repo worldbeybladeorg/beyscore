@@ -123,7 +123,7 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-start gap-3">
         <ScoringChip
           label="OVR"
-          :score="1"
+          :score="ovrScore"
           variant="red"
           :disabled="disabled"
           class="w-21 flex-none"
@@ -133,7 +133,7 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-end gap-3">
         <ScoringChip
           label="SPF"
-          :score="1"
+          :score="spfScore"
           variant="red"
           :disabled="disabled"
           class="w-21 flex-none"
@@ -149,7 +149,7 @@ const handleOwnFinishClick = () => {
     >
       <ScoringChip
         label="OVR"
-        :score="2"
+        :score="ovrScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -157,7 +157,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="BST"
-        :score="2"
+        :score="bstScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -165,7 +165,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="SPF"
-        :score="1"
+        :score="spfScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -296,7 +296,7 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-start gap-3">
         <ScoringChip
           label="OVR"
-          :score="1"
+          :score="ovrScore"
           variant="blue"
           :disabled="disabled"
           class="w-21 flex-none"
@@ -306,7 +306,7 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-end gap-3">
         <ScoringChip
           label="SPF"
-          :score="1"
+          :score="spfScore"
           variant="blue"
           :disabled="disabled"
           class="w-21 flex-none"
@@ -322,7 +322,7 @@ const handleOwnFinishClick = () => {
     >
       <ScoringChip
         label="OVR"
-        :score="2"
+        :score="ovrScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -330,7 +330,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="BST"
-        :score="2"
+        :score="bstScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -338,7 +338,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="SPF"
-        :score="1"
+        :score="spfScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"

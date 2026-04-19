@@ -161,3 +161,11 @@ export const SETS_ITEMS = [
 export function getPointsToWinItems(generation: string) {
   return generation === "x" ? POINTS_TO_WIN_ITEMS_X : POINTS_TO_WIN_ITEMS_OTHER;
 }
+
+export function defaultOvrPointsForGeneration(value: GenerationOption): number {
+  if (value === "mfb-zero-g" || value === "plastics-hms") {
+    return 1;
+  } else {
+    return DEFAULT_OVR_POINTS;
+  }
+}

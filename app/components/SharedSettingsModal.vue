@@ -19,6 +19,7 @@ import {
   DEFAULT_OVR_POINTS,
   DEFAULT_BST_POINTS,
   DEFAULT_SPF_POINTS,
+  defaultOvrPointsForGeneration,
 } from "~/lib/gameUtils";
 import type {
   GenerationOption,
@@ -93,8 +94,10 @@ const setsItems = SETS_ITEMS as DropdownItem[];
 
 const hasChanges = computed(() => {
   return (
-    localPlayer1Name.value !== (scoreboardStore.player1NameSetting || "Player 1") ||
-    localPlayer2Name.value !== (scoreboardStore.player2NameSetting || "Player 2") ||
+    localPlayer1Name.value !==
+      (scoreboardStore.player1NameSetting || "Player 1") ||
+    localPlayer2Name.value !==
+      (scoreboardStore.player2NameSetting || "Player 2") ||
     localGeneration.value !== scoreboardStore.generation ||
     localMatchType.value !== scoreboardStore.matchType ||
     localCustomPoints.value !== scoreboardStore.customPoints ||
@@ -300,8 +303,7 @@ const handleClose = () => {
             :items="setsItems"
             :selected-value="localBestOf ? localBestOf.toString() : undefined"
             @select="
-              localBestOf =
-                $event === '3' ? 3 : $event === '5' ? 5 : undefined
+              localBestOf = $event === '3' ? 3 : $event === '5' ? 5 : undefined
             "
           />
         </div>
@@ -338,7 +340,7 @@ const handleClose = () => {
         @update:spf-points="localSpfPoints = $event"
         @reset="
           localXtrPoints = DEFAULT_XTR_POINTS;
-          localOvrPoints = DEFAULT_OVR_POINTS;
+          localOvrPoints = defaultOvrPointsForGeneration(localGeneration);
           localBstPoints = DEFAULT_BST_POINTS;
           localSpfPoints = DEFAULT_SPF_POINTS;
         "
