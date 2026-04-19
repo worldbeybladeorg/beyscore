@@ -25,7 +25,7 @@ const props = defineProps<{
   generationItems: DropdownItem[];
   pointsToWinItems: DropdownItem[];
   setsItems: DropdownItem[];
-  generation: string;
+  generation: GenerationOption;
   matchTypeParam: string;
   customPoints?: number;
   bestOf?: number;
@@ -231,11 +231,16 @@ const handleCustomPointsInput = (event: Event) => {
 
   <div
     :class="
-      props.isLandscape ? 'settings-buttons-container' : 'settings-buttons-container-portrait'
+      props.isLandscape
+        ? 'settings-buttons-container'
+        : 'settings-buttons-container-portrait'
     "
   >
     <div v-if="props.isLandscape" class="settings-buttons-landscape">
-      <Button variant="blue" :disabled="!hasChanges" @click="emit('saveChanges')"
+      <Button
+        variant="blue"
+        :disabled="!hasChanges"
+        @click="emit('saveChanges')"
         >Save Changes</Button
       >
       <Button
@@ -246,7 +251,10 @@ const handleCustomPointsInput = (event: Event) => {
       >
     </div>
     <div v-else class="settings-buttons-portrait">
-      <Button variant="blue" :disabled="!hasChanges" @click="emit('saveChanges')"
+      <Button
+        variant="blue"
+        :disabled="!hasChanges"
+        @click="emit('saveChanges')"
         >Save Changes</Button
       >
       <Button variant="secondary" @click="emit('resetGame')">Reset Game</Button>
@@ -419,6 +427,7 @@ const handleCustomPointsInput = (event: Event) => {
 
 .custom-points-input[type="number"] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .settings-buttons-container-portrait {
