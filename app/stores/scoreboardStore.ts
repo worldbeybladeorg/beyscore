@@ -7,6 +7,7 @@ import {
   DEFAULT_OVR_POINTS,
   DEFAULT_BST_POINTS,
   DEFAULT_SPF_POINTS,
+  defaultOvrPointsForGeneration,
 } from "~/lib/gameUtils";
 
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
@@ -46,14 +47,6 @@ const createInitialHistorySnapshot = (): HistorySnapshot => ({
 const defaultMatchTypeForGeneration = (
   value: GenerationOption,
 ): MatchTypeOption => (value === "x" ? "4pts" : "3pts");
-
-const defaultOvrPointsForGeneration = (value: GenerationOption): number => {
-  if (value === "mfb-zero-g" || value === "plastics-hms") {
-    return 1;
-  } else {
-    return DEFAULT_OVR_POINTS;
-  }
-};
 
 const DEFAULT_GENERATION: GenerationOption = "x";
 const DEFAULT_MATCH_TYPE: MatchTypeOption =
