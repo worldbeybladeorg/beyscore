@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
+import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "@lucide/vue";
 import Alert from "~/components/Alert.vue";
 import AdvancedSettingsSection from "~/components/AdvancedSettingsSection.vue";
@@ -6,6 +8,23 @@ import Button from "~/components/Button.vue";
 import DropdownMenu from "~/components/DropdownMenu.vue";
 import TextDropdownField from "~/components/TextDropdownField.vue";
 import ToggleButton from "~/components/ToggleButton.vue";
+import {
+  getGenerationLabel,
+  getPointsToWinLabel,
+  getSetsLabel,
+  GENERATION_ITEMS,
+  SETS_ITEMS,
+  getPointsToWinItems,
+  DEFAULT_XTR_POINTS,
+  DEFAULT_OVR_POINTS,
+  DEFAULT_BST_POINTS,
+  DEFAULT_SPF_POINTS,
+} from "~/lib/gameUtils";
+import type {
+  GenerationOption,
+  MatchTypeOption,
+  BestOfOption,
+} from "~/stores/scoreboardStore";
 
 type DropdownItem = {
   label: string;
@@ -15,57 +34,130 @@ type DropdownItem = {
 
 const props = defineProps<{
   gameHasStarted: boolean;
-  player1Name: string;
-  player2Name: string;
-  beybladeGenerationLabel: string;
-  pointsToWinLabel: string;
-  setsLabel: string;
-  ownFinishOptionLabel: string;
-  openDropdown: "generation" | "pointsToWin" | "sets" | null;
-  generationItems: DropdownItem[];
-  pointsToWinItems: DropdownItem[];
-  setsItems: DropdownItem[];
-  generation: GenerationOption;
-  matchTypeParam: string;
-  customPoints?: number;
-  bestOf?: number;
-  isOwnFinishEnabled: boolean;
-  xtrPoints: number;
-  ovrPoints: number;
-  bstPoints: number;
-  spfPoints: number;
-  hasChanges: boolean;
   isLandscape?: boolean;
 }>();
 
 const emit = defineEmits<{
   close: [];
-  saveChanges: [];
+  save: [];
   resetGame: [];
-  toggleGenerationDropdown: [];
-  togglePointsToWinDropdown: [];
-  toggleSetsDropdown: [];
-  selectGeneration: [value: string];
-  selectPointsToWin: [value: string];
-  selectSets: [value: string];
-  ownFinishToggle: [];
-  customPointsChange: [value: number];
-  "update:player1Name": [value: string];
-  "update:player2Name": [value: string];
-  "update:xtr-points": [value: number];
-  "update:ovr-points": [value: number];
-  "update:bst-points": [value: number];
-  "update:spf-points": [value: number];
-  resetChipPoints: [];
 }>();
+
+const scoreboardStore = useScoreboardStore();
+
+const localPlayer1Name = ref("Player 1");
+const localPlayer2Name = ref("Player 2");
+const localGeneration = ref<GenerationOption>("x");
+const localMatchType = ref<MatchTypeOption>("4pts");
+const localCustomPoints = ref(10);
+const localBestOf = ref<BestOfOption>(undefined);
+const localOwnFinishEnabled = ref(false);
+const localXtrPoints = ref(DEFAULT_XTR_POINTS);
+const localOvrPoints = ref(DEFAULT_OVR_POINTS);
+const localBstPoints = ref(DEFAULT_BST_POINTS);
+const localSpfPoints = ref(DEFAULT_SPF_POINTS);
+
+onMounted(() => {
+  localPlayer1Name.value = scoreboardStore.player1NameSetting || "Player 1";
+  localPlayer2Name.value = scoreboardStore.player2NameSetting || "Player 2";
+  localGeneration.value = scoreboardStore.generation;
+  localMatchType.value = scoreboardStore.matchType;
+  localCustomPoints.value = scoreboardStore.customPoints;
+  localBestOf.value = scoreboardStore.bestOf;
+  localOwnFinishEnabled.value = scoreboardStore.ownFinishEnabled;
+  localXtrPoints.value = scoreboardStore.xtrPoints;
+  localOvrPoints.value = scoreboardStore.ovrPoints;
+  localBstPoints.value = scoreboardStore.bstPoints;
+  localSpfPoints.value = scoreboardStore.spfPoints;
+});
+
+const matchTypeParam = computed(() => localMatchType.value);
+
+const openDropdown = ref<"generation" | "pointsToWin" | "sets" | null>(null);
+
+const beybladeGenerationLabel = computed(() =>
+  getGenerationLabel(localGeneration.value),
+);
+const pointsToWinLabel = computed(() =>
+  getPointsToWinLabel(localMatchType.value, localCustomPoints.value),
+);
+const setsLabel = computed(() => getSetsLabel(localBestOf.value));
+const ownFinishOptionLabel = computed(() =>
+  localOwnFinishEnabled.value ? "On" : "Off",
+);
+const generationItems = GENERATION_ITEMS as DropdownItem[];
+const pointsToWinItems = computed(() =>
+  getPointsToWinItems(localGeneration.value),
+) as unknown as DropdownItem[];
+const setsItems = SETS_ITEMS as DropdownItem[];
+
+const hasChanges = computed(() => {
+  return (
+    localPlayer1Name.value !== (scoreboardStore.player1NameSetting || "Player 1") ||
+    localPlayer2Name.value !== (scoreboardStore.player2NameSetting || "Player 2") ||
+    localGeneration.value !== scoreboardStore.generation ||
+    localMatchType.value !== scoreboardStore.matchType ||
+    localCustomPoints.value !== scoreboardStore.customPoints ||
+    localBestOf.value !== scoreboardStore.bestOf ||
+    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled ||
+    localXtrPoints.value !== scoreboardStore.xtrPoints ||
+    localOvrPoints.value !== scoreboardStore.ovrPoints ||
+    localBstPoints.value !== scoreboardStore.bstPoints ||
+    localSpfPoints.value !== scoreboardStore.spfPoints
+  );
+});
+
+const toggleDropdown = (dropdown: "generation" | "pointsToWin" | "sets") => {
+  openDropdown.value = openDropdown.value === dropdown ? null : dropdown;
+};
 
 const handleCustomPointsInput = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const value = Number.parseInt(target.value, 10);
 
   if (!Number.isNaN(value) && value >= 1) {
-    emit("customPointsChange", value);
+    localCustomPoints.value = value;
   }
+};
+
+const handleSave = () => {
+  const gameSettingsChanged =
+    localGeneration.value !== scoreboardStore.generation ||
+    localMatchType.value !== scoreboardStore.matchType ||
+    localCustomPoints.value !== scoreboardStore.customPoints ||
+    localBestOf.value !== scoreboardStore.bestOf ||
+    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled;
+
+  if (gameSettingsChanged && props.gameHasStarted) {
+    scoreboardStore.reset();
+  }
+
+  scoreboardStore.player1NameSetting = localPlayer1Name.value || "Player 1";
+  scoreboardStore.player2NameSetting = localPlayer2Name.value || "Player 2";
+  scoreboardStore.generation = localGeneration.value;
+  scoreboardStore.matchType = localMatchType.value;
+  scoreboardStore.customPoints = localCustomPoints.value;
+  scoreboardStore.bestOf = localBestOf.value;
+  scoreboardStore.ownFinishEnabled = localOwnFinishEnabled.value;
+  scoreboardStore.xtrPoints = localXtrPoints.value;
+  scoreboardStore.ovrPoints = localOvrPoints.value;
+  scoreboardStore.bstPoints = localBstPoints.value;
+  scoreboardStore.spfPoints = localSpfPoints.value;
+  openDropdown.value = null;
+  emit("save");
+};
+
+const handleResetGame = () => {
+  scoreboardStore.player1NameSetting = "Player 1";
+  scoreboardStore.player2NameSetting = "Player 2";
+  scoreboardStore.reset({ resetConfig: true });
+  openDropdown.value = null;
+  emit("resetGame");
+};
+
+const handleClose = () => {
+  openDropdown.value = null;
+  emit("close");
 };
 </script>
 
@@ -78,7 +170,7 @@ const handleCustomPointsInput = (event: Event) => {
 
   <button
     class="absolute top-6 right-5 z-10 box-border flex h-6 w-6 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
-    @click="emit('close')"
+    @click="handleClose"
   >
     <X :size="24" color="#64748b" :stroke-width="2" />
   </button>
@@ -99,21 +191,21 @@ const handleCustomPointsInput = (event: Event) => {
 
     <div class="mt-4 w-full first:mt-0">
       <TextDropdownField
-        :model-value="player1Name"
+        :model-value="localPlayer1Name"
         title="Player 1 Name"
         :show-chevron="false"
         :max-length="15"
-        @update:model-value="emit('update:player1Name', $event)"
+        @update:model-value="localPlayer1Name = $event"
       />
     </div>
 
     <div class="mt-4 w-full">
       <TextDropdownField
-        :model-value="player2Name"
+        :model-value="localPlayer2Name"
         title="Player 2 Name"
         :show-chevron="false"
         :max-length="15"
-        @update:model-value="emit('update:player2Name', $event)"
+        @update:model-value="localPlayer2Name = $event"
       />
     </div>
 
@@ -124,7 +216,7 @@ const handleCustomPointsInput = (event: Event) => {
           variant="dropdown"
           :show-chevron="true"
           :model-value="beybladeGenerationLabel"
-          @toggle="emit('toggleGenerationDropdown')"
+          @toggle="toggleDropdown('generation')"
         />
         <div
           v-if="openDropdown === 'generation'"
@@ -132,8 +224,8 @@ const handleCustomPointsInput = (event: Event) => {
         >
           <DropdownMenu
             :items="generationItems"
-            :selected-value="generation"
-            @select="emit('selectGeneration', $event)"
+            :selected-value="localGeneration"
+            @select="localGeneration = $event"
           />
         </div>
       </div>
@@ -146,7 +238,7 @@ const handleCustomPointsInput = (event: Event) => {
           variant="dropdown"
           :show-chevron="true"
           :model-value="pointsToWinLabel"
-          @toggle="emit('togglePointsToWinDropdown')"
+          @toggle="toggleDropdown('pointsToWin')"
         />
         <div
           v-if="openDropdown === 'pointsToWin'"
@@ -159,7 +251,7 @@ const handleCustomPointsInput = (event: Event) => {
           <DropdownMenu
             :items="pointsToWinItems"
             :selected-value="matchTypeParam"
-            @select="emit('selectPointsToWin', $event)"
+            @select="localMatchType = $event"
           />
         </div>
       </div>
@@ -179,7 +271,7 @@ const handleCustomPointsInput = (event: Event) => {
             id="custom-points-input"
             type="number"
             min="1"
-            :value="customPoints"
+            :value="localCustomPoints"
             class="box-border w-full border-0 bg-transparent p-0 font-titillium text-base font-normal text-slate-600 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             @input="handleCustomPointsInput"
           />
@@ -194,7 +286,7 @@ const handleCustomPointsInput = (event: Event) => {
           variant="dropdown"
           :show-chevron="true"
           :model-value="setsLabel"
-          @toggle="emit('toggleSetsDropdown')"
+          @toggle="toggleDropdown('sets')"
         />
         <div
           v-if="openDropdown === 'sets'"
@@ -206,14 +298,17 @@ const handleCustomPointsInput = (event: Event) => {
         >
           <DropdownMenu
             :items="setsItems"
-            :selected-value="bestOf ? bestOf.toString() : undefined"
-            @select="emit('selectSets', $event)"
+            :selected-value="localBestOf ? localBestOf.toString() : undefined"
+            @select="
+              localBestOf =
+                $event === '3' ? 3 : $event === '5' ? 5 : undefined
+            "
           />
         </div>
       </div>
     </div>
 
-    <div v-if="generation === 'x'" class="mt-4 w-full">
+    <div v-if="localGeneration === 'x'" class="mt-4 w-full">
       <div
         class="m-0 box-border p-0 font-titillium text-sm leading-normal font-semibold text-slate-500"
       >
@@ -222,8 +317,8 @@ const handleCustomPointsInput = (event: Event) => {
       <div class="mt-2 flex items-center">
         <ToggleButton
           size="default"
-          :initial-state="isOwnFinishEnabled"
-          @toggle="emit('ownFinishToggle')"
+          :initial-state="localOwnFinishEnabled"
+          @toggle="localOwnFinishEnabled = !localOwnFinishEnabled"
         >
           {{ ownFinishOptionLabel }}
         </ToggleButton>
@@ -232,16 +327,21 @@ const handleCustomPointsInput = (event: Event) => {
 
     <div class="mt-4 w-full">
       <AdvancedSettingsSection
-        :generation="generation"
-        :xtr-points="xtrPoints"
-        :ovr-points="ovrPoints"
-        :bst-points="bstPoints"
-        :spf-points="spfPoints"
-        @update:xtr-points="emit('update:xtr-points', $event)"
-        @update:ovr-points="emit('update:ovr-points', $event)"
-        @update:bst-points="emit('update:bst-points', $event)"
-        @update:spf-points="emit('update:spf-points', $event)"
-        @reset="emit('resetChipPoints')"
+        :generation="localGeneration"
+        :xtr-points="localXtrPoints"
+        :ovr-points="localOvrPoints"
+        :bst-points="localBstPoints"
+        :spf-points="localSpfPoints"
+        @update:xtr-points="localXtrPoints = $event"
+        @update:ovr-points="localOvrPoints = $event"
+        @update:bst-points="localBstPoints = $event"
+        @update:spf-points="localSpfPoints = $event"
+        @reset="
+          localXtrPoints = DEFAULT_XTR_POINTS;
+          localOvrPoints = DEFAULT_OVR_POINTS;
+          localBstPoints = DEFAULT_BST_POINTS;
+          localSpfPoints = DEFAULT_SPF_POINTS;
+        "
       />
     </div>
   </div>
@@ -262,21 +362,21 @@ const handleCustomPointsInput = (event: Event) => {
         variant="blue"
         :disabled="!hasChanges"
         class-name="flex-1 min-w-0 font-bold"
-        @click="emit('saveChanges')"
+        @click="handleSave"
         >Save Changes</Button
       >
       <Button
         v-if="props.isLandscape"
         variant="secondary"
         class-name="flex-1 min-w-0 border border-[#1088c9] border-b-2 bg-transparent font-bold"
-        @click="emit('resetGame')"
+        @click="handleResetGame"
         >Reset Game</Button
       >
       <Button
         v-else
         variant="secondary"
         class-name="flex-1 min-w-0 font-bold"
-        @click="emit('resetGame')"
+        @click="handleResetGame"
         >Reset Game</Button
       >
     </div>

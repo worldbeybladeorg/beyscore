@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch, nextTick, ref } from "vue";
+import { watch, nextTick, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "@lucide/vue";
@@ -11,10 +11,8 @@ import PlayerName from "../components/PlayerName.vue";
 import GameResults from "../components/GameResults.vue";
 import SharedSettingsModal from "../components/SharedSettingsModal.vue";
 import { useGameState } from "~/composables/useGameState";
-import { useMatchSettings } from "~/composables/useMatchSettings";
 import {
   useMatchHistoryModal,
-  useSettingsModal,
 } from "~/composables/useModalState";
 import { useHistoryUndoRedo } from "~/composables/useHistoryUndoRedo";
 import { useScoring } from "~/composables/useScoring";
@@ -27,7 +25,6 @@ const {
   matchType,
   customPoints,
   bestOf,
-  ownFinishEnabled,
   xtrPoints,
   ovrPoints,
   bstPoints,
@@ -53,8 +50,6 @@ const {
   gameResultsOverlayHasBeenShown,
 } = storeToRefs(scoreboardStore);
 
-const matchTypeParam = computed(() => matchType.value);
-const isOwnFinishEnabled = ownFinishEnabled;
 const gameResetTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const {
@@ -90,72 +85,40 @@ const {
 });
 
 const {
-  openDropdown,
-  beybladeGenerationLabel,
-  pointsToWinLabel,
-  setsLabel,
-  ownFinishOptionLabel,
-  pointsToWinItems,
-  handleGenerationDropdownToggle,
-  handlePointsToWinDropdownToggle,
-  handleSetsDropdownToggle,
-  handleGenerationSelect,
-  handlePointsToWinSelect,
-  handleSetsSelect,
-  handleOwnFinishToggle,
-  handleCustomPointsChange,
-  closeDropdowns,
-  GENERATION_ITEMS: generationItems,
-  SETS_ITEMS: setsItems,
-} = useMatchSettings(
-  generation,
-  matchType,
-  customPoints,
-  bestOf,
-  isOwnFinishEnabled,
-  scoreboardStore.setGeneration,
-  scoreboardStore.setMatchType,
-  scoreboardStore.setCustomPoints,
-  scoreboardStore.setBestOf,
-  scoreboardStore.setOwnFinishEnabled,
-);
-
-const {
   isMatchHistoryModalOpen,
   isMatchHistoryModalClosing,
   openMatchHistoryModal,
   closeMatchHistoryModal,
 } = useMatchHistoryModal();
 
-const {
-  isSettingsModalOpen,
-  isSettingsModalClosing,
-  hasChanges,
-  openSettingsModal,
-  closeSettingsModal,
-  handleSaveChanges,
-  handleResetGame,
-} = useSettingsModal(
-  player1NameSetting,
-  player2NameSetting,
-  generation,
-  matchType,
-  customPoints,
-  bestOf,
-  isOwnFinishEnabled,
-  {
-    setGeneration: scoreboardStore.setGeneration,
-    setMatchType: scoreboardStore.setMatchType,
-    setCustomPoints: scoreboardStore.setCustomPoints,
-    setBestOf: scoreboardStore.setBestOf,
-    setOwnFinishEnabled: scoreboardStore.setOwnFinishEnabled,
-    reset: scoreboardStore.reset,
-  },
-  {
-    gameHasStarted,
-    closeDropdowns,
-  },
-);
+const { isSettingsModalOpen, isSettingsModalClosing, openSettingsModal, closeSettingsModal } = (() => {
+  const isSettingsModalOpen = ref(false);
+  const isSettingsModalClosing = ref(false);
+
+  function openSettingsModal() {
+    isSettingsModalClosing.value = false;
+    isSettingsModalOpen.value = true;
+  }
+
+  function closeSettingsModal() {
+    if (isSettingsModalClosing.value) return;
+    isSettingsModalClosing.value = true;
+    setTimeout(() => {
+      isSettingsModalOpen.value = false;
+      isSettingsModalClosing.value = false;
+    }, 300);
+  }
+
+  return { isSettingsModalOpen, isSettingsModalClosing, openSettingsModal, closeSettingsModal };
+})();
+
+const handleSaveChanges = () => {
+  closeSettingsModal();
+};
+
+const handleResetGame = () => {
+  closeSettingsModal();
+};
 
 const {
   winnerDisplayText,
@@ -225,14 +188,6 @@ const handleGameResultsNewGame = () => {
 };
 const handleGameResultsViewHistory = () => {
   triggerGameResultsViewHistory(openMatchHistoryModal);
-};
-
-const updatePlayer1NameSetting = (name: string) => {
-  player1NameSetting.value = name;
-};
-
-const updatePlayer2NameSetting = (name: string) => {
-  player2NameSetting.value = name;
 };
 
 displayedSetNumber.value = 1;
@@ -595,44 +550,9 @@ watch(gameEnded, async (ended) => {
         >
           <SharedSettingsModal
             :game-has-started="gameHasStarted"
-            :player1-name="player1NameSetting"
-            :player2-name="player2NameSetting"
-            :beyblade-generation-label="beybladeGenerationLabel"
-            :points-to-win-label="pointsToWinLabel"
-            :sets-label="setsLabel"
-            :own-finish-option-label="ownFinishOptionLabel"
-            :open-dropdown="openDropdown"
-            :generation-items="generationItems"
-            :points-to-win-items="pointsToWinItems"
-            :sets-items="setsItems"
-            :generation="generation"
-            :match-type-param="matchTypeParam"
-            :custom-points="customPoints"
-            :best-of="bestOf"
-            :is-own-finish-enabled="isOwnFinishEnabled"
-            :xtr-points="xtrPoints"
-            :ovr-points="ovrPoints"
-            :bst-points="bstPoints"
-            :spf-points="spfPoints"
-            :has-changes="hasChanges"
             @close="closeSettingsModal"
-            @save-changes="handleSaveChanges"
+            @save="handleSaveChanges"
             @reset-game="handleResetGame"
-            @update:player1-name="updatePlayer1NameSetting"
-            @update:player2-name="updatePlayer2NameSetting"
-            @toggle-generation-dropdown="handleGenerationDropdownToggle"
-            @toggle-points-to-win-dropdown="handlePointsToWinDropdownToggle"
-            @toggle-sets-dropdown="handleSetsDropdownToggle"
-            @select-generation="handleGenerationSelect"
-            @select-points-to-win="handlePointsToWinSelect"
-            @select-sets="handleSetsSelect"
-            @custom-points-change="handleCustomPointsChange"
-            @own-finish-toggle="handleOwnFinishToggle"
-            @update:xtr-points="scoreboardStore.setXtrPoints"
-            @update:ovr-points="scoreboardStore.setOvrPoints"
-            @update:bst-points="scoreboardStore.setBstPoints"
-            @update:spf-points="scoreboardStore.setSpfPoints"
-            @reset-chip-points="scoreboardStore.resetChipPointsToDefaults"
           />
         </div>
       </div>
