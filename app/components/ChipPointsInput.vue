@@ -8,7 +8,7 @@ interface Emits {
   change: [value: number];
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const handleInput = (e: Event) => {
@@ -17,18 +17,24 @@ const handleInput = (e: Event) => {
     emit("change", val);
   }
 };
+
+const id = computed(
+  () => `chip-points-input-${props.label.replaceAll(" ", "-")}`,
+);
 </script>
 
 <template>
   <div class="flex items-center justify-between gap-3">
     <label
       class="font-titillium text-base leading-6 font-bold text-slate-400"
+      :for="id"
       >{{ label }}</label
     >
     <div
       class="relative flex h-9.5 min-w-17.5 items-center justify-center rounded-t-[10px] border border-b-0 border-slate-300 bg-white px-3 py-2 shadow-[0_2px_0_0_#cbd5e1]"
     >
       <input
+        :id="id"
         type="number"
         min="1"
         :value="value"
