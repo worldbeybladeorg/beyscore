@@ -5,15 +5,10 @@ import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "@lucide/vue";
 import ScoreCardLandscape from "../components/ScoreCardLandscape.vue";
 import LandscapeNavigation from "../components/LandscapeNavigation.vue";
-import Button from "../components/Button.vue";
 import MatchHistoryItem from "../components/MatchHistoryItem.vue";
-import TextDropdownField from "../components/TextDropdownField.vue";
-import ToggleButton from "../components/ToggleButton.vue";
-import DropdownMenu from "../components/DropdownMenu.vue";
-import Alert from "../components/Alert.vue";
 import GameResults from "../components/GameResults.vue";
 import PlayerName from "../components/PlayerName.vue";
-import AdvancedSettingsSection from "../components/AdvancedSettingsSection.vue";
+import SharedSettingsModal from "../components/SharedSettingsModal.vue";
 import { useGameState } from "~/composables/useGameState";
 import { useMatchSettings } from "~/composables/useMatchSettings";
 import {
@@ -229,6 +224,14 @@ const handleGameResultsNewGame = () => {
 };
 const handleGameResultsViewHistory = () => {
   triggerGameResultsViewHistory(openMatchHistoryModal);
+};
+
+const updatePlayer1NameSetting = (name: string) => {
+  player1NameSetting.value = name;
+};
+
+const updatePlayer2NameSetting = (name: string) => {
+  player2NameSetting.value = name;
 };
 
 displayedSetNumber.value = 1;
@@ -569,192 +572,48 @@ watch(gameEnded, async (ended) => {
           :class="{ closing: isSettingsModalClosing }"
           @click.stop
         >
-          <h1 class="modal-title">Settings</h1>
-          <p class="settings-description">Set your match preferences.</p>
-          <button class="modal-close" @click="closeSettingsModal">
-            <X :size="24" color="#64748b" :stroke-width="2" />
-          </button>
-
-          <!-- Settings content area -->
-          <div class="settings-content">
-            <div v-if="gameHasStarted" class="settings-field alert-top">
-              <Alert />
-            </div>
-            <div class="settings-field">
-              <TextDropdownField
-                v-model="player1NameSetting"
-                title="Player 1 Name"
-                :show-chevron="false"
-                :max-length="15"
-              />
-            </div>
-            <div class="settings-field">
-              <TextDropdownField
-                v-model="player2NameSetting"
-                title="Player 2 Name"
-                :show-chevron="false"
-                :max-length="15"
-              />
-            </div>
-            <div class="settings-field generation-gap">
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Beyblade Generation"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="beybladeGenerationLabel"
-                  @toggle="handleGenerationDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'generation'"
-                  style="
-                    margin-top: 8px;
-                    position: absolute;
-                    width: 100%;
-                    z-index: 10;
-                  "
-                >
-                  <DropdownMenu
-                    :items="generationItems"
-                    :selected-value="generation"
-                    @select="handleGenerationSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="settings-field">
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Points to Win"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="pointsToWinLabel"
-                  @toggle="handlePointsToWinDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'pointsToWin'"
-                  style="
-                    position: absolute;
-                    top: calc(0.875rem * 1.5 + 8px);
-                    width: 100%;
-                    z-index: 10;
-                    transform: translateY(calc(-100% - 8px));
-                  "
-                >
-                  <DropdownMenu
-                    :items="pointsToWinItems"
-                    :selected-value="matchTypeParam"
-                    @select="handlePointsToWinSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div v-if="matchTypeParam === 'custom'" class="settings-field">
-              <div class="custom-points-field">
-                <label for="custom-points-input" class="custom-points-title"
-                  >Custom Points</label
-                >
-                <div class="custom-points-input-container">
-                  <input
-                    id="custom-points-input"
-                    type="number"
-                    min="1"
-                    :value="customPoints"
-                    class="custom-points-input"
-                    @input="
-                      (e) => {
-                        const val = parseInt(
-                          (e.target as HTMLInputElement).value,
-                          10,
-                        );
-                        if (!isNaN(val) && val >= 1)
-                          handleCustomPointsChange(val);
-                      }
-                    "
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="matchTypeParam !== 'nolimit'"
-              class="settings-field sets-gap"
-            >
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Sets"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="setsLabel"
-                  @toggle="handleSetsDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'sets'"
-                  style="
-                    position: absolute;
-                    top: calc(0.875rem * 1.5 + 8px);
-                    width: 100%;
-                    z-index: 10;
-                    transform: translateY(calc(-100% - 8px));
-                  "
-                >
-                  <DropdownMenu
-                    :items="setsItems"
-                    :selected-value="bestOf ? bestOf.toString() : undefined"
-                    @select="handleSetsSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="generation === 'x'"
-              class="settings-field own-finish-gap"
-            >
-              <div class="own-finish-label">Own Finish</div>
-              <div class="own-finish-toggle">
-                <ToggleButton
-                  size="default"
-                  :initial-state="isOwnFinishEnabled"
-                  @toggle="handleOwnFinishToggle"
-                >
-                  {{ ownFinishOptionLabel }}
-                </ToggleButton>
-              </div>
-            </div>
-
-            <!-- Advanced Settings dropdown -->
-            <div class="settings-field advanced-settings-gap">
-              <AdvancedSettingsSection
-                :generation="generation"
-                :xtr-points="xtrPoints"
-                :ovr-points="ovrPoints"
-                :bst-points="bstPoints"
-                :spf-points="spfPoints"
-                @update:xtr-points="scoreboardStore.setXtrPoints"
-                @update:ovr-points="scoreboardStore.setOvrPoints"
-                @update:bst-points="scoreboardStore.setBstPoints"
-                @update:spf-points="scoreboardStore.setSpfPoints"
-                @reset="scoreboardStore.resetChipPointsToDefaults"
-              />
-            </div>
-          </div>
-
-          <!-- Settings buttons -->
-          <div class="settings-buttons-container">
-            <div class="settings-buttons">
-              <Button
-                variant="blue"
-                :disabled="!hasChanges"
-                @click="handleSaveChanges"
-                >Save Changes</Button
-              >
-              <Button
-                variant="secondary"
-                class="reset-game-button-transparent"
-                @click="handleResetGame"
-                >Reset Game</Button
-              >
-            </div>
-          </div>
+          <SharedSettingsModal
+            :game-has-started="gameHasStarted"
+            :player1-name="player1NameSetting"
+            :player2-name="player2NameSetting"
+            :beyblade-generation-label="beybladeGenerationLabel"
+            :points-to-win-label="pointsToWinLabel"
+            :sets-label="setsLabel"
+            :own-finish-option-label="ownFinishOptionLabel"
+            :open-dropdown="openDropdown"
+            :generation-items="generationItems"
+            :points-to-win-items="pointsToWinItems"
+            :sets-items="setsItems"
+            :generation="generation"
+            :match-type-param="matchTypeParam"
+            :custom-points="customPoints"
+            :best-of="bestOf"
+            :is-own-finish-enabled="isOwnFinishEnabled"
+            :xtr-points="xtrPoints"
+            :ovr-points="ovrPoints"
+            :bst-points="bstPoints"
+            :spf-points="spfPoints"
+            :has-changes="hasChanges"
+            :is-landscape="true"
+            @close="closeSettingsModal"
+            @save-changes="handleSaveChanges"
+            @reset-game="handleResetGame"
+            @update:player1-name="updatePlayer1NameSetting"
+            @update:player2-name="updatePlayer2NameSetting"
+            @toggle-generation-dropdown="handleGenerationDropdownToggle"
+            @toggle-points-to-win-dropdown="handlePointsToWinDropdownToggle"
+            @toggle-sets-dropdown="handleSetsDropdownToggle"
+            @select-generation="handleGenerationSelect"
+            @select-points-to-win="handlePointsToWinSelect"
+            @select-sets="handleSetsSelect"
+            @custom-points-change="handleCustomPointsChange"
+            @own-finish-toggle="handleOwnFinishToggle"
+            @update:xtr-points="scoreboardStore.setXtrPoints"
+            @update:ovr-points="scoreboardStore.setOvrPoints"
+            @update:bst-points="scoreboardStore.setBstPoints"
+            @update:spf-points="scoreboardStore.setSpfPoints"
+            @reset-chip-points="scoreboardStore.resetChipPointsToDefaults"
+          />
         </div>
       </div>
     </div>
@@ -1126,167 +985,6 @@ watch(gameEnded, async (ended) => {
 
 .settings-modal-content.closing {
   animation: slideOutToRight 0.3s ease-out;
-}
-
-.settings-description {
-  position: absolute;
-  top: calc(20px + 1.6875rem + 6px); /* Title top + title height + 4px gap */
-  left: 20px;
-  right: 20px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem; /* text-base */
-  font-weight: 400;
-  color: #64748b; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.settings-content {
-  position: absolute;
-  top: calc(
-    20px + 1.6875rem + 6px + 1.5rem + 24px
-  ); /* Title + description spacing + description height + 24px */
-  left: 20px;
-  right: 20px;
-  bottom: 0;
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding-bottom: 112px; /* Space for buttons container + 24px visual gap (accounts for 1px top border) */
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.settings-field {
-  width: 100%;
-}
-
-.settings-field + .settings-field {
-  margin-top: 16px;
-}
-
-.settings-field.generation-gap {
-  margin-top: 16px;
-}
-
-.settings-field.sets-gap {
-  margin-top: 16px;
-}
-
-.settings-field.own-finish-gap {
-  margin-top: 16px;
-}
-
-.settings-field.advanced-settings-gap {
-  margin-top: 16px;
-}
-
-.settings-field.alert-top {
-  margin-top: 0;
-  margin-bottom: 24px;
-}
-
-.settings-field.alert-top + .settings-field {
-  margin-top: 0;
-}
-
-.own-finish-label {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 600;
-  color: #64748b; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.own-finish-toggle {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.custom-points-field {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.custom-points-title {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-}
-
-.custom-points-input-container {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background-color: white;
-  padding: 8px 12px;
-  box-shadow: 0 0 4px rgba(15, 23, 42, 0.05);
-}
-
-.custom-points-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  color: #475569;
-  outline: none;
-}
-
-.custom-points-input::-webkit-outer-spin-button,
-.custom-points-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.custom-points-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.settings-buttons-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background-color: #f8fafc; /* slate-50 */
-  border-top: 1px solid #e2e8f0; /* slate-200 */
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 20; /* Higher than dropdowns (z-index: 10) to prevent overlay */
-}
-
-.settings-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.settings-buttons :deep(button) {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  width: auto !important;
-  font-weight: bold;
-}
-
-.settings-buttons :deep(.reset-game-button-transparent) {
-  background-color: transparent !important;
-  border: 1px solid #1088c9;
-  border-bottom: 2px solid #1088c9;
 }
 
 /* Game Results overlay */
