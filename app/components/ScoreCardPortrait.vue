@@ -280,7 +280,7 @@ const handleOwnFinishClick = () => {
           variant="blue"
           :disabled="disabled"
           class="w-21 flex-none"
-          @chip-click="(points: number) => handleChipClick(points, 'SPF')"
+          @chip-click="(points) => handleChipClick(points, 'SPF')"
         />
       </div>
     </div>
