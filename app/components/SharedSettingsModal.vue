@@ -70,21 +70,34 @@ const handleCustomPointsInput = (event: Event) => {
 </script>
 
 <template>
-  <h1 class="modal-title">Settings</h1>
-  <p class="settings-description">Set your match preferences.</p>
-  <button class="modal-close" @click="emit('close')">
+  <h1
+    class="absolute top-5 right-11 left-5 m-0 box-border w-auto p-0 font-titillium text-lg leading-normal font-bold text-[#334155]"
+  >
+    Settings
+  </h1>
+
+  <button
+    class="absolute top-6 right-5 z-10 box-border flex h-6 w-6 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
+    @click="emit('close')"
+  >
     <X :size="24" color="#64748b" :stroke-width="2" />
   </button>
 
-  <div
-    class="settings-content"
-    :class="{ 'settings-content-landscape': props.isLandscape }"
+  <p
+    class="absolute top-[calc(20px+1.6875rem+6px)] right-5 left-5 m-0 box-border w-auto p-0 font-titillium text-base leading-6 font-normal text-slate-500"
   >
-    <div v-if="gameHasStarted" class="settings-field alert-top">
+    Set your match preferences.
+  </p>
+
+  <div
+    class="absolute top-[calc(20px+1.6875rem+6px+1.5rem+24px)] right-5 bottom-0 left-5 box-border flex w-auto flex-col overflow-y-auto pb-26.5"
+    :class="{ 'pb-28': props.isLandscape }"
+  >
+    <div v-if="gameHasStarted" class="mt-0 mb-6 w-full">
       <Alert />
     </div>
 
-    <div class="settings-field">
+    <div class="mt-4 w-full first:mt-0">
       <TextDropdownField
         :model-value="player1Name"
         title="Player 1 Name"
@@ -94,7 +107,7 @@ const handleCustomPointsInput = (event: Event) => {
       />
     </div>
 
-    <div class="settings-field">
+    <div class="mt-4 w-full">
       <TextDropdownField
         :model-value="player2Name"
         title="Player 2 Name"
@@ -104,8 +117,8 @@ const handleCustomPointsInput = (event: Event) => {
       />
     </div>
 
-    <div class="settings-field generation-gap">
-      <div style="position: relative">
+    <div class="mt-4 w-full">
+      <div class="relative">
         <TextDropdownField
           title="Beyblade Generation"
           variant="dropdown"
@@ -115,7 +128,7 @@ const handleCustomPointsInput = (event: Event) => {
         />
         <div
           v-if="openDropdown === 'generation'"
-          style="margin-top: 8px; position: absolute; width: 100%; z-index: 10"
+          class="absolute top-full left-0 z-10 mt-2 w-full"
         >
           <DropdownMenu
             :items="generationItems"
@@ -126,8 +139,8 @@ const handleCustomPointsInput = (event: Event) => {
       </div>
     </div>
 
-    <div class="settings-field">
-      <div style="position: relative">
+    <div class="mt-4 w-full">
+      <div class="relative">
         <TextDropdownField
           title="Points to Win"
           variant="dropdown"
@@ -137,11 +150,9 @@ const handleCustomPointsInput = (event: Event) => {
         />
         <div
           v-if="openDropdown === 'pointsToWin'"
+          class="absolute left-0 z-10 w-full"
           style="
-            position: absolute;
             top: calc(0.875rem * 1.5 + 8px);
-            width: 100%;
-            z-index: 10;
             transform: translateY(calc(-100% - 8px));
           "
         >
@@ -154,26 +165,30 @@ const handleCustomPointsInput = (event: Event) => {
       </div>
     </div>
 
-    <div v-if="matchTypeParam === 'custom'" class="settings-field">
-      <div class="custom-points-field">
-        <label for="custom-points-input" class="custom-points-title"
+    <div v-if="matchTypeParam === 'custom'" class="mt-4 w-full">
+      <div class="flex w-full flex-col">
+        <label
+          for="custom-points-input"
+          class="m-0 box-border p-0 font-titillium text-sm font-semibold text-slate-500"
           >Custom Points</label
         >
-        <div class="custom-points-input-container">
+        <div
+          class="mt-2 flex items-center justify-between rounded-[10px] border border-slate-300 bg-white px-3 py-2 shadow-[0_0_4px_rgba(15,23,42,0.05)]"
+        >
           <input
             id="custom-points-input"
             type="number"
             min="1"
             :value="customPoints"
-            class="custom-points-input"
+            class="box-border w-full border-0 bg-transparent p-0 font-titillium text-base font-normal text-slate-600 outline-none [-moz-appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             @input="handleCustomPointsInput"
           />
         </div>
       </div>
     </div>
 
-    <div v-if="matchTypeParam !== 'nolimit'" class="settings-field sets-gap">
-      <div style="position: relative">
+    <div v-if="matchTypeParam !== 'nolimit'" class="mt-4 w-full">
+      <div class="relative">
         <TextDropdownField
           title="Sets"
           variant="dropdown"
@@ -183,11 +198,9 @@ const handleCustomPointsInput = (event: Event) => {
         />
         <div
           v-if="openDropdown === 'sets'"
+          class="absolute left-0 z-10 w-full"
           style="
-            position: absolute;
             top: calc(0.875rem * 1.5 + 8px);
-            width: 100%;
-            z-index: 10;
             transform: translateY(calc(-100% - 8px));
           "
         >
@@ -200,9 +213,13 @@ const handleCustomPointsInput = (event: Event) => {
       </div>
     </div>
 
-    <div v-if="generation === 'x'" class="settings-field own-finish-gap">
-      <div class="own-finish-label">Own Finish</div>
-      <div class="own-finish-toggle">
+    <div v-if="generation === 'x'" class="mt-4 w-full">
+      <div
+        class="m-0 box-border p-0 font-titillium text-sm leading-normal font-semibold text-slate-500"
+      >
+        Own Finish
+      </div>
+      <div class="mt-2 flex items-center">
         <ToggleButton
           size="default"
           :initial-state="isOwnFinishEnabled"
@@ -213,7 +230,7 @@ const handleCustomPointsInput = (event: Event) => {
       </div>
     </div>
 
-    <div class="settings-field advanced-settings-gap">
+    <div class="mt-4 w-full">
       <AdvancedSettingsSection
         :generation="generation"
         :xtr-points="xtrPoints"
@@ -230,260 +247,38 @@ const handleCustomPointsInput = (event: Event) => {
   </div>
 
   <div
+    class="absolute right-0 bottom-0 left-0 z-20 box-border w-full bg-slate-50 p-5"
     :class="
       props.isLandscape
-        ? 'settings-buttons-container'
-        : 'settings-buttons-container-portrait'
+        ? 'border-t border-slate-200'
+        : 'border-t border-slate-200'
     "
   >
-    <div v-if="props.isLandscape" class="settings-buttons-landscape">
+    <div
+      class="flex w-full flex-row gap-5"
+      :class="props.isLandscape ? '' : ''"
+    >
       <Button
         variant="blue"
         :disabled="!hasChanges"
+        class-name="flex-1 min-w-0 font-bold"
         @click="emit('saveChanges')"
         >Save Changes</Button
       >
       <Button
+        v-if="props.isLandscape"
         variant="secondary"
-        class="reset-game-button-transparent"
+        class-name="flex-1 min-w-0 border border-[#1088c9] border-b-2 bg-transparent font-bold"
+        @click="emit('resetGame')"
+        >Reset Game</Button
+      >
+      <Button
+        v-else
+        variant="secondary"
+        class-name="flex-1 min-w-0 font-bold"
         @click="emit('resetGame')"
         >Reset Game</Button
       >
     </div>
-    <div v-else class="settings-buttons-portrait">
-      <Button
-        variant="blue"
-        :disabled="!hasChanges"
-        @click="emit('saveChanges')"
-        >Save Changes</Button
-      >
-      <Button variant="secondary" @click="emit('resetGame')">Reset Game</Button>
-    </div>
   </div>
 </template>
-
-<style scoped>
-.modal-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 44px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1.125rem;
-  font-weight: bold;
-  color: #334155;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  width: auto;
-  box-sizing: border-box;
-}
-
-.modal-close {
-  position: absolute;
-  top: 24px;
-  right: 20px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-close:hover {
-  opacity: 0.9;
-}
-
-.settings-description {
-  position: absolute;
-  top: calc(20px + 1.6875rem + 6px);
-  left: 20px;
-  right: 20px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  color: #64748b;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  width: auto;
-  box-sizing: border-box;
-}
-
-.settings-content {
-  position: absolute;
-  top: calc(20px + 1.6875rem + 6px + 1.5rem + 24px);
-  left: 20px;
-  right: 20px;
-  bottom: 0;
-  width: auto;
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding-bottom: 106px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.settings-content-landscape {
-  padding-bottom: 112px;
-}
-
-.settings-field {
-  width: 100%;
-}
-
-.settings-field + .settings-field {
-  margin-top: 16px;
-}
-
-.settings-field.generation-gap {
-  margin-top: 16px;
-}
-
-.settings-field.sets-gap {
-  margin-top: 16px;
-}
-
-.settings-field.own-finish-gap {
-  margin-top: 16px;
-}
-
-.settings-field.advanced-settings-gap {
-  margin-top: 16px;
-}
-
-.settings-field.alert-top {
-  margin-top: 0;
-  margin-bottom: 24px;
-}
-
-.settings-field.alert-top + .settings-field {
-  margin-top: 0;
-}
-
-.own-finish-label {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.own-finish-toggle {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.custom-points-field {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.custom-points-title {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-}
-
-.custom-points-input-container {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background-color: white;
-  padding: 8px 12px;
-  box-shadow: 0 0 4px rgba(15, 23, 42, 0.05);
-}
-
-.custom-points-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  color: #475569;
-  outline: none;
-}
-
-.custom-points-input::-webkit-outer-spin-button,
-.custom-points-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.custom-points-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.settings-buttons-container-portrait {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background-color: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 20;
-}
-
-.settings-buttons-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background-color: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 20;
-}
-
-.settings-buttons-portrait {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.settings-buttons-landscape {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.settings-buttons-portrait :deep(button),
-.settings-buttons-landscape :deep(button) {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  width: auto !important;
-  font-weight: bold;
-}
-
-.settings-buttons-landscape :deep(.reset-game-button-transparent) {
-  background-color: transparent !important;
-  border: 1px solid #1088c9;
-  border-bottom: 2px solid #1088c9;
-}
-</style>
