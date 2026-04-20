@@ -83,12 +83,12 @@ const winMessage = computed(() => {
 // Get score for the chip based on label
 const chipScore = computed(() => {
   const scoreMapping = {
-    Xtreme: 3,
-    Burst: 2,
-    Over: props.generation === "mfb-zero-g" ? 1 : 2,
-    Spin: 1,
+    Xtreme: store.xtrPoints,
+    Burst: store.bstPoints,
+    Over: store.ovrPoints,
+    Spin: store.spfPoints,
   };
-  return scoreMapping[props.chipLabel] || 3;
+  return scoreMapping[props.chipLabel] || store.xtrPoints;
 });
 
 // Create filled stars array - only filled stars, one per set win
