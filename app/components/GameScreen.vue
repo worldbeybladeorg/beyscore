@@ -90,14 +90,6 @@ const {
   closeSettingsModal,
 } = useSettingsModal();
 
-const handleSaveChanges = () => {
-  closeSettingsModal();
-};
-
-const handleResetGame = () => {
-  closeSettingsModal();
-};
-
 const {
   winnerDisplayText,
   winnerNameForResults,
@@ -442,8 +434,8 @@ watch(gameEnded, async (ended) => {
         :is-closing="isSettingsModalClosing"
         :game-has-started="gameHasStarted"
         @close="closeSettingsModal"
-        @save="handleSaveChanges"
-        @reset-game="handleResetGame"
+        @save="closeSettingsModal"
+        @reset-game="closeSettingsModal"
       />
     </div>
   </div>
