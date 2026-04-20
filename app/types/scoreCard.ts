@@ -1,6 +1,7 @@
 export type PlayerType = "p1" | "p2";
 export type GenerationType = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 export type BestOfType = 3 | 5 | undefined;
+export type StarCount = 3 | 5;
 
 export interface GameSummaryItem {
   id?: string | number;

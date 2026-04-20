@@ -1,70 +1,41 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import ScoringChip from "./ScoringChip.vue";
 import ScoringStar from "./ScoringStar.vue";
+import type { GenerationType, PlayerType } from "~/types/scoreCard";
 
-const props = defineProps({
-  generation: {
-    type: String,
-    default: "x",
-    validator: (value) =>
-      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
-  },
-  player: {
-    type: String,
-    default: "p1",
-    validator: (value) => ["p1", "p2"].includes(value),
-  },
-  score1: {
-    type: Number,
-    default: 0,
-  },
-  score2: {
-    type: Number,
-    default: 0,
-  },
-  chipLabel: {
-    type: String,
-    default: "Xtreme",
-  },
-  isFirst: {
-    type: Boolean,
-    default: false,
-  },
-  isWarning: {
-    type: Boolean,
-    default: false,
-  },
-  isPenalty: {
-    type: Boolean,
-    default: false,
-  },
-  isGameWin: {
-    type: Boolean,
-    default: false,
-  },
-  isPenaltyWin: {
-    type: Boolean,
-    default: false,
-  },
-  bestOf: {
-    type: Number,
-    default: null,
-    validator: (value) => value === null || [3, 5].includes(value),
-  },
-  setWins: {
-    type: Number,
-    default: 0,
-  },
-  winner: {
-    type: String,
-    default: null,
-    validator: (value) => value === null || ["p1", "p2"].includes(value),
-  },
-  isAfterDivider: {
-    type: Boolean,
-    default: false,
-  },
+interface MatchHistoryItemProps {
+  generation?: GenerationType;
+  player?: PlayerType;
+  score1?: number;
+  score2?: number;
+  chipLabel?: string;
+  isFirst?: boolean;
+  isWarning?: boolean;
+  isPenalty?: boolean;
+  isGameWin?: boolean;
+  isPenaltyWin?: boolean;
+  bestOf?: null | number;
+  setWins?: number;
+  winner?: PlayerType;
+  isAfterDivider?: boolean;
+}
+
+const props = withDefaults(defineProps<MatchHistoryItemProps>(), {
+  generation: "x",
+  player: "p1",
+  score1: 0,
+  score2: 0,
+  chipLabel: "Xtreme",
+  isFirst: false,
+  isWarning: false,
+  isPenalty: false,
+  isGameWin: false,
+  isPenaltyWin: false,
+  bestOf: null,
+  setWins: 0,
+  winner: undefined,
+  isAfterDivider: false,
 });
 
 const playerName = computed(() => {
