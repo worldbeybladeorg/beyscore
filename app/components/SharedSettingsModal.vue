@@ -148,6 +148,17 @@ function handleGenerationSelect(value: GenerationOption) {
 }
 
 function handleSave() {
+  const gameSettingsChanged =
+    localGeneration.value !== scoreboardStore.generation ||
+    localMatchType.value !== scoreboardStore.matchType ||
+    localCustomPoints.value !== scoreboardStore.customPoints ||
+    localBestOf.value !== scoreboardStore.bestOf ||
+    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled ||
+    localXtrPoints.value !== scoreboardStore.xtrPoints ||
+    localOvrPoints.value !== scoreboardStore.ovrPoints ||
+    localBstPoints.value !== scoreboardStore.bstPoints ||
+    localSpfPoints.value !== scoreboardStore.spfPoints;
+
   scoreboardStore.player1NameSetting = localPlayer1Name.value || "Player 1";
   scoreboardStore.player2NameSetting = localPlayer2Name.value || "Player 2";
   scoreboardStore.generation = localGeneration.value;
@@ -160,17 +171,6 @@ function handleSave() {
   scoreboardStore.setBstPoints(localBstPoints.value);
   scoreboardStore.setSpfPoints(localSpfPoints.value);
   openDropdown.value = null;
-
-  const gameSettingsChanged =
-    localGeneration.value !== scoreboardStore.generation ||
-    localMatchType.value !== scoreboardStore.matchType ||
-    localCustomPoints.value !== scoreboardStore.customPoints ||
-    localBestOf.value !== scoreboardStore.bestOf ||
-    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled ||
-    localXtrPoints.value !== scoreboardStore.xtrPoints ||
-    localOvrPoints.value !== scoreboardStore.ovrPoints ||
-    localBstPoints.value !== scoreboardStore.bstPoints ||
-    localSpfPoints.value !== scoreboardStore.spfPoints;
 
   if (gameSettingsChanged && props.gameHasStarted) {
     scoreboardStore.reset();
