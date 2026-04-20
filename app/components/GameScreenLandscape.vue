@@ -2,13 +2,12 @@
 import { ref, watch, nextTick } from "vue";
 import { storeToRefs } from "pinia";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
-import { X } from "@lucide/vue";
 import ScoreCardLandscape from "../components/ScoreCardLandscape.vue";
 import LandscapeNavigation from "../components/LandscapeNavigation.vue";
-import MatchHistoryItem from "../components/MatchHistoryItem.vue";
 import GameResults from "../components/GameResults.vue";
 import PlayerName from "../components/PlayerName.vue";
 import SharedSettingsModal from "../components/SharedSettingsModal.vue";
+import MatchHistoryModal from "../components/MatchHistoryModal.vue";
 import { useGameState } from "~/composables/useGameState";
 import {
   useMatchHistoryModal,
@@ -425,69 +424,18 @@ watch(gameEnded, async (ended) => {
       </div>
 
       <!-- Match History Modal -->
-      <div
-        v-if="isMatchHistoryModalOpen || isMatchHistoryModalClosing"
-        class="modal-backdrop"
-        :class="{ closing: isMatchHistoryModalClosing }"
-        @click="closeMatchHistoryModal"
-      >
-        <div
-          class="modal-content"
-          :class="{ closing: isMatchHistoryModalClosing }"
-          @click.stop
-        >
-          <h1 class="modal-title">Match History</h1>
-          <button class="modal-close" @click="closeMatchHistoryModal">
-            <X :size="24" color="#64748b" :stroke-width="2" />
-          </button>
-
-          <!-- Match History Items -->
-          <div class="match-history-list">
-            <template v-for="(item, index) in matchHistory" :key="index">
-              <div v-if="item.isGameDivider" class="game-divider">
-                <div class="divider-line" />
-                <div class="divider-text">
-                  <span v-if="item.isMatchConclusion"
-                    >Set {{ item.gameNumber }} –
-                    {{ getPlayerDisplayNameFull(item.winner) }} Wins</span
-                  >
-                  <span v-else>Set {{ item.gameNumber }}</span>
-                </div>
-                <div class="divider-line" />
-              </div>
-              <MatchHistoryItem
-                v-else
-                :generation="generation"
-                :player="item.player"
-                :score1="item.score1"
-                :score2="item.score2"
-                :chip-label="item.chipLabel"
-                :is-first="index === 0"
-                :is-warning="item.isWarning || false"
-                :is-penalty="item.isPenalty || false"
-                :is-game-win="item.isGameWin || false"
-                :is-penalty-win="item.isPenaltyWin || false"
-                :best-of="bestOf"
-                :set-wins="item.setWins || 0"
-                :winner="item.winner || null"
-                :player1-name="player1DisplayName"
-                :player2-name="player2DisplayName"
-                :is-after-divider="
-                  (() => {
-                    if (index < matchHistory.length - 1) {
-                      const nextItem = matchHistory[index + 1];
-                      if (nextItem?.isGameDivider) {
-                        return true;
-                      }
-                    }
-                    return false;
-                  })()
-                "
-              />
-            </template>
-          </div>
-        </div>
-      </div>
+      <MatchHistoryModal
+        :is-open="isMatchHistoryModalOpen"
+        :is-closing="isMatchHistoryModalClosing"
+        :is-landscape="true"
+        :match-history="matchHistory"
+        :generation="generation"
+        :best-of="bestOf"
+        :player1-display-name="player1DisplayName"
+        :player2-display-name="player2DisplayName"
+        :get-player-display-name-full="getPlayerDisplayNameFull"
+        @close="closeMatchHistoryModal"
+      />
 
       <!-- Settings Modal -->
       <div
@@ -714,159 +662,6 @@ watch(gameEnded, async (ended) => {
 
 .landscape-navigation-container :deep(.landscape-navigation) {
   pointer-events: auto; /* Re-enable clicks on navigation component */
-}
-
-/* Match History Modal */
-.modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(2, 6, 23, 0.6); /* slate-950 at 60% opacity */
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-backdrop.closing {
-  animation: fadeOut 0.3s ease-out;
-}
-
-.modal-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 90%;
-  height: 100%;
-  background-color: white;
-  z-index: 1001;
-  animation: slideInFromLeft 0.3s ease-out;
-  will-change: transform;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-.modal-content.closing {
-  animation: slideOutToLeft 0.3s ease-out;
-}
-
-.modal-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1.125rem; /* text-lg */
-  font-weight: bold;
-  color: #334155; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5; /* Explicit line-height for alignment calculation */
-}
-
-.match-history-list {
-  position: absolute;
-  top: calc(
-    20px + 1.6875rem + 24px
-  ); /* Modal padding (20px) + title height (1.125rem * 1.5) + 24px gap */
-  left: 20px;
-  right: 20px;
-  bottom: 0; /* Span to bottom of modal */
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding-bottom: 20px; /* Bottom padding so last item isn't flush to bottom */
-}
-
-.match-history-list > :first-child {
-  margin-top: 0;
-}
-
-.match-history-list > :not(:first-child) {
-  margin-top: 12px;
-}
-
-.game-divider {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px; /* 12px above the last win */
-  margin-bottom: 0;
-  padding: 0;
-  width: 100%;
-}
-
-.divider-line {
-  flex: 1;
-  height: 1px;
-  background-color: #e2e8f0; /* slate-200 */
-}
-
-.divider-text {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem; /* text-sm - same as match-score */
-  font-weight: 600; /* semibold */
-  color: #64748b; /* slate-500 - same as match-score */
-  padding: 0 12px; /* 12px left and right padding */
-  white-space: nowrap;
-}
-
-.modal-close {
-  position: absolute;
-  top: 24px; /* Horizontally center aligned with text */
-  right: 20px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-close:hover {
-  opacity: 0.9;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes slideOutToLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
 }
 
 /* Settings Modal - slides in from right */

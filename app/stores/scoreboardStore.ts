@@ -9,6 +9,7 @@ import {
   DEFAULT_SPF_POINTS,
   defaultOvrPointsForGeneration,
 } from "~/lib/gameUtils";
+import type { PlayerType } from "~/types/scoreCard";
 
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 export type MatchTypeOption =
@@ -20,7 +21,22 @@ export type MatchTypeOption =
   | "custom";
 export type BestOfOption = 3 | 5 | undefined;
 
-type MatchHistoryEntry = Record<string, unknown>;
+export interface MatchHistoryEntry {
+  isGameDivider?: boolean;
+  gameNumber?: number;
+  isMatchConclusion?: boolean;
+  player?: PlayerType;
+  score1?: number;
+  score2?: number;
+  chipLabel?: string;
+  isWarning?: boolean;
+  isPenalty?: boolean;
+  isGameWin?: boolean;
+  isPenaltyWin?: boolean;
+  setWins?: number;
+  winner?: PlayerType;
+  winnerName?: string;
+}
 
 interface HistorySnapshot {
   player1: number;
