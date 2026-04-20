@@ -15,11 +15,11 @@ import {
   defaultOvrPointsForGeneration,
 } from "~/lib/gameUtils";
 
-type DropdownItem = {
+interface DropdownItem {
   label: string;
   value: string;
   disabled?: boolean;
-};
+}
 
 const props = withDefaults(
   defineProps<{
