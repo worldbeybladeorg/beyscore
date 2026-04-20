@@ -158,22 +158,26 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
 
   // Custom chip point values
   const xtrPoints = ref<number>(
-    persistedState.xtrPoints !== undefined
+    persistedState.xtrPoints !== undefined &&
+      Number.isInteger(persistedState.xtrPoints)
       ? persistedState.xtrPoints
       : DEFAULT_XTR_POINTS,
   );
   const ovrPoints = ref<number>(
-    persistedState.ovrPoints !== undefined
+    persistedState.ovrPoints !== undefined &&
+      Number.isInteger(persistedState.ovrPoints)
       ? persistedState.ovrPoints
       : DEFAULT_OVR_POINTS,
   );
   const bstPoints = ref<number>(
-    persistedState.bstPoints !== undefined
+    persistedState.bstPoints !== undefined &&
+      Number.isInteger(persistedState.bstPoints)
       ? persistedState.bstPoints
       : DEFAULT_BST_POINTS,
   );
   const spfPoints = ref<number>(
-    persistedState.spfPoints !== undefined
+    persistedState.spfPoints !== undefined &&
+      Number.isInteger(persistedState.spfPoints)
       ? persistedState.spfPoints
       : DEFAULT_SPF_POINTS,
   );
