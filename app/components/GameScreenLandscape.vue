@@ -655,6 +655,80 @@ watch(gameEnded, async (ended) => {
   pointer-events: auto; /* Re-enable clicks on navigation component */
 }
 
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+  background: rgba(2, 6, 23, 0.6);
+}
+
+.modal-backdrop.closing {
+  animation: fadeOut 0.3s ease-out;
+}
+
+.modal-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: auto;
+  width: 90%;
+  max-width: none;
+  height: 100%;
+  background-color: white;
+  z-index: 1001;
+  animation: slideInFromLeft 0.3s ease-out;
+  will-change: transform;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.modal-content.closing {
+  animation: slideOutToLeft 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 /* Settings Modal - slides in from right */
 .settings-modal-content {
   left: auto;

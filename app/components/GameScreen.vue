@@ -441,26 +441,14 @@ watch(gameEnded, async (ended) => {
         @close="closeMatchHistoryModal"
       />
 
-      <!-- Settings Modal -->
-      <div
-        v-if="isSettingsModalOpen || isSettingsModalClosing"
-        class="modal-backdrop settings-modal-backdrop"
-        :class="{ closing: isSettingsModalClosing }"
-        @click="closeSettingsModal"
-      >
-        <div
-          class="modal-content settings-modal-content"
-          :class="{ closing: isSettingsModalClosing }"
-          @click.stop
-        >
-          <SharedSettingsModal
-            :game-has-started="gameHasStarted"
-            @close="closeSettingsModal"
-            @save="handleSaveChanges"
-            @reset-game="handleResetGame"
-          />
-        </div>
-      </div>
+      <SharedSettingsModal
+        :is-open="isSettingsModalOpen"
+        :is-closing="isSettingsModalClosing"
+        :game-has-started="gameHasStarted"
+        @close="closeSettingsModal"
+        @save="handleSaveChanges"
+        @reset-game="handleResetGame"
+      />
     </div>
   </div>
 </template>
@@ -634,35 +622,13 @@ watch(gameEnded, async (ended) => {
   height: 48px; /* Explicit height */
 }
 
-/* Settings Modal - slides in from right */
-.settings-modal-content {
-  left: max(
-    0px,
-    calc(20px - env(safe-area-inset-left, 0px))
-  ); /* 20px from viewport edge, never negative */
-  right: 0; /* Flush with viewport edge - content handles padding */
-  width: auto; /* Let left/right positioning determine width */
-  max-width: calc(
-    100vw - 20px
-  ); /* Ensure it doesn't exceed viewport minus 20px on left side */
-  animation: slideInFromRight 0.3s ease-out;
-  will-change: transform;
-  padding: 0; /* No padding - content elements handle their own positioning */
-}
-
-/* Settings modal backdrop - overlay only on left side (opposite of where modal comes from) */
-.settings-modal-backdrop {
-  background: linear-gradient(
-    to right,
-    rgba(2, 6, 23, 0.6) 0%,
-    rgba(2, 6, 23, 0.6) 50%,
-    transparent 50%,
-    transparent 100%
-  );
-}
-
-.settings-modal-content.closing {
-  animation: slideOutToRight 0.3s ease-out;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Game Results overlay */
@@ -695,23 +661,5 @@ watch(gameEnded, async (ended) => {
 
 .game-results-wrapper.no-animation {
   animation: none;
-}
-
-@keyframes slideInFromRight {
-  from {
-    transform: translateX(100%); /* Start off-screen to the right */
-  }
-  to {
-    transform: translateX(0); /* Final position */
-  }
-}
-
-@keyframes slideOutToRight {
-  from {
-    transform: translateX(0); /* Final position */
-  }
-  to {
-    transform: translateX(100%); /* Slide off-screen to the right */
-  }
 }
 </style>
