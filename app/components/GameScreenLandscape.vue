@@ -1,20 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from "vue";
-import { storeToRefs } from "pinia";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
-import { X } from "lucide-vue-next";
-import ScoreCardLandscape from "../components/ScoreCardLandscape.vue";
-import LandscapeNavigation from "../components/LandscapeNavigation.vue";
-import Button from "../components/Button.vue";
-import MatchHistoryItem from "../components/MatchHistoryItem.vue";
-import TextDropdownField from "../components/TextDropdownField.vue";
-import ToggleButton from "../components/ToggleButton.vue";
-import DropdownMenu from "../components/DropdownMenu.vue";
-import Alert from "../components/Alert.vue";
-import GameResults from "../components/GameResults.vue";
-import PlayerName from "../components/PlayerName.vue";
-import { useGameState } from "~/composables/useGameState";
-import { useMatchSettings } from "~/composables/useMatchSettings";
 import {
   useMatchHistoryModal,
   useSettingsModal,
@@ -30,7 +15,10 @@ const {
   matchType,
   customPoints,
   bestOf,
-  ownFinishEnabled,
+  xtrPoints,
+  ovrPoints,
+  bstPoints,
+  spfPoints,
   player1Score,
   player2Score,
   player1NameSetting,
@@ -50,10 +38,9 @@ const {
   historyIndex,
   showGameResultsOverlay,
   gameResultsOverlayHasBeenShown,
+  ownFinishEnabled,
 } = storeToRefs(scoreboardStore);
 
-const matchTypeParam = computed(() => matchType.value);
-const isOwnFinishEnabled = ownFinishEnabled;
 const gameResetTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const {
@@ -89,37 +76,6 @@ const {
 });
 
 const {
-  openDropdown,
-  beybladeGenerationLabel,
-  pointsToWinLabel,
-  setsLabel,
-  ownFinishOptionLabel,
-  pointsToWinItems,
-  handleGenerationDropdownToggle,
-  handlePointsToWinDropdownToggle,
-  handleSetsDropdownToggle,
-  handleGenerationSelect,
-  handlePointsToWinSelect,
-  handleSetsSelect,
-  handleOwnFinishToggle,
-  handleCustomPointsChange,
-  closeDropdowns,
-  GENERATION_ITEMS: generationItems,
-  SETS_ITEMS: setsItems,
-} = useMatchSettings(
-  generation,
-  matchType,
-  customPoints,
-  bestOf,
-  isOwnFinishEnabled,
-  scoreboardStore.setGeneration,
-  scoreboardStore.setMatchType,
-  scoreboardStore.setCustomPoints,
-  scoreboardStore.setBestOf,
-  scoreboardStore.setOwnFinishEnabled,
-);
-
-const {
   isMatchHistoryModalOpen,
   isMatchHistoryModalClosing,
   openMatchHistoryModal,
@@ -129,32 +85,9 @@ const {
 const {
   isSettingsModalOpen,
   isSettingsModalClosing,
-  hasChanges,
   openSettingsModal,
   closeSettingsModal,
-  handleSaveChanges,
-  handleResetGame,
-} = useSettingsModal(
-  player1NameSetting,
-  player2NameSetting,
-  generation,
-  matchType,
-  customPoints,
-  bestOf,
-  isOwnFinishEnabled,
-  {
-    setGeneration: scoreboardStore.setGeneration,
-    setMatchType: scoreboardStore.setMatchType,
-    setCustomPoints: scoreboardStore.setCustomPoints,
-    setBestOf: scoreboardStore.setBestOf,
-    setOwnFinishEnabled: scoreboardStore.setOwnFinishEnabled,
-    reset: scoreboardStore.reset,
-  },
-  {
-    gameHasStarted,
-    closeDropdowns,
-  },
-);
+} = useSettingsModal();
 
 const {
   winnerDisplayText,
@@ -214,33 +147,17 @@ const {
   saveState,
 });
 
-const handleGameResultsClose = () => {
+function handleGameResultsClose() {
   closeGameResultsOverlay();
-};
-const handleGameResultsNewGame = () => {
+}
+function handleGameResultsNewGame() {
   triggerGameResultsNewGame(() => {
     scoreboardStore.reset();
   });
-};
-const handleGameResultsViewHistory = () => {
+}
+function handleGameResultsViewHistory() {
   triggerGameResultsViewHistory(openMatchHistoryModal);
-};
-
-displayedSetNumber.value = 1;
-
-history.value = [
-  {
-    player1: 0,
-    player2: 0,
-    p1SetWins: [],
-    p2SetWins: [],
-    p1ShowWarning: false,
-    p2ShowWarning: false,
-    matchHistory: [],
-    currentGameNumber: 1,
-  },
-];
-historyIndex.value = 0;
+}
 
 watch(gameEnded, async (ended) => {
   if (ended && !pendingGameReset.value) {
@@ -396,13 +313,17 @@ watch(gameEnded, async (ended) => {
           :player-name="player1DisplayName"
           :generation="generation"
           :best-of="bestOf"
-          :own-finish-enabled="generation === 'x' && isOwnFinishEnabled"
+          :own-finish-enabled="generation === 'x' && ownFinishEnabled"
           :score="player1Score.toString()"
           :disabled="gameEnded || matchOver"
           :filled-stars="p1FilledStars"
           :show-warning="p1ShowWarning"
           :is-fading-in="isScoreFadingIn"
           :is-shrinking="isScoreShrinking"
+          :xtr-score="xtrPoints"
+          :ovr-score="ovrPoints"
+          :bst-score="bstPoints"
+          :spf-score="spfPoints"
           @score-increase="
             (points, chipLabel) => handlePlayer1ScoreIncrease(points, chipLabel)
           "
@@ -417,13 +338,17 @@ watch(gameEnded, async (ended) => {
           :player-name="player2DisplayName"
           :generation="generation"
           :best-of="bestOf"
-          :own-finish-enabled="generation === 'x' && isOwnFinishEnabled"
+          :own-finish-enabled="generation === 'x' && ownFinishEnabled"
           :score="player2Score.toString()"
           :disabled="gameEnded || matchOver"
           :filled-stars="p2FilledStars"
           :show-warning="p2ShowWarning"
           :is-fading-in="isScoreFadingIn"
           :is-shrinking="isScoreShrinking"
+          :xtr-score="xtrPoints"
+          :ovr-score="ovrPoints"
+          :bst-score="bstPoints"
+          :spf-score="spfPoints"
           @score-increase="
             (points, chipLabel) => handlePlayer2ScoreIncrease(points, chipLabel)
           "
@@ -480,252 +405,26 @@ watch(gameEnded, async (ended) => {
       </div>
 
       <!-- Match History Modal -->
-      <div
-        v-if="isMatchHistoryModalOpen || isMatchHistoryModalClosing"
-        class="modal-backdrop"
-        :class="{ closing: isMatchHistoryModalClosing }"
-        @click="closeMatchHistoryModal"
-      >
-        <div
-          class="modal-content"
-          :class="{ closing: isMatchHistoryModalClosing }"
-          @click.stop
-        >
-          <h1 class="modal-title">Match History</h1>
-          <button class="modal-close" @click="closeMatchHistoryModal">
-            <X :size="24" color="#64748b" :stroke-width="2" />
-          </button>
+      <MatchHistoryModal
+        :is-open="isMatchHistoryModalOpen"
+        :is-closing="isMatchHistoryModalClosing"
+        :is-landscape="true"
+        :match-history="matchHistory"
+        :generation="generation"
+        :best-of="bestOf"
+        :get-player-display-name-full="getPlayerDisplayNameFull"
+        @close="closeMatchHistoryModal"
+      />
 
-          <!-- Match History Items -->
-          <div class="match-history-list">
-            <template v-for="(item, index) in matchHistory" :key="index">
-              <div v-if="item.isGameDivider" class="game-divider">
-                <div class="divider-line" />
-                <div class="divider-text">
-                  <span v-if="item.isMatchConclusion"
-                    >Set {{ item.gameNumber }} –
-                    {{ getPlayerDisplayNameFull(item.winner) }} Wins</span
-                  >
-                  <span v-else>Set {{ item.gameNumber }}</span>
-                </div>
-                <div class="divider-line" />
-              </div>
-              <MatchHistoryItem
-                v-else
-                :generation="generation"
-                :player="item.player"
-                :score1="item.score1"
-                :score2="item.score2"
-                :chip-label="item.chipLabel"
-                :is-first="index === 0"
-                :is-warning="item.isWarning || false"
-                :is-penalty="item.isPenalty || false"
-                :is-game-win="item.isGameWin || false"
-                :is-penalty-win="item.isPenaltyWin || false"
-                :best-of="bestOf"
-                :set-wins="item.setWins || 0"
-                :winner="item.winner || null"
-                :player1-name="player1DisplayName"
-                :player2-name="player2DisplayName"
-                :is-after-divider="
-                  (() => {
-                    if (index < matchHistory.length - 1) {
-                      const nextItem = matchHistory[index + 1];
-                      if (nextItem?.isGameDivider) {
-                        return true;
-                      }
-                    }
-                    return false;
-                  })()
-                "
-              />
-            </template>
-          </div>
-        </div>
-      </div>
-
-      <!-- Settings Modal -->
-      <div
-        v-if="isSettingsModalOpen || isSettingsModalClosing"
-        class="modal-backdrop settings-modal-backdrop"
-        :class="{ closing: isSettingsModalClosing }"
-        @click="closeSettingsModal"
-      >
-        <div
-          class="modal-content settings-modal-content"
-          :class="{ closing: isSettingsModalClosing }"
-          @click.stop
-        >
-          <h1 class="modal-title">Settings</h1>
-          <p class="settings-description">Set your match preferences.</p>
-          <button class="modal-close" @click="closeSettingsModal">
-            <X :size="24" color="#64748b" :stroke-width="2" />
-          </button>
-
-          <!-- Settings content area -->
-          <div class="settings-content">
-            <div v-if="gameHasStarted" class="settings-field alert-top">
-              <Alert />
-            </div>
-            <div class="settings-field">
-              <TextDropdownField
-                v-model="player1NameSetting"
-                title="Player 1 Name"
-                :show-chevron="false"
-                :max-length="15"
-              />
-            </div>
-            <div class="settings-field">
-              <TextDropdownField
-                v-model="player2NameSetting"
-                title="Player 2 Name"
-                :show-chevron="false"
-                :max-length="15"
-              />
-            </div>
-            <div class="settings-field generation-gap">
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Beyblade Generation"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="beybladeGenerationLabel"
-                  @toggle="handleGenerationDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'generation'"
-                  style="
-                    margin-top: 8px;
-                    position: absolute;
-                    width: 100%;
-                    z-index: 10;
-                  "
-                >
-                  <DropdownMenu
-                    :items="generationItems"
-                    :selected-value="generation"
-                    @select="handleGenerationSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="settings-field">
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Points to Win"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="pointsToWinLabel"
-                  @toggle="handlePointsToWinDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'pointsToWin'"
-                  style="
-                    position: absolute;
-                    top: calc(0.875rem * 1.5 + 8px);
-                    width: 100%;
-                    z-index: 10;
-                    transform: translateY(calc(-100% - 8px));
-                  "
-                >
-                  <DropdownMenu
-                    :items="pointsToWinItems"
-                    :selected-value="matchTypeParam"
-                    @select="handlePointsToWinSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div v-if="matchTypeParam === 'custom'" class="settings-field">
-              <div class="custom-points-field">
-                <label for="custom-points-input" class="custom-points-title">Custom Points</label>
-                <div class="custom-points-input-container">
-                  <input
-                    id="custom-points-input"
-                    type="number"
-                    min="1"
-                    :value="customPoints"
-                    class="custom-points-input"
-                    @input="
-                      (e) => {
-                        const val = parseInt(
-                          (e.target as HTMLInputElement).value,
-                          10,
-                        );
-                        if (!isNaN(val) && val >= 1)
-                          handleCustomPointsChange(val);
-                      }
-                    "
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="matchTypeParam !== 'nolimit'"
-              class="settings-field sets-gap"
-            >
-              <div style="position: relative">
-                <TextDropdownField
-                  title="Sets"
-                  variant="dropdown"
-                  :show-chevron="true"
-                  :model-value="setsLabel"
-                  @toggle="handleSetsDropdownToggle"
-                />
-                <div
-                  v-if="openDropdown === 'sets'"
-                  style="
-                    position: absolute;
-                    top: calc(0.875rem * 1.5 + 8px);
-                    width: 100%;
-                    z-index: 10;
-                    transform: translateY(calc(-100% - 8px));
-                  "
-                >
-                  <DropdownMenu
-                    :items="setsItems"
-                    :selected-value="bestOf ? bestOf.toString() : undefined"
-                    @select="handleSetsSelect"
-                  />
-                </div>
-              </div>
-            </div>
-            <div
-              v-if="generation === 'x'"
-              class="settings-field own-finish-gap"
-            >
-              <div class="own-finish-label">Own Finish</div>
-              <div class="own-finish-toggle">
-                <ToggleButton
-                  size="default"
-                  :initial-state="isOwnFinishEnabled"
-                  @toggle="handleOwnFinishToggle"
-                >
-                  {{ ownFinishOptionLabel }}
-                </ToggleButton>
-              </div>
-            </div>
-          </div>
-
-          <!-- Settings buttons -->
-          <div class="settings-buttons-container">
-            <div class="settings-buttons">
-              <Button
-                variant="blue"
-                :disabled="!hasChanges"
-                @click="handleSaveChanges"
-                >Save Changes</Button
-              >
-              <Button
-                variant="secondary"
-                class="reset-game-button-transparent"
-                @click="handleResetGame"
-                >Reset Game</Button
-              >
-            </div>
-          </div>
-        </div>
-      </div>
+      <SharedSettingsModal
+        :is-open="isSettingsModalOpen"
+        :is-closing="isSettingsModalClosing"
+        :game-has-started="gameHasStarted"
+        :is-landscape="true"
+        @close="closeSettingsModal"
+        @save="closeSettingsModal"
+        @reset-game="closeSettingsModal"
+      />
     </div>
   </div>
 </template>
@@ -932,123 +631,6 @@ watch(gameEnded, async (ended) => {
   pointer-events: auto; /* Re-enable clicks on navigation component */
 }
 
-/* Match History Modal */
-.modal-backdrop {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(2, 6, 23, 0.6); /* slate-950 at 60% opacity */
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-backdrop.closing {
-  animation: fadeOut 0.3s ease-out;
-}
-
-.modal-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 90%;
-  height: 100%;
-  background-color: white;
-  z-index: 1001;
-  animation: slideInFromLeft 0.3s ease-out;
-  will-change: transform;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-.modal-content.closing {
-  animation: slideOutToLeft 0.3s ease-out;
-}
-
-.modal-title {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1.125rem; /* text-lg */
-  font-weight: bold;
-  color: #334155; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5; /* Explicit line-height for alignment calculation */
-}
-
-.match-history-list {
-  position: absolute;
-  top: calc(
-    20px + 1.6875rem + 24px
-  ); /* Modal padding (20px) + title height (1.125rem * 1.5) + 24px gap */
-  left: 20px;
-  right: 20px;
-  bottom: 0; /* Span to bottom of modal */
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding-bottom: 20px; /* Bottom padding so last item isn't flush to bottom */
-}
-
-.match-history-list > :first-child {
-  margin-top: 0;
-}
-
-.match-history-list > :not(:first-child) {
-  margin-top: 12px;
-}
-
-.game-divider {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px; /* 12px above the last win */
-  margin-bottom: 0;
-  padding: 0;
-  width: 100%;
-}
-
-.divider-line {
-  flex: 1;
-  height: 1px;
-  background-color: #e2e8f0; /* slate-200 */
-}
-
-.divider-text {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem; /* text-sm - same as match-score */
-  font-weight: 600; /* semibold */
-  color: #64748b; /* slate-500 - same as match-score */
-  padding: 0 12px; /* 12px left and right padding */
-  white-space: nowrap;
-}
-
-.modal-close {
-  position: absolute;
-  top: 24px; /* Horizontally center aligned with text */
-  right: 20px;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal-close:hover {
-  opacity: 0.9;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -1056,202 +638,6 @@ watch(gameEnded, async (ended) => {
   to {
     opacity: 1;
   }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes slideOutToLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-/* Settings Modal - slides in from right */
-.settings-modal-content {
-  left: auto;
-  right: 0;
-  animation: slideInFromRight 0.3s ease-out;
-  will-change: transform;
-}
-
-.settings-modal-content.closing {
-  animation: slideOutToRight 0.3s ease-out;
-}
-
-.settings-description {
-  position: absolute;
-  top: calc(20px + 1.6875rem + 6px); /* Title top + title height + 4px gap */
-  left: 20px;
-  right: 20px;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem; /* text-base */
-  font-weight: 400;
-  color: #64748b; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.settings-content {
-  position: absolute;
-  top: calc(
-    20px + 1.6875rem + 6px + 1.5rem + 24px
-  ); /* Title + description spacing + description height + 24px */
-  left: 20px;
-  right: 20px;
-  bottom: 0;
-  width: calc(100% - 40px);
-  box-sizing: border-box;
-  overflow-y: auto;
-  padding-bottom: 112px; /* Space for buttons container + 24px visual gap (accounts for 1px top border) */
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.settings-field {
-  width: 100%;
-}
-
-.settings-field + .settings-field {
-  margin-top: 16px;
-}
-
-.settings-field.generation-gap {
-  margin-top: 16px;
-}
-
-.settings-field.sets-gap {
-  margin-top: 16px;
-}
-
-.settings-field.own-finish-gap {
-  margin-top: 16px;
-}
-
-.settings-field.alert-top {
-  margin-top: 0;
-  margin-bottom: 24px;
-}
-
-.settings-field.alert-top + .settings-field {
-  margin-top: 0;
-}
-
-.own-finish-label {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 600;
-  color: #64748b; /* slate-500 */
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
-}
-
-.own-finish-toggle {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-}
-
-.custom-points-field {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.custom-points-title {
-  font-family: "Titillium Web", sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #64748b;
-}
-
-.custom-points-input-container {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  background-color: white;
-  padding: 8px 12px;
-  box-shadow: 0 0 4px rgba(15, 23, 42, 0.05);
-}
-
-.custom-points-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: "Titillium Web", sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  color: #475569;
-  outline: none;
-}
-
-.custom-points-input::-webkit-outer-spin-button,
-.custom-points-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.custom-points-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-.settings-buttons-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  background-color: #f8fafc; /* slate-50 */
-  border-top: 1px solid #e2e8f0; /* slate-200 */
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 20; /* Higher than dropdowns (z-index: 10) to prevent overlay */
-}
-
-.settings-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.settings-buttons :deep(button) {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  width: auto !important;
-  font-weight: bold;
-}
-
-.settings-buttons :deep(.reset-game-button-transparent) {
-  background-color: transparent !important;
-  border: 1px solid #1088c9;
-  border-bottom: 2px solid #1088c9;
 }
 
 /* Game Results overlay */
@@ -1289,23 +675,5 @@ watch(gameEnded, async (ended) => {
 
 .game-results-wrapper.no-animation {
   animation: none;
-}
-
-@keyframes slideInFromRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideOutToRight {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
 }
 </style>

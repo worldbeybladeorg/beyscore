@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertTriangle, Trophy } from "lucide-vue-next";
+import { AlertTriangle, Trophy } from "@lucide/vue";
 
 type ResponseChipVariant = "warning" | "p1Winner" | "p2Winner";
 

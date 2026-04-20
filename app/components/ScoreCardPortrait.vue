@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import PlayerName from "./PlayerName.vue";
-import ScoringChip from "./ScoringChip.vue";
-import ResponseChip from "./ResponseChip.vue";
 import type { ScoreCardProps, ScoreCardEmits } from "~/types/scoreCard";
 
 const props = withDefaults(defineProps<ScoreCardProps>(), {
@@ -79,7 +76,7 @@ const handleOwnFinishClick = () => {
           :score="ovrScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'OVR')"
         />
         <ScoringChip
@@ -87,7 +84,7 @@ const handleOwnFinishClick = () => {
           :score="xtrScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'XTR')"
         />
       </div>
@@ -98,7 +95,7 @@ const handleOwnFinishClick = () => {
           :score="spfScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'SPF')"
         />
         <ScoringChip
@@ -106,7 +103,7 @@ const handleOwnFinishClick = () => {
           :score="bstScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'BST')"
         />
       </div>
@@ -123,20 +120,20 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-start gap-3">
         <ScoringChip
           label="OVR"
-          :score="1"
+          :score="ovrScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'OVR')"
         />
       </div>
       <div class="flex flex-col items-end gap-3">
         <ScoringChip
           label="SPF"
-          :score="1"
+          :score="spfScore"
           variant="red"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'SPF')"
         />
       </div>
@@ -149,7 +146,7 @@ const handleOwnFinishClick = () => {
     >
       <ScoringChip
         label="OVR"
-        :score="2"
+        :score="ovrScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -157,7 +154,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="BST"
-        :score="2"
+        :score="bstScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -165,7 +162,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="SPF"
-        :score="1"
+        :score="spfScore"
         variant="red"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -205,7 +202,7 @@ const handleOwnFinishClick = () => {
           variant="warning"
           :label="showWarning ? 'PEN' : 'ERR'"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="handleErrClick"
         />
         <ScoringChip
@@ -213,7 +210,7 @@ const handleOwnFinishClick = () => {
           :score="1"
           variant="warning"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="handleOwnFinishClick"
         />
       </div>
@@ -223,7 +220,7 @@ const handleOwnFinishClick = () => {
         variant="warning"
         :label="showWarning ? 'PEN' : 'ERR'"
         :disabled="disabled"
-        class="w-[84px] flex-none"
+        class="w-21 flex-none"
         @chip-click="handleErrClick"
       />
     </div>
@@ -252,7 +249,7 @@ const handleOwnFinishClick = () => {
           :score="xtrScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'XTR')"
         />
         <ScoringChip
@@ -260,7 +257,7 @@ const handleOwnFinishClick = () => {
           :score="ovrScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'OVR')"
         />
       </div>
@@ -271,7 +268,7 @@ const handleOwnFinishClick = () => {
           :score="bstScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'BST')"
         />
         <ScoringChip
@@ -279,8 +276,8 @@ const handleOwnFinishClick = () => {
           :score="spfScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
-          @chip-click="(points: number) => handleChipClick(points, 'SPF')"
+          class="w-21 flex-none"
+          @chip-click="(points) => handleChipClick(points, 'SPF')"
         />
       </div>
     </div>
@@ -296,20 +293,20 @@ const handleOwnFinishClick = () => {
       <div class="flex flex-col items-start gap-3">
         <ScoringChip
           label="OVR"
-          :score="1"
+          :score="ovrScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'OVR')"
         />
       </div>
       <div class="flex flex-col items-end gap-3">
         <ScoringChip
           label="SPF"
-          :score="1"
+          :score="spfScore"
           variant="blue"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="(points) => handleChipClick(points, 'SPF')"
         />
       </div>
@@ -322,7 +319,7 @@ const handleOwnFinishClick = () => {
     >
       <ScoringChip
         label="OVR"
-        :score="2"
+        :score="ovrScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -330,7 +327,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="BST"
-        :score="2"
+        :score="bstScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -338,7 +335,7 @@ const handleOwnFinishClick = () => {
       />
       <ScoringChip
         label="SPF"
-        :score="1"
+        :score="spfScore"
         variant="blue"
         :disabled="disabled"
         class="w-auto min-w-0 flex-1"
@@ -379,14 +376,14 @@ const handleOwnFinishClick = () => {
           :score="1"
           variant="warning"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="handleOwnFinishClick"
         />
         <ScoringChip
           variant="warning"
           :label="showWarning ? 'PEN' : 'ERR'"
           :disabled="disabled"
-          class="w-[84px] flex-none"
+          class="w-21 flex-none"
           @chip-click="handleErrClick"
         />
       </div>
@@ -396,7 +393,7 @@ const handleOwnFinishClick = () => {
         variant="warning"
         :label="showWarning ? 'PEN' : 'ERR'"
         :disabled="disabled"
-        class="w-[84px] flex-none"
+        class="w-21 flex-none"
         @chip-click="handleErrClick"
       />
     </div>

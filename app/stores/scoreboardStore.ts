@@ -1,7 +1,15 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
-import { DEFAULT_CUSTOM_POINTS } from "~/lib/gameUtils";
+import {
+  DEFAULT_CUSTOM_POINTS,
+  DEFAULT_XTR_POINTS,
+  DEFAULT_OVR_POINTS,
+  DEFAULT_BST_POINTS,
+  DEFAULT_SPF_POINTS,
+  defaultOvrPointsForGeneration,
+} from "~/lib/gameUtils";
+import type { PlayerType } from "~/types/scoreCard";
 
 export type GenerationOption = "x" | "burst" | "mfb-zero-g" | "plastics-hms";
 export type MatchTypeOption =
@@ -13,7 +21,22 @@ export type MatchTypeOption =
   | "custom";
 export type BestOfOption = 3 | 5 | undefined;
 
-type MatchHistoryEntry = Record<string, unknown>;
+export interface MatchHistoryEntry {
+  isGameDivider?: boolean;
+  gameNumber?: number;
+  isMatchConclusion?: boolean;
+  player?: PlayerType;
+  score1?: number;
+  score2?: number;
+  chipLabel?: string;
+  isWarning?: boolean;
+  isPenalty?: boolean;
+  isGameWin?: boolean;
+  isPenaltyWin?: boolean;
+  setWins?: number;
+  winner?: PlayerType;
+  winnerName?: string;
+}
 
 interface HistorySnapshot {
   player1: number;
@@ -24,14 +47,6 @@ interface HistorySnapshot {
   p2ShowWarning: boolean;
   matchHistory: MatchHistoryEntry[];
   currentGameNumber: number;
-}
-
-interface GameConfig {
-  generation: GenerationOption;
-  matchType: MatchTypeOption;
-  customPoints: number;
-  bestOf: BestOfOption;
-  ownFinishEnabled: boolean;
 }
 
 const createInitialHistorySnapshot = (): HistorySnapshot => ({
@@ -141,12 +156,42 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
       : DEFAULT_OWN_FINISH,
   );
 
+  // Custom chip point values
+  const xtrPoints = ref<number>(
+    persistedState.xtrPoints !== undefined &&
+      Number.isInteger(persistedState.xtrPoints)
+      ? persistedState.xtrPoints
+      : DEFAULT_XTR_POINTS,
+  );
+  const ovrPoints = ref<number>(
+    persistedState.ovrPoints !== undefined &&
+      Number.isInteger(persistedState.ovrPoints)
+      ? persistedState.ovrPoints
+      : DEFAULT_OVR_POINTS,
+  );
+  const bstPoints = ref<number>(
+    persistedState.bstPoints !== undefined &&
+      Number.isInteger(persistedState.bstPoints)
+      ? persistedState.bstPoints
+      : DEFAULT_BST_POINTS,
+  );
+  const spfPoints = ref<number>(
+    persistedState.spfPoints !== undefined &&
+      Number.isInteger(persistedState.spfPoints)
+      ? persistedState.spfPoints
+      : DEFAULT_SPF_POINTS,
+  );
+
   const setGeneration = (value: GenerationOption) => {
     generation.value = value;
     matchType.value = defaultMatchTypeForGeneration(value);
     if (value !== "x") {
       ownFinishEnabled.value = false;
     }
+    xtrPoints.value = DEFAULT_XTR_POINTS;
+    ovrPoints.value = defaultOvrPointsForGeneration(value);
+    bstPoints.value = DEFAULT_BST_POINTS;
+    spfPoints.value = DEFAULT_SPF_POINTS;
   };
 
   const setMatchType = (value: MatchTypeOption) => {
@@ -172,11 +217,38 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     ownFinishEnabled.value = generation.value === "x" ? value : false;
   };
 
+  const setXtrPoints = (value: number) => {
+    xtrPoints.value = Math.max(1, Math.floor(value));
+  };
+
+  const setOvrPoints = (value: number) => {
+    ovrPoints.value = Math.max(1, Math.floor(value));
+  };
+
+  const setBstPoints = (value: number) => {
+    bstPoints.value = Math.max(1, Math.floor(value));
+  };
+
+  const setSpfPoints = (value: number) => {
+    spfPoints.value = Math.max(1, Math.floor(value));
+  };
+
+  const resetChipPointsToDefaults = () => {
+    xtrPoints.value = DEFAULT_XTR_POINTS;
+    ovrPoints.value = defaultOvrPointsForGeneration(generation.value);
+    bstPoints.value = DEFAULT_BST_POINTS;
+    spfPoints.value = DEFAULT_SPF_POINTS;
+  };
+
   const resetConfigToDefaults = () => {
     generation.value = DEFAULT_GENERATION;
     matchType.value = DEFAULT_MATCH_TYPE;
     bestOf.value = DEFAULT_BEST_OF;
     ownFinishEnabled.value = DEFAULT_OWN_FINISH;
+    xtrPoints.value = DEFAULT_XTR_POINTS;
+    ovrPoints.value = DEFAULT_OVR_POINTS;
+    bstPoints.value = DEFAULT_BST_POINTS;
+    spfPoints.value = DEFAULT_SPF_POINTS;
   };
 
   const reset = (options: { resetConfig?: boolean } = {}) => {
@@ -239,6 +311,10 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
         customPoints: customPoints.value,
         bestOf: bestOf.value,
         ownFinishEnabled: ownFinishEnabled.value,
+        xtrPoints: xtrPoints.value,
+        ovrPoints: ovrPoints.value,
+        bstPoints: bstPoints.value,
+        spfPoints: spfPoints.value,
       };
       localStorage.setItem("beyscore-store", JSON.stringify(stateToPersist));
     }
@@ -273,6 +349,10 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     customPoints,
     bestOf,
     ownFinishEnabled,
+    xtrPoints,
+    ovrPoints,
+    bstPoints,
+    spfPoints,
   ];
 
   stateRefs.forEach((stateRef) => {
@@ -309,11 +389,20 @@ export const useScoreboardStore = defineStore("scoreboard", () => {
     customPoints,
     bestOf,
     ownFinishEnabled,
+    xtrPoints,
+    ovrPoints,
+    bstPoints,
+    spfPoints,
     setGeneration,
     setMatchType,
     setCustomPoints,
     setBestOf,
     setOwnFinishEnabled,
+    setXtrPoints,
+    setOvrPoints,
+    setBstPoints,
+    setSpfPoints,
+    resetChipPointsToDefaults,
     resetConfigToDefaults,
     reset,
   };

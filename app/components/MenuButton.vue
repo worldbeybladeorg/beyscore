@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { History, Settings } from "lucide-vue-next";
+import { History, Settings } from "@lucide/vue";
 
 type MenuButtonVariant = "matchHistory" | "settings";
 

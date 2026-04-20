@@ -11,20 +11,17 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/eslint",
     "@vite-pwa/nuxt",
-    "@vueuse/sound/nuxt",
     "@nuxtjs/color-mode",
     "@pinia/nuxt",
     "@nuxt/icon",
     "@nuxt/fonts",
   ],
   css: ["@/assets/css/tailwind.css"],
-  sound: {
-    sounds: {
-      scan: true,
-    },
-  },
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["@vue/devtools-core", "@vue/devtools-kit"],
+    },
   },
   pwa: {
     registerType: "autoUpdate",

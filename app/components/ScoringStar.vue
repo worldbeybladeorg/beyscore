@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
-
-type PlayerType = "p1" | "p2";
-type StarCount = 3 | 5;
+import type { PlayerType, StarCount } from "~/types/scoreCard";
 
 interface Props {
   player?: PlayerType;

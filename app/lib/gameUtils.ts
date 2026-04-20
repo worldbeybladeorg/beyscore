@@ -2,6 +2,10 @@
 
 // Default configuration constants
 export const DEFAULT_CUSTOM_POINTS = 10;
+export const DEFAULT_XTR_POINTS = 3;
+export const DEFAULT_OVR_POINTS = 2;
+export const DEFAULT_BST_POINTS = 2;
+export const DEFAULT_SPF_POINTS = 1;
 
 // Chip and win condition utilities
 export function getChipTypeForHistory(
@@ -156,4 +160,12 @@ export const SETS_ITEMS = [
 
 export function getPointsToWinItems(generation: string) {
   return generation === "x" ? POINTS_TO_WIN_ITEMS_X : POINTS_TO_WIN_ITEMS_OTHER;
+}
+
+export function defaultOvrPointsForGeneration(value: GenerationOption): number {
+  if (value === "mfb-zero-g" || value === "plastics-hms") {
+    return 1;
+  } else {
+    return DEFAULT_OVR_POINTS;
+  }
 }

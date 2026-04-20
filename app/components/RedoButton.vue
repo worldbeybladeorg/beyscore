@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Redo2 } from "lucide-vue-next";
+import { Redo2 } from "@lucide/vue";
 
 interface Props {
   disabled?: boolean;

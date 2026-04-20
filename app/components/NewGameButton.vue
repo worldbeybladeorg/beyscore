@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RotateCcw } from "lucide-vue-next";
+import { RotateCcw } from "@lucide/vue";
 
 interface Props {
   disabled?: boolean;

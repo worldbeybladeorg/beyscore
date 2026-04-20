@@ -1,76 +1,46 @@
-<script setup>
-import { computed } from "vue";
-import ScoringChip from "./ScoringChip.vue";
-import ScoringStar from "./ScoringStar.vue";
+<script setup lang="ts">
+import type { GenerationType, PlayerType } from "~/types/scoreCard";
 
-const props = defineProps({
-  generation: {
-    type: String,
-    default: "x",
-    validator: (value) =>
-      ["x", "burst", "mfb-zero-g", "plastics-hms"].includes(value),
-  },
-  player: {
-    type: String,
-    default: "p1",
-    validator: (value) => ["p1", "p2"].includes(value),
-  },
-  score1: {
-    type: Number,
-    default: 0,
-  },
-  score2: {
-    type: Number,
-    default: 0,
-  },
-  chipLabel: {
-    type: String,
-    default: "Xtreme",
-  },
-  isFirst: {
-    type: Boolean,
-    default: false,
-  },
-  isWarning: {
-    type: Boolean,
-    default: false,
-  },
-  isPenalty: {
-    type: Boolean,
-    default: false,
-  },
-  isGameWin: {
-    type: Boolean,
-    default: false,
-  },
-  isPenaltyWin: {
-    type: Boolean,
-    default: false,
-  },
-  bestOf: {
-    type: Number,
-    default: null,
-    validator: (value) => value === null || [3, 5].includes(value),
-  },
-  setWins: {
-    type: Number,
-    default: 0,
-  },
-  winner: {
-    type: String,
-    default: null,
-    validator: (value) => value === null || ["p1", "p2"].includes(value),
-  },
-  isAfterDivider: {
-    type: Boolean,
-    default: false,
-  },
+const store = useScoreboardStore();
+
+interface MatchHistoryItemProps {
+  generation?: GenerationType;
+  player?: PlayerType;
+  score1?: number;
+  score2?: number;
+  chipLabel?: string;
+  isFirst?: boolean;
+  isWarning?: boolean;
+  isPenalty?: boolean;
+  isGameWin?: boolean;
+  isPenaltyWin?: boolean;
+  bestOf?: null | number;
+  setWins?: number;
+  winner?: PlayerType;
+  isAfterDivider?: boolean;
+}
+
+const props = withDefaults(defineProps<MatchHistoryItemProps>(), {
+  generation: "x",
+  player: "p1",
+  score1: 0,
+  score2: 0,
+  chipLabel: "Xtreme",
+  isFirst: false,
+  isWarning: false,
+  isPenalty: false,
+  isGameWin: false,
+  isPenaltyWin: false,
+  bestOf: null,
+  setWins: 0,
+  winner: undefined,
+  isAfterDivider: false,
 });
 
 const playerName = computed(() => {
   // For penalty wins, show the penalty receiver's name
   // But for display purposes, we'll show the winner's name in the win message
-  return props.player === "p1" ? "Player 1" : "Player 2";
+  return props.player === "p1" ? store.player1Name : store.player2Name;
 });
 
 // Get the player name to show next to the star (should be the winner for penalty wins)
@@ -103,7 +73,8 @@ const displayScore = computed(() => {
 // Display win message separately for penalty wins
 const winMessage = computed(() => {
   if (props.isGameWin && props.isPenaltyWin) {
-    const winnerName = props.winner === "p1" ? "Player 1" : "Player 2";
+    const winnerName =
+      props.winner === "p1" ? store.player1Name : store.player2Name;
     return `${winnerName} Wins`;
   }
   return null;
@@ -112,12 +83,12 @@ const winMessage = computed(() => {
 // Get score for the chip based on label
 const chipScore = computed(() => {
   const scoreMapping = {
-    Xtreme: 3,
-    Burst: 2,
-    Over: props.generation === "mfb-zero-g" ? 1 : 2,
-    Spin: 1,
+    Xtreme: store.xtrPoints,
+    Burst: store.bstPoints,
+    Over: store.ovrPoints,
+    Spin: store.spfPoints,
   };
-  return scoreMapping[props.chipLabel] || 3;
+  return scoreMapping[props.chipLabel] || store.xtrPoints;
 });
 
 // Create filled stars array - only filled stars, one per set win
