@@ -141,7 +141,11 @@ const handleSave = () => {
     localMatchType.value !== scoreboardStore.matchType ||
     localCustomPoints.value !== scoreboardStore.customPoints ||
     localBestOf.value !== scoreboardStore.bestOf ||
-    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled;
+    localOwnFinishEnabled.value !== scoreboardStore.ownFinishEnabled ||
+    localXtrPoints.value !== scoreboardStore.xtrPoints ||
+    localOvrPoints.value !== scoreboardStore.ovrPoints ||
+    localBstPoints.value !== scoreboardStore.bstPoints ||
+    localSpfPoints.value !== scoreboardStore.spfPoints;
 
   if (gameSettingsChanged && props.gameHasStarted) {
     scoreboardStore.reset();
