@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { GenerationType, PlayerType } from "~/types/scoreCard";
 
+const store = useScoreboardStore();
+
 interface MatchHistoryItemProps {
   generation?: GenerationType;
   player?: PlayerType;
@@ -38,7 +40,7 @@ const props = withDefaults(defineProps<MatchHistoryItemProps>(), {
 const playerName = computed(() => {
   // For penalty wins, show the penalty receiver's name
   // But for display purposes, we'll show the winner's name in the win message
-  return props.player === "p1" ? "Player 1" : "Player 2";
+  return props.player === "p1" ? store.player1Name : store.player2Name;
 });
 
 // Get the player name to show next to the star (should be the winner for penalty wins)
@@ -71,7 +73,8 @@ const displayScore = computed(() => {
 // Display win message separately for penalty wins
 const winMessage = computed(() => {
   if (props.isGameWin && props.isPenaltyWin) {
-    const winnerName = props.winner === "p1" ? "Player 1" : "Player 2";
+    const winnerName =
+      props.winner === "p1" ? store.player1Name : store.player2Name;
     return `${winnerName} Wins`;
   }
   return null;
