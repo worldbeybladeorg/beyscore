@@ -435,8 +435,6 @@ watch(gameEnded, async (ended) => {
         :match-history="matchHistory"
         :generation="generation"
         :best-of="bestOf"
-        :player1-display-name="player1DisplayName"
-        :player2-display-name="player2DisplayName"
         :get-player-display-name-full="getPlayerDisplayNameFull"
         @close="closeMatchHistoryModal"
       />

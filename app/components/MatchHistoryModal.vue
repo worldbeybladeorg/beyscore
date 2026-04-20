@@ -8,8 +8,6 @@ interface Props {
   matchHistory: MatchHistoryEntry[];
   generation?: GenerationOption;
   bestOf?: number;
-  player1DisplayName?: string;
-  player2DisplayName?: string;
   getPlayerDisplayNameFull: (player: string) => string;
 }
 
@@ -18,8 +16,6 @@ withDefaults(defineProps<Props>(), {
   isClosing: false,
   isLandscape: false,
   bestOf: undefined,
-  player1DisplayName: "",
-  player2DisplayName: "",
   generation: "x",
 });
 
@@ -89,8 +85,6 @@ function isAfterDivider(index: number, matchHistory: MatchHistoryEntry[]) {
             :best-of="bestOf"
             :set-wins="item.setWins || 0"
             :winner="item.winner"
-            :player1-name="player1DisplayName"
-            :player2-name="player2DisplayName"
             :is-after-divider="isAfterDivider(index, matchHistory)"
           />
         </template>
