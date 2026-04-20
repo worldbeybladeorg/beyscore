@@ -147,17 +147,17 @@ const {
   saveState,
 });
 
-const handleGameResultsClose = () => {
+function handleGameResultsClose() {
   closeGameResultsOverlay();
-};
-const handleGameResultsNewGame = () => {
+}
+function handleGameResultsNewGame() {
   triggerGameResultsNewGame(() => {
     scoreboardStore.reset();
   });
-};
-const handleGameResultsViewHistory = () => {
+}
+function handleGameResultsViewHistory() {
   triggerGameResultsViewHistory(openMatchHistoryModal);
-};
+}
 
 watch(gameEnded, async (ended) => {
   if (ended && !pendingGameReset.value) {
