@@ -41,8 +41,6 @@ const {
   ownFinishEnabled,
 } = storeToRefs(scoreboardStore);
 
-const isOwnFinishEnabled = computed(() => ownFinishEnabled.value);
-
 const gameResetTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
 
 const {
@@ -323,7 +321,7 @@ watch(gameEnded, async (ended) => {
           :player-name="player1DisplayName"
           :generation="generation"
           :best-of="bestOf"
-          :own-finish-enabled="generation === 'x' && isOwnFinishEnabled"
+          :own-finish-enabled="generation === 'x' && ownFinishEnabled"
           :score="player1Score.toString()"
           :disabled="gameEnded || matchOver"
           :filled-stars="p1FilledStars"
@@ -348,7 +346,7 @@ watch(gameEnded, async (ended) => {
           :player-name="player2DisplayName"
           :generation="generation"
           :best-of="bestOf"
-          :own-finish-enabled="generation === 'x' && isOwnFinishEnabled"
+          :own-finish-enabled="generation === 'x' && ownFinishEnabled"
           :score="player2Score.toString()"
           :disabled="gameEnded || matchOver"
           :filled-stars="p2FilledStars"
