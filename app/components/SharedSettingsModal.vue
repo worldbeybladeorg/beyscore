@@ -203,7 +203,7 @@ function handleClose() {
       class="modal-content"
       :class="{
         closing: props.isClosing,
-        'model-content-landscape': isLandscape,
+        'modal-content-landscape': isLandscape,
       }"
       @click.stop
     >
@@ -476,7 +476,7 @@ function handleClose() {
   animation: slideOutToRight 0.3s ease-out;
 }
 
-.model-content-landscape {
+.modal-content-landscape {
   left: auto;
   width: 90%;
   max-width: none;
