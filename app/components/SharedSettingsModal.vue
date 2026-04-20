@@ -201,7 +201,10 @@ function handleClose() {
   >
     <div
       class="modal-content"
-      :class="{ closing: props.isClosing }"
+      :class="{
+        closing: props.isClosing,
+        'model-content-landscape': isLandscape,
+      }"
       @click.stop
     >
       <h1
@@ -218,20 +221,20 @@ function handleClose() {
       </button>
 
       <p
-        class="absolute top-[calc(20px+1.6875rem+6px)] right-5 left-5 m-0 box-border w-auto p-0 font-titillium text-base leading-6 font-normal text-slate-500"
+        class="absolute top-[calc(20px+1.6875rem+6px)] right-5 left-5 m-0 box-border w-auto p-0 font-titillium text-base leading-normal font-normal text-slate-500"
       >
         Set your match preferences.
       </p>
 
       <div
-        class="absolute top-[calc(20px+1.6875rem+6px+1.5rem+24px)] right-5 bottom-0 left-5 box-border flex w-auto flex-col overflow-y-auto pb-26.5"
+        class="absolute top-[calc(20px+1.6875rem+6px+1.5rem+24px)] right-5 bottom-0 left-5 box-border flex w-auto flex-col gap-0 overflow-y-auto pb-26.5"
         :class="{ 'pb-28': props.isLandscape }"
       >
         <div v-if="gameHasStarted" class="mt-0 mb-6 w-full">
           <Alert />
         </div>
 
-        <div class="mt-4 w-full first:mt-0">
+        <div class="w-full first:mt-0">
           <TextDropdownField
             :model-value="localPlayer1Name"
             title="Player 1 Name"
@@ -471,6 +474,12 @@ function handleClose() {
 
 .modal-content.closing {
   animation: slideOutToRight 0.3s ease-out;
+}
+
+.model-content-landscape {
+  left: auto;
+  width: 90%;
+  max-width: none;
 }
 
 @keyframes fadeIn {
