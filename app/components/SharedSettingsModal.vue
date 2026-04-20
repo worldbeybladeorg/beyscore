@@ -60,7 +60,7 @@ const localOvrPoints = ref(DEFAULT_OVR_POINTS);
 const localBstPoints = ref(DEFAULT_BST_POINTS);
 const localSpfPoints = ref(DEFAULT_SPF_POINTS);
 
-onMounted(() => {
+function syncLocalValuesFromStore() {
   localPlayer1Name.value = scoreboardStore.player1NameSetting || "Player 1";
   localPlayer2Name.value = scoreboardStore.player2NameSetting || "Player 2";
   localGeneration.value = scoreboardStore.generation;
@@ -72,7 +72,17 @@ onMounted(() => {
   localOvrPoints.value = scoreboardStore.ovrPoints;
   localBstPoints.value = scoreboardStore.bstPoints;
   localSpfPoints.value = scoreboardStore.spfPoints;
-});
+}
+
+watch(
+  () => props.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      syncLocalValuesFromStore();
+    }
+  },
+  { immediate: true },
+);
 
 const matchTypeParam = computed(() => localMatchType.value);
 
