@@ -42,12 +42,18 @@ function isAfterDivider(index: number, matchHistory: MatchHistoryEntry[]) {
   <div
     v-if="isOpen || isClosing"
     class="modal-backdrop"
-    :class="[{ closing: isClosing }, isLandscape ? 'modal-backdrop-landscape' : '']"
+    :class="[
+      { closing: isClosing },
+      isLandscape ? 'modal-backdrop-landscape' : '',
+    ]"
     @click="emit('close')"
   >
     <div
       class="modal-content"
-      :class="[{ closing: isClosing }, isLandscape ? 'modal-content-landscape' : '']"
+      :class="[
+        { closing: isClosing },
+        isLandscape ? 'modal-content-landscape' : '',
+      ]"
       @click.stop
     >
       <h1 class="modal-title">Match History</h1>
@@ -60,7 +66,7 @@ function isAfterDivider(index: number, matchHistory: MatchHistoryEntry[]) {
           <div v-if="item.isGameDivider" class="game-divider">
             <div class="divider-line" />
             <div class="divider-text">
-              <span v-if="item.isMatchConclusion"
+              <span v-if="item.isMatchConclusion && item.winner"
                 >Set {{ item.gameNumber }} –
                 {{ getPlayerDisplayNameFull(item.winner) }} Wins</span
               >
