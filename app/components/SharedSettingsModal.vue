@@ -14,11 +14,6 @@ import {
   DEFAULT_SPF_POINTS,
   defaultOvrPointsForGeneration,
 } from "~/lib/gameUtils";
-import type {
-  GenerationOption,
-  MatchTypeOption,
-  BestOfOption,
-} from "~/stores/scoreboardStore";
 
 type DropdownItem = {
   label: string;
@@ -122,20 +117,37 @@ const hasChanges = computed(() => {
   );
 });
 
-const toggleDropdown = (dropdown: "generation" | "pointsToWin" | "sets") => {
+function toggleDropdown(dropdown: "generation" | "pointsToWin" | "sets") {
   openDropdown.value = openDropdown.value === dropdown ? null : dropdown;
-};
+}
 
-const handleCustomPointsInput = (event: Event) => {
+function handleCustomPointsInput(event: Event) {
   const target = event.target as HTMLInputElement;
   const value = Number.parseInt(target.value, 10);
 
   if (!Number.isNaN(value) && value >= 1) {
     localCustomPoints.value = value;
   }
-};
+}
 
-const handleSave = () => {
+function defaultMatchTypeForGeneration(
+  value: GenerationOption,
+): MatchTypeOption {
+  return value === "x" ? "4pts" : "3pts";
+}
+
+function handleGenerationSelect(value: GenerationOption) {
+  localGeneration.value = value;
+  localMatchType.value = defaultMatchTypeForGeneration(value);
+  localOwnFinishEnabled.value =
+    value === "x" ? localOwnFinishEnabled.value : false;
+  localXtrPoints.value = DEFAULT_XTR_POINTS;
+  localOvrPoints.value = defaultOvrPointsForGeneration(value);
+  localBstPoints.value = DEFAULT_BST_POINTS;
+  localSpfPoints.value = DEFAULT_SPF_POINTS;
+}
+
+function handleSave() {
   const gameSettingsChanged =
     localGeneration.value !== scoreboardStore.generation ||
     localMatchType.value !== scoreboardStore.matchType ||
@@ -164,20 +176,20 @@ const handleSave = () => {
   scoreboardStore.spfPoints = localSpfPoints.value;
   openDropdown.value = null;
   emit("save");
-};
+}
 
-const handleResetGame = () => {
+function handleResetGame() {
   scoreboardStore.player1NameSetting = "Player 1";
   scoreboardStore.player2NameSetting = "Player 2";
   scoreboardStore.reset({ resetConfig: true });
   openDropdown.value = null;
   emit("resetGame");
-};
+}
 
-const handleClose = () => {
+function handleClose() {
   openDropdown.value = null;
   emit("close");
-};
+}
 </script>
 
 <template>
@@ -255,7 +267,7 @@ const handleClose = () => {
               <DropdownMenu
                 :items="generationItems"
                 :selected-value="localGeneration"
-                @select="localGeneration = $event"
+                @select="(value) => handleGenerationSelect(value)"
               />
             </div>
           </div>
