@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import PlayerName from "./PlayerName.vue";
-import ScoringChip from "./ScoringChip.vue";
-import ResponseChip from "./ResponseChip.vue";
 import type { ScoreCardProps, ScoreCardEmits } from "~/types/scoreCard";
 
 const props = withDefaults(defineProps<ScoreCardProps>(), {

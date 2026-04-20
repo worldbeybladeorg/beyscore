@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
 import { ChevronDown, ChevronUp } from "@lucide/vue";
 
 type TextDropdownVariant = "input" | "dropdown";

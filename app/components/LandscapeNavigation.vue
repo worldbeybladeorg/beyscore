@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import MenuButton from "./MenuButton.vue";
-import UndoRedoButtons from "./UndoRedoButtons.vue";
-
 interface Props {
   undoDisabled?: boolean;
   redoDisabled?: boolean;

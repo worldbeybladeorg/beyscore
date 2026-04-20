@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
 import { X } from "@lucide/vue";
-import Alert from "~/components/Alert.vue";
-import AdvancedSettingsSection from "~/components/AdvancedSettingsSection.vue";
-import Button from "~/components/Button.vue";
-import DropdownMenu from "~/components/DropdownMenu.vue";
-import TextDropdownField from "~/components/TextDropdownField.vue";
-import ToggleButton from "~/components/ToggleButton.vue";
 import {
   getGenerationLabel,
   getPointsToWinLabel,

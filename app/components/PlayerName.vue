@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import ScoringStar from "./ScoringStar.vue";
-
 type PlayerType = "p1" | "p2" | undefined;
 type BestOfType = 3 | 5 | undefined;
 

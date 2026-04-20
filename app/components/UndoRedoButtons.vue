@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import UndoButton from "./UndoButton.vue";
-import RedoButton from "./RedoButton.vue";
-import NewGameButton from "./NewGameButton.vue";
-
 interface Props {
   undoDisabled?: boolean;
   redoDisabled?: boolean;

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import ScoringChip from "./ScoringChip.vue";
-import ScoringStar from "./ScoringStar.vue";
 import type { GenerationType, PlayerType } from "~/types/scoreCard";
 
 interface MatchHistoryItemProps {

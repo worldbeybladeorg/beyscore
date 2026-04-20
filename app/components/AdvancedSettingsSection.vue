@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import ChipPointsInput from "./ChipPointsInput.vue";
 import type { GenerationOption } from "~/stores/scoreboardStore";
 
 interface Props {

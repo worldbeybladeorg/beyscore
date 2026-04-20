@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, nextTick } from "vue";
-import { storeToRefs } from "pinia";
 import { useScoreboardStore } from "~/stores/scoreboardStore";
-import ScoreCardLandscape from "../components/ScoreCardLandscape.vue";
-import LandscapeNavigation from "../components/LandscapeNavigation.vue";
-import GameResults from "../components/GameResults.vue";
-import PlayerName from "../components/PlayerName.vue";
-import SharedSettingsModal from "../components/SharedSettingsModal.vue";
-import MatchHistoryModal from "../components/MatchHistoryModal.vue";
-import { useGameState } from "~/composables/useGameState";
 import {
   useMatchHistoryModal,
   useSettingsModal,

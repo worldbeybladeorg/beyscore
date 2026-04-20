@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { computed } from "vue";
-
 type ButtonVariant = "blue" | "orange" | "secondary";
 
 interface Props {

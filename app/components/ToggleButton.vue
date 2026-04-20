@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-
 type ToggleButtonSize = "default" | "large";
 
 interface Props {
