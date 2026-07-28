@@ -181,7 +181,7 @@ function handleSave() {
 function handleResetGame() {
   scoreboardStore.player1NameSetting = "Player 1";
   scoreboardStore.player2NameSetting = "Player 2";
-  scoreboardStore.reset({ resetConfig: true });
+  scoreboardStore.reset({ resetConfig: false });
   openDropdown.value = null;
   emit("resetGame");
 }
