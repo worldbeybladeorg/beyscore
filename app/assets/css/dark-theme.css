@@ -1,0 +1,61 @@
+body {
+  background-color: #0f0e0f !important;
+}
+div.viewport-container,
+div.viewport-container-landscape {
+  & .game-setup-screen,
+  & .game-setup-screen-landscape {
+    background-color: black;
+  }
+  & div:has(>input),
+  & .settings-field div:nth-child(2) .box-border {
+    background-color: #0f0f0f !important;
+  }
+  &,
+  & .game-screen,
+  & .game-screen-landscape,
+  & .modal-content,
+  & .settings-buttons-container {
+    background-color: #1f1f1f;
+  }
+  @layer utilities {
+      & .shadow-\[0_2px_0_0_\#cbd5e1\] {
+        --tw-shadow: 0 2px 0 0 var(--tw-shadow-color,#3f4246);
+      }
+    &  .text-\[\#1088C9\] {
+        color: #3fbfff;
+      }
+    & .text-\[\#FF5555\] {
+        color: #ff9191;
+    }
+  }
+  & img.logo {
+    filter: brightness(1.35);
+  }
+  & h1 {
+    color: #cfdfef !important;
+  }
+  & p,
+  & [class *= "-label"],
+  & .text-sm {
+    color: #afbfcf !important;
+  }
+  & button:not(.bg-\[\#FF7900\]):not(.bg-\[\#1088C9\]),
+  & .flex .box-border:has(>span) {
+    & svg,
+    & svg path {
+      stroke: #dfdfdf !important;
+    }
+    background-color: #3f3f3f !important;
+    border-color: #40454a !important;
+    color: #dfdfdf !important;
+  }
+  & .landscape-navigation,
+  & .ml-auto {
+    background-color: #363735 !important;
+  }
+  /* try to implement this logic side */
+  & span[style*="color: rgb(71, 85, 105)"] {
+    color: #dfafdf !important;
+  }
+}
